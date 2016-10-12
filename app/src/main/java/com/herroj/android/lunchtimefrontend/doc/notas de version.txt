@@ -1,0 +1,12 @@
+﻿0 - En desarrollo
+0 - Preparación
+1 - Creación de repositorio
+
++ creación del repositorio de github
+
+
+0 - En desarrollo
+0 - Preparación
+2 - Creación de activity en blanco
+
++ creación del proyecto con el activity en blanco
