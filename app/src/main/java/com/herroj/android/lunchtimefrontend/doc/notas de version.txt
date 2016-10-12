@@ -202,3 +202,12 @@
   5 - Populate detail text
 
   + proceso de ingresar los datos en la pantalla de detalle
+
+
+  v0.3.6 Add Settingsactivity
+
+  0 - En desarrollo
+  3 - Nuevos activities y navegar con intents
+  6 - Add settingsactivity
+
+  + se crea la pantalla de configuraciones

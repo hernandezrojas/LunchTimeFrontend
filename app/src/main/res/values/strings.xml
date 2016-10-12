@@ -20,4 +20,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_restaurant_detail">Details</string>
 
+    <string name="title_activity_restaurant_settings">Settings</string>
+
 </resources>
