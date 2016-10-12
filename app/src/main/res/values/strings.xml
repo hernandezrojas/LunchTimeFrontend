@@ -18,6 +18,6 @@
 
     <string name="restaurant_action_refresh">Refresh</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_restaurant_detail">RestaurantDetailActivity</string>
+    <string name="title_activity_restaurant_detail">Details</string>
 
 </resources>

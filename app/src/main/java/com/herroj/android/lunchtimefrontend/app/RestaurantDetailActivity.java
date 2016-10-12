@@ -1,5 +1,6 @@
 package com.herroj.android.lunchtimefrontend.app;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class RestaurantDetailActivity extends ActionBarActivity {
 
@@ -19,7 +21,7 @@ public class RestaurantDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_restaurant_detail);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new RestaurantDetailFragment())
                     .commit();
         }
     }
@@ -50,9 +52,9 @@ public class RestaurantDetailActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class RestaurantDetailFragment extends Fragment {
 
-        public PlaceholderFragment() {
+        public RestaurantDetailFragment() {
         }
 
         @Override
@@ -60,6 +62,15 @@ public class RestaurantDetailActivity extends ActionBarActivity {
                                  Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
+
+                        // The detail Activity called via intent.  Inspect the intent for forecast data.
+                                Intent intent = getActivity().getIntent();
+                        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
+                                String forecastStr = intent.getStringExtra(Intent.EXTRA_TEXT);
+                                ((TextView) rootView.findViewById(R.id.restaurant_detail_text))
+                                               .setText(forecastStr);
+                            }
+
             return rootView;
         }
     }

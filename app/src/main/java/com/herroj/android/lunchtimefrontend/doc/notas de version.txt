@@ -193,3 +193,12 @@
   4 - Launch detail activity
 
   + evento que al seleccionar un elemento en el menú se genera el activity
+
+
+  v0.3.5 Populate Detail Text
+
+  0 - En desarrollo
+  3 - Nuevos activities y navegar con intents
+  5 - Populate detail text
+
+  + proceso de ingresar los datos en la pantalla de detalle
