@@ -184,3 +184,12 @@
   3 - Create detail activity 
 
   + creación de activity que mostrará el detalle del elemento seleccionado
+
+
+  v0.3.4 Launch Detail Activity
+
+  0 - En desarrollo
+  3 - Nuevos activities y navegar con intents
+  4 - Launch detail activity
+
+  + evento que al seleccionar un elemento en el menú se genera el activity

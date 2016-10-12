@@ -4,6 +4,7 @@ package com.herroj.android.lunchtimefrontend.app;
  * Created by Roberto Hernandez on 10/10/2016.
  */
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -140,14 +141,17 @@ public class RestaurantFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listview_restaurant);
         listView.setAdapter(mRestaurantAdapter);
 
+        // Evento que al seleccionar un elemento en el menú se genera el activity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String forecast = mRestaurantAdapter.getItem(position);
-                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+                String restaurant = mRestaurantAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, restaurant);
+                startActivity(intent);
             }
-            
+
         });
 
         return rootView;
