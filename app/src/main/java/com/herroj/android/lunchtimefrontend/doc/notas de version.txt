@@ -128,3 +128,12 @@ v0.2.6 Add Internet Permissions
 6 - Add internet permissions
 
 + se agregan los permisos para acceder a internet
+
+
+v0.2.7 Build URL With Params
+
+0 - En desarrollo
+2 - Conectar Lunch Time a la nube 
+7 - Build URL with params
+
++ funcionalidad de agregar parametros a la URL

@@ -4,6 +4,7 @@ package com.herroj.android.lunchtimefrontend.app;
  * Created by Roberto Hernandez on 10/10/2016.
  */
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -66,7 +67,7 @@ public class RestaurantFragment extends Fragment {
              */
 
             FetchRestaurantTask restaurantTask = new FetchRestaurantTask();
-            restaurantTask.execute();
+            restaurantTask.execute("-1");
 
             // Fin 2.05 execute fetchestauranttask
 
@@ -127,12 +128,19 @@ public class RestaurantFragment extends Fragment {
         return rootView;
     }
 
-    public class FetchRestaurantTask extends AsyncTask<Void, Void, Void> {
+    public class FetchRestaurantTask extends AsyncTask<String, Void, Void> {
 
         private final String LOG_TAG = FetchRestaurantTask.class.getSimpleName();
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(String... params) {
+
+
+            // RHR 2.07 Build URL with params
+
+            if (params.length == 0) {
+                return null;
+            }
 
             /*
                 RHR
@@ -156,8 +164,21 @@ public class RestaurantFragment extends Fragment {
                 // http://openweathermap.org/API#forecast
 
                 //ahora con el url perteneciente al proyecto Lunch Time
-                String baseUrl = "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/com.herroj.lunchtimebackend.restaurant";
-                URL url = new URL(baseUrl);
+                final String RESTAURANT_BASE_URL = "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/com.herroj.lunchtimebackend.restaurant/";
+                final String ID_PARAM = "IdRestaurant";
+
+                Uri builtUri = null;
+
+                if (params[0].compareTo("-1") == 0) {
+                    builtUri = Uri.parse(RESTAURANT_BASE_URL).buildUpon()
+                            .build();
+                } else {
+                    builtUri = Uri.parse(RESTAURANT_BASE_URL).buildUpon()
+                            .appendQueryParameter(ID_PARAM, params[0])
+                            .build();
+                }
+
+                URL url = new URL(builtUri.toString());
                 /*
                 String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
                 String apiKey = "&APPID=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
