@@ -43,6 +43,8 @@ public class RestaurantDetailActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.restaurant_action_settings) {
+            // se invoca la pantalla de configuración
+            startActivity(new Intent(this, RestaurantSettingsActivity.class));
             return true;
         }
 

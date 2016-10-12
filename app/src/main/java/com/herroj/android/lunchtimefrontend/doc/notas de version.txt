@@ -211,3 +211,12 @@
   6 - Add settingsactivity
 
   + se crea la pantalla de configuraciones
+
+
+  v0.3.7 Launch Settings
+
+  0 - En desarrollo
+  3 - Nuevos activities y navegar con intents
+  7 - Launch settings
+
+  + se invoca la pantalla de configuraciones

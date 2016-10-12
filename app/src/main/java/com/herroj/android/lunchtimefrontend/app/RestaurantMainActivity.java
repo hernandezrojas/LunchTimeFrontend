@@ -1,5 +1,6 @@
 package com.herroj.android.lunchtimefrontend.app;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -69,6 +70,8 @@ public class RestaurantMainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.restaurant_action_settings) {
+            // se invoca la pantalla de configuración
+            startActivity(new Intent(this, RestaurantSettingsActivity.class));
             return true;
         }
 
