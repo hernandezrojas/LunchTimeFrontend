@@ -25,3 +25,12 @@ v0.1.1 Hola Mundo
 + actualización de icono de proyecto
 + cambio de colores
 + localización de texto al español
+
+
+v0.1.2 Add List Item Restaurant Layout
+
+0 - En desarrollo
+1 - Lista de restaurantes tomados de un Array 
+2 - Add List Item Restaurant Layout
+
++ se agrega el layout de los elementos de la lista
