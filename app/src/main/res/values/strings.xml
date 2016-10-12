@@ -22,4 +22,13 @@
 
     <string name="title_activity_restaurant_settings">Settings</string>
 
+    <!-- Label for the location preference [CHAR LIMIT=30] -->
+    <string name="pref_restaurant_label">Restaurant</string>
+
+    <!-- Key name for storing location in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_restaurant_key" translatable="false">restaurant</string>
+
+    <!-- Default postal code for location preference [CHAR LIMIT=NONE] -->
+    <string name="pref_restaurant_default" translatable="false"></string>
+
 </resources>
