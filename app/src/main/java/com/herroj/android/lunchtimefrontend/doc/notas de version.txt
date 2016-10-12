@@ -72,6 +72,7 @@ v0.1.6 Attach Adapter
 + se adjunta los datos de prueba al adaptador y se
   muestra la lista de restaurantes para terminar el punto v0.1.x 
 
+
 v0.2.1 Add The Network Call Code
 
 0 - En desarrollo
@@ -80,6 +81,7 @@ v0.2.1 Add The Network Call Code
 
 + se agrega el código que se conecta al servicio web para obtener la
   información de los restaurantes y lo guarda en una cadena con formato json
+
 
 v0.2.2 Refactor Restaurant Fragment
 
@@ -95,6 +97,15 @@ v0.2.3 Add Refresh
 
 0 - En desarrollo
 2 - Conectar Lunch Time a la nube 
-3 - add refresh
+3 - Add refresh
 
 + se agrega un elemento de menu actualizar
+
+
+v0.2.4 Inflate Menu
+
+0 - En desarrollo
+2 - Conectar Lunch Time a la nube 
+4 - Inflate menu
+
++ se agrega el elemento de menu al menu
