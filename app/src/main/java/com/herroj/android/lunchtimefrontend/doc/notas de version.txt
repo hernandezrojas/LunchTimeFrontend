@@ -34,3 +34,12 @@ v0.1.2 Add List Item Restaurant Layout
 2 - Add List Item Restaurant Layout
 
 + se agrega el layout de los elementos de la lista
+
+
+v0.1.3 Update Fragment Layout
+
+0 - En desarrollo
+1 - Lista de restaurantes tomados de un Array 
+3 - Update Fragment Layout
+
++ se modifica el fragment layout que contiene la lista
