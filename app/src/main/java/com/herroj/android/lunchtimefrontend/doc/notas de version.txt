@@ -89,3 +89,12 @@ v0.2.2 Refactor Restaurant Fragment
 
 + se separa la clase embebida fragment dentro de la clase principal, para colocarla
   en una clase propia
+
+
+v0.2.3 Add Refresh
+
+0 - En desarrollo
+2 - Conectar Lunch Time a la nube 
+3 - add refresh
+
++ se agrega un elemento de menu actualizar
