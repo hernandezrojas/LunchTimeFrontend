@@ -109,3 +109,13 @@ v0.2.4 Inflate Menu
 4 - Inflate menu
 
 + se agrega el elemento de menu al menu
+
+
+v0.2.5 Execute Fetchrestauranttask
+
+0 - En desarrollo
+2 - Conectar Lunch Time a la nube 
+5 - Execute fetchrestauranttask
+
++ se agrega la función de conectar a base de datos 
+  para obtener la información al presionar actualizar en el menu

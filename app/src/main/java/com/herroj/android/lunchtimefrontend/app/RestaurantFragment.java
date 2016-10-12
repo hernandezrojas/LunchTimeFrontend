@@ -60,6 +60,16 @@ public class RestaurantFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.restaurant_action_refresh) {
+
+            /* RHR
+                2.05 execute fetchestauranttask
+             */
+
+            FetchRestaurantTask restaurantTask = new FetchRestaurantTask();
+            restaurantTask.execute();
+
+            // Fin 2.05 execute fetchestauranttask
+
             return true;
         }
         return super.onOptionsItemSelected(item);
