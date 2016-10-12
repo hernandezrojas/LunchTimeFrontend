@@ -31,7 +31,7 @@ v0.1.2 Add List Item Restaurant Layout
 
 0 - En desarrollo
 1 - Lista de restaurantes tomados de un Array 
-2 - Add List Item Restaurant Layout
+2 - Add list item restaurant layout
 
 + se agrega el layout de los elementos de la lista
 
@@ -40,15 +40,16 @@ v0.1.3 Update Fragment Layout
 
 0 - En desarrollo
 1 - Lista de restaurantes tomados de un Array 
-3 - Update Fragment Layout
+3 - Update fragment layout
 
 + se modifica el fragment layout que contiene la lista
+
 
 v0.1.4 Add Dummy Data
 
 0 - En desarrollo
 1 - Lista de restaurantes tomados de un Array 
-4 - Add Dummy Data
+4 - Add dummy data
 
 + se agregan datos de prueba
 
@@ -57,7 +58,7 @@ v0.1.5 Create ArrayAdapter
 
 0 - En desarrollo
 1 - Lista de restaurantes tomados de un Array 
-5 - Create ArrayAdapter
+5 - Create arrayAdapter
 
 + se crea el array adapter
 
@@ -66,7 +67,7 @@ v0.1.6 Attach Adapter
 
 0 - En desarrollo
 1 - Lista de restaurantes tomados de un Array 
-6 - Attach Adapter
+6 - Attach adapter
 
 + se adjunta los datos de prueba al adaptador y se
   muestra la lista de restaurantes para terminar el punto v0.1.x 
@@ -75,7 +76,16 @@ v0.2.1 Add The Network Call Code
 
 0 - En desarrollo
 2 - Conectar Lunch Time a la nube 
-1 - Add The Network Call Code
+1 - Add the network call code
 
 + se agrega el código que se conecta al servicio web para obtener la
   información de los restaurantes y lo guarda en una cadena con formato json
+
+v0.2.2 Refactor Restaurant Fragment
+
+0 - En desarrollo
+2 - Conectar Lunch Time a la nube 
+2 - Refactor restaurant fragment
+
++ se separa la clase embebida fragment dentro de la clase principal, para colocarla
+  en una clase propia
