@@ -119,3 +119,12 @@ v0.2.5 Execute Fetchrestauranttask
 
 + se agrega la función de conectar a base de datos 
   para obtener la información al presionar actualizar en el menu
+
+
+v0.2.6 Add Internet Permissions
+
+0 - En desarrollo
+2 - Conectar Lunch Time a la nube 
+6 - Add internet permissions
+
++ se agregan los permisos para acceder a internet
