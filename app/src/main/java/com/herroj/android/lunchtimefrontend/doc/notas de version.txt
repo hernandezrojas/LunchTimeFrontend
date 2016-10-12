@@ -167,3 +167,12 @@
   1 - Remove logging
 
   + se eliminan los logs verbose puestos provisionalmente
+
+  v0.3.2 Add Toast
+
+  0 - En desarrollo
+  3 - Nuevos activities y navegar con intents
+  2 - Add toast
+
+  + se agrega la funcionalidad temporal de abrir una ventana emergente al
+    seleccionar un elemento de la lista
