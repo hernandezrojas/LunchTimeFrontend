@@ -185,10 +185,6 @@ public class RestaurantFragment extends Fragment {
                 resultStrs[i] = NombreRestaurant + " - " + horaApertura + " - " + horaCierre;
             }
 
-            for (String s : resultStrs) {
-                Log.v(LOG_TAG, "Restaurant: " + s);
-            }
-
             return (String[]) resultStrs;
 
         }
@@ -308,7 +304,6 @@ public class RestaurantFragment extends Fragment {
                     return null;
                 }
                 restaurantJsonStr = buffer.toString();
-                Log.v(LOG_TAG, "Restaurant string: " + restaurantJsonStr);
 
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
