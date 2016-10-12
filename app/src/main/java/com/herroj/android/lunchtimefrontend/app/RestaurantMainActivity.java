@@ -1,4 +1,4 @@
-﻿package com.herroj.android.lunchtimefrontend.app;
+package com.herroj.android.lunchtimefrontend.app;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ import java.util.List;
 
 /**
  * RHR
- * 
+ * <p>
  * 1.01_hola_mundo
  * Esta clase representa la ventana principal de los restaurantes, contiene un menú
  * con un elemento que se llama configuración, esta pantalla muestra un fragment
@@ -62,6 +63,8 @@ public class RestaurantMainActivity extends ActionBarActivity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        ArrayAdapter<String> mForecastAdapter;
+
         public PlaceholderFragment() {
         }
 
@@ -84,9 +87,28 @@ public class RestaurantMainActivity extends ActionBarActivity {
                     "FACPYA - 8:00 - 21:00 - Cafetería",
                     "FCI - 7:00 - 20:30 - Cafetería"
             };
-            List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
+            List<String> restaurantes = new ArrayList<String>(Arrays.asList(data));
 
             // Termina 1.04 Creación de dummy datos
+
+            /*
+                RHR
+
+                1.05 Create ArrayAdapter to eventually use to populate the ListView
+            */
+
+
+            // Now that we have some dummy forecast data, create an ArrayAdapter.
+            // The ArrayAdapter will take data from a source (like our dummy forecast) and
+            // use it to populate the ListView it's attached to.
+            mForecastAdapter =
+                    new ArrayAdapter<String>(
+                            getActivity(), // The current context (this activity)
+                            R.layout.list_item_restaurant, // The name of the layout ID.
+                            R.id.list_item_restaurant_textview, // The ID of the textview to populate.
+                            restaurantes);
+
+            // 1.05 Create ArrayAdapter to eventually use to populate the ListView
 
             View rootView = inflater.inflate(R.layout.fragment_restaurant_main, container, false);
             return rootView;

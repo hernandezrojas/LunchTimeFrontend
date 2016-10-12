@@ -51,3 +51,12 @@ v0.1.4 Add Dummy Data
 4 - Add Dummy Data
 
 + se agregan datos de prueba
+
+
+v0.1.5 Create ArrayAdapter
+
+0 - En desarrollo
+1 - Lista de restaurantes tomados de un Array 
+5 - Create ArrayAdapter
+
++ se crea el array adapter
