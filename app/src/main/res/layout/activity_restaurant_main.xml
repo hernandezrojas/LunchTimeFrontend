@@ -1,17 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_restaurant_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.herroj.android.lunchtimefrontend.app.RestaurantMainActivity">
+<!--
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
-</RelativeLayout>
+    RHR
+
+    1.01_hola_mundo
+
+    Este layout es de la pantalla principal de restaurantes, en el se manda a llamar al fragment
+    que muestra el texto hola mundo
+
+     *  Un FrameLayout coloca todos sus controles hijos alineados con su esquina superior izquierda,
+     de forma que cada control quedará oculto por el control siguiente (a menos que éste último
+     tenga transparencia). Por ello, suele utilizarse para mostrar un único control en su interior,
+     a modo de contenedor (placeholder) sencillo para un sólo elemento sustituible, por ejemplo una
+     imagen
+
+-->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/restaurant_container"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    tools:context=".RestaurantMainActivity" tools:ignore="MergeRootFrame" />

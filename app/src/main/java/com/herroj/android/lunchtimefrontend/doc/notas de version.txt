@@ -1,12 +1,27 @@
-﻿0 - En desarrollo
+﻿v0.0.1 Repositorio Nuevo
+
+0 - En desarrollo
 0 - Preparación
-1 - Creación de repositorio
+1 - Repositorio nuevo
 
 + creación del repositorio de github
 
 
+v0.0.2 Activity En Blanco
 0 - En desarrollo
 0 - Preparación
-2 - Creación de activity en blanco
+2 - Activity en blanco
 
 + creación del proyecto con el activity en blanco
+
+
+v0.1.1 Hola Mundo
+
+0 - En desarrollo
+1 - Lista de restaurantes tomados de un Array 
+1 - Hola mundo
+
++ creación de fragment dentro de activity principal
++ actualización de icono de proyecto
++ cambio de colores
++ localización de texto al español

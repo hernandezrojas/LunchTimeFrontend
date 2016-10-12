@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LunchTimeFrontend</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="restaurant_action_settings">Settings</string>
 </resources>

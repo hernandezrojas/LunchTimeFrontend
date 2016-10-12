@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lunch Time</string>
+    <string name="hello_world">Hola mundo!</string>
+    <string name="restaurant_action_settings">Configuraciones</string>
+</resources>
