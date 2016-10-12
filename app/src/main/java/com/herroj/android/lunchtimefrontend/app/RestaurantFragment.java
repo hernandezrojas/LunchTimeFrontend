@@ -209,7 +209,7 @@ public class RestaurantFragment extends Fragment {
 
         private String darformatoCadenaHora(String hora) {
 
-            if(hora.compareTo("") == 0) {
+            if (hora.compareTo("") == 0) {
                 return hora;
             }
 
@@ -339,5 +339,17 @@ public class RestaurantFragment extends Fragment {
 
             return null;
         }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+            if (result != null) {
+                mRestaurantAdapter.clear();
+                for (String dayForecastStr : result) {
+                    mRestaurantAdapter.add(dayForecastStr);
+                }
+                // New data is back from the server.  Hooray!
+            }
+        }
+
     }
 }

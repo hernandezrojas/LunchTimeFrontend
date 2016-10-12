@@ -147,3 +147,11 @@ v0.2.8 Json Parsing
 
 + se procesa la información en formato json para agregarla
   a la lista
+
+  v0.2.9 Display Data
+
+  0 - En desarrollo
+  2 - Conectar Lunch Time a la nube
+  9 - Display data
+
+  + se muestran los datos en la lista y termina el punto 0.2.x
