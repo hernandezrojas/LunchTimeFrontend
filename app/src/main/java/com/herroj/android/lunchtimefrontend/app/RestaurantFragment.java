@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,15 +19,27 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 public class RestaurantFragment extends Fragment {
 
@@ -128,12 +141,72 @@ public class RestaurantFragment extends Fragment {
         return rootView;
     }
 
-    public class FetchRestaurantTask extends AsyncTask<String, Void, Void> {
+    public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
 
         private final String LOG_TAG = FetchRestaurantTask.class.getSimpleName();
 
+        private SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
+        private SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
+
+        /**
+         * Take the String representing the complete forecast in JSON Format and
+         * pull out the data we need to construct the Strings needed for the wireframes.
+         * <p>
+         * Fortunately parsing is easy:  constructor takes the JSON string and converts it
+         * into an Object hierarchy for us.
+         */
+        private String[] getRestaurantDataFromJson(String restaurantJsonStr)
+                throws JSONException {
+
+            // These are the names of the JSON objects that need to be extracted.
+            final String OWM_RESTAURANT = "restaurant";
+            final String OWM_HORA_APERTURA = "horaApertura";
+            final String OWM_HORA_CIERRE = "horaCierre";
+
+
+            JSONArray restaurantArray = new JSONArray(restaurantJsonStr);
+
+            String NombreRestaurant;
+            String horaApertura;
+            String horaCierre;
+
+            String[] resultStrs = new String[restaurantArray.length()];
+            for (int i = 0; i < restaurantArray.length(); i++) {
+
+
+                // Get the JSON object representing the restaurant
+                JSONObject objRestaurant = restaurantArray.getJSONObject(i);
+
+                NombreRestaurant = objRestaurant.getString(OWM_RESTAURANT);
+
+                horaApertura = darformatoCadenaHora(objRestaurant.getString(OWM_HORA_APERTURA));
+                horaCierre = darformatoCadenaHora(objRestaurant.getString(OWM_HORA_CIERRE));
+
+                resultStrs[i] = NombreRestaurant + " - " + horaApertura + " - " + horaCierre;
+            }
+
+            for (String s : resultStrs) {
+                Log.v(LOG_TAG, "Restaurant: " + s);
+            }
+
+            return (String[]) resultStrs;
+
+        }
+
+        private String darformatoCadenaHora(String hora){
+            hora = hora.substring(hora.indexOf('T') + 1, hora.length());
+            hora = hora.substring(0, hora.indexOf('-') -3);
+            try {
+                Date _24HourDt = _24HourSDF.parse(hora);
+                hora =_12HourSDF.format(_24HourDt);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return hora;
+        }
+
         @Override
-        protected Void doInBackground(String... params) {
+        protected String[] doInBackground(String... params) {
 
 
             // RHR 2.07 Build URL with params
@@ -156,7 +229,7 @@ public class RestaurantFragment extends Fragment {
             BufferedReader reader = null;
 
             // Will contain the raw JSON response as a string.
-            String forecastJsonStr = null;
+            String restaurantJsonStr = null;
 
             try {
                 // Construct the URL for the OpenWeatherMap query
@@ -185,9 +258,13 @@ public class RestaurantFragment extends Fragment {
                 URL url = new URL(baseUrl.concat(apiKey));
                 */
 
+
+                final String MEDIA_TYPE = "application/json";
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", MEDIA_TYPE);
+                //urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.connect();
 
                 // Read the input stream into a String
@@ -211,7 +288,9 @@ public class RestaurantFragment extends Fragment {
                     // Stream was empty.  No point in parsing.
                     return null;
                 }
-                forecastJsonStr = buffer.toString();
+                restaurantJsonStr = buffer.toString();
+                Log.v(LOG_TAG, "Restaurant string: " + restaurantJsonStr);
+
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
@@ -229,6 +308,16 @@ public class RestaurantFragment extends Fragment {
                     }
                 }
             }
+
+            try {
+                return getRestaurantDataFromJson(restaurantJsonStr);
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
+            }
+
+            // This will only happen if there was an error getting or parsing the forecast.
+
             return null;
         }
     }

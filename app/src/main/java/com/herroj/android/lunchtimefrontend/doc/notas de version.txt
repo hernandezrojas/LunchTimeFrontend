@@ -137,3 +137,13 @@ v0.2.7 Build URL With Params
 7 - Build URL with params
 
 + funcionalidad de agregar parametros a la URL
+
+
+v0.2.8 Json Parsing
+
+0 - En desarrollo
+2 - Conectar Lunch Time a la nube 
+8 - Json parsing
+
++ se procesa la información en formato json para agregarla
+  a la lista
