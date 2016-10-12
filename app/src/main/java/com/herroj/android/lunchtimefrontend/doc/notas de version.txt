@@ -60,3 +60,13 @@ v0.1.5 Create ArrayAdapter
 5 - Create ArrayAdapter
 
 + se crea el array adapter
+
+
+v0.1.6 Attach Adapter
+
+0 - En desarrollo
+1 - Lista de restaurantes tomados de un Array 
+6 - Attach Adapter
+
++ se adjunta los datos de prueba al adaptador y se
+  muestra la lista de restaurantes para terminar el punto v0.1.x 

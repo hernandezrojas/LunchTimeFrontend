@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,13 @@ import java.util.List;
  * Esta clase representa la ventana principal de los restaurantes, contiene un menú
  * con un elemento que se llama configuración, esta pantalla muestra un fragment
  * que contiene el texto de hola mundo
+ *
+ * 1.04 Creación de dummy datos
+ *
+ * 1.05 Create ArrayAdapter to eventually use to populate the ListView
+ *
+ * 1.06 Get a reference to the ListView, and attach this adapter to it.
+ *
  */
 
 public class RestaurantMainActivity extends ActionBarActivity {
@@ -111,6 +119,11 @@ public class RestaurantMainActivity extends ActionBarActivity {
             // 1.05 Create ArrayAdapter to eventually use to populate the ListView
 
             View rootView = inflater.inflate(R.layout.fragment_restaurant_main, container, false);
+
+            // 1.06 Get a reference to the ListView, and attach this adapter to it.
+            ListView listView = (ListView) rootView.findViewById(R.id.listview_restaurant);
+            listView.setAdapter(mForecastAdapter);
+
             return rootView;
         }
     }
