@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="38d90cb457daf0bb893619723a6ba607f78b2757">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_bbaf6cb6267f06597879427ee9ea97a97be4459d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-utils-24.2.1_94eff9314b812286c7c5bd5673325399be6caa0f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-24.2.1_c62b4cd6789557ecbef534286c1d9df48223e815\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-24.2.1_bc37748c0194a3621a843f8e5e5dadfed8cf19e3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_dc9f049f1394dfc45071b8f8d5ef212adbfdc21d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="867dad63c33388ff8c7644b236579355036d075f">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_7774f6e927fce9daa596a59356b230590ce79762\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-24.2.1_0c72fbf0f92621dcc1c2f95e7c54baa998f5d151\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_9bd7eb08018b3e59983dc81de482b0f3f4daa9e5\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-24.2.1_29f1b0356272d056daacba364ab84b471255bb52\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="7f65f2eda800ea5cb3f6b946e598990860aac860">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_8ac23e86b819d77d1d3d6f378238ede00ecd8ce3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_424034bd632738b2c662d09860e433e578b9da3f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\24.2.1\support-annotations-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-24.2.1_10cd953c940accdea77ebb67004f63b8f836c70e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_5c69479390909a7fd23741ce116e176b7f17aab9\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-24.2.1_27c711468024bf42c28b253f3a8b855d932bd993\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-fragment-24.2.1_24fa03e97d67856ce9337a9836696fb57f340d4b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-24.2.1_c0825ec3648be3159981cca09d162eb9b09cc25c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
+        <dex dex="D:\Programacion\Proyectos\General\LunchTime\Android\LunchTimeFrontend\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-24.2.1_5531b3cdd49862d76e222a762c2ccb2407d5b8d2\classes.dex" />
+    </item>
+
+</items>

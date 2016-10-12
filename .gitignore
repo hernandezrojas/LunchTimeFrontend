@@ -47,14 +47,14 @@ Temporary Items
 .apdisk
 
 # RHR
-.idea*
-.gradle*
-gradle*
-bundle*
-.gradle/*
-.idea/*
+# .idea*
+# .gradle*
+# gradle*
+# bundle*
+# .gradle/*
+# .idea/*
 
-app/app.iml
-build/intermediates/dex-cache/cache.xml
+# app/app.iml
+# build/intermediates/dex-cache/cache.xml
 
 
