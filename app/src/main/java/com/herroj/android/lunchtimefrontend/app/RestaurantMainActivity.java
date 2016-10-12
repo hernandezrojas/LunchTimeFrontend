@@ -1,4 +1,4 @@
-package com.herroj.android.lunchtimefrontend.app;
+﻿package com.herroj.android.lunchtimefrontend.app;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -9,15 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
- *
  * RHR
- *
+ * 
  * 1.01_hola_mundo
  * Esta clase representa la ventana principal de los restaurantes, contiene un menú
  * con un elemento que se llama configuración, esta pantalla muestra un fragment
  * que contiene el texto de hola mundo
- *
  */
 
 public class RestaurantMainActivity extends ActionBarActivity {
@@ -66,6 +68,26 @@ public class RestaurantMainActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            /*
+                RHR
+
+                1.04 Creación de dummy datos para mostrarlos por el momento
+            */
+
+            // Create some dummy data for the ListView.  Here's a sample weekly forecast
+            String[] data = {
+                    "FCQ - 7:00 - 19:00 - Cafetería",
+                    "Hotdogs - 8:30 - 19:30 - Puesto",
+                    "FOD -  -  - Cafetería",
+                    "FCFM - 8:00 - 17:00 - Cafetería",
+                    "Gimnasio - 6:00 - 19:00 - Cafetería",
+                    "FACPYA - 8:00 - 21:00 - Cafetería",
+                    "FCI - 7:00 - 20:30 - Cafetería"
+            };
+            List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
+
+            // Termina 1.04 Creación de dummy datos
+
             View rootView = inflater.inflate(R.layout.fragment_restaurant_main, container, false);
             return rootView;
         }

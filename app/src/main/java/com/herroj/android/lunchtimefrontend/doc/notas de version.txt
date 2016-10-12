@@ -43,3 +43,11 @@ v0.1.3 Update Fragment Layout
 3 - Update Fragment Layout
 
 + se modifica el fragment layout que contiene la lista
+
+v0.1.4 Add Dummy Data
+
+0 - En desarrollo
+1 - Lista de restaurantes tomados de un Array 
+4 - Add Dummy Data
+
++ se agregan datos de prueba
