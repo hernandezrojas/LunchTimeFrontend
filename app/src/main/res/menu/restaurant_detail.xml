@@ -1,6 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".RestaurantMainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.herroj.android.lunchtimefrontend.app.RestaurantMainActivity">
     <item android:id="@+id/restaurant_action_settings" android:title="@string/restaurant_action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

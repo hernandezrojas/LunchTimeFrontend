@@ -176,3 +176,11 @@
 
   + se agrega la funcionalidad temporal de abrir una ventana emergente al
     seleccionar un elemento de la lista
+
+  v0.3.3 Create Detail Activity 
+
+  0 - En desarrollo
+  3 - Nuevos activities y navegar con intents
+  3 - Create detail activity 
+
+  + creación de activity que mostrará el detalle del elemento seleccionado
