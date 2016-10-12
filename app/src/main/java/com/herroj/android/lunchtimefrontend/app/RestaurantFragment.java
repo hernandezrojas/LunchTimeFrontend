@@ -179,8 +179,8 @@ public class RestaurantFragment extends Fragment {
 
                 NombreRestaurant = objRestaurant.getString(OWM_RESTAURANT);
 
-                horaApertura = darformatoCadenaHora(objRestaurant.getString(OWM_HORA_APERTURA));
-                horaCierre = darformatoCadenaHora(objRestaurant.getString(OWM_HORA_CIERRE));
+                horaApertura = darformatoCadenaHora(getStrCampo(objRestaurant, OWM_HORA_APERTURA));
+                horaCierre = darformatoCadenaHora(getStrCampo(objRestaurant, OWM_HORA_CIERRE));
 
                 resultStrs[i] = NombreRestaurant + " - " + horaApertura + " - " + horaCierre;
             }
@@ -193,12 +193,31 @@ public class RestaurantFragment extends Fragment {
 
         }
 
-        private String darformatoCadenaHora(String hora){
+        private String getStrCampo(JSONObject objeto, String campo) {
+
+            try {
+                if (objeto.has(campo)) {
+                    return objeto.getString(campo);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+            }
+            return "";
+
+        }
+
+        private String darformatoCadenaHora(String hora) {
+
+            if(hora.compareTo("") == 0) {
+                return hora;
+            }
+
             hora = hora.substring(hora.indexOf('T') + 1, hora.length());
-            hora = hora.substring(0, hora.indexOf('-') -3);
+            hora = hora.substring(0, hora.indexOf('-') - 3);
             try {
                 Date _24HourDt = _24HourSDF.parse(hora);
-                hora =_12HourSDF.format(_24HourDt);
+                hora = _12HourSDF.format(_24HourDt);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
