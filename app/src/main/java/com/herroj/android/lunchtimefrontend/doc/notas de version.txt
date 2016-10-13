@@ -229,3 +229,12 @@
   8 - Add locations setting
 
   + se agregan elementos a la configuración
+
+
+  v0.3.9 Inflate Settingsactivity
+
+  0 - En desarrollo
+  3 - Nuevos activities y navegar con intents
+  9 - Inflate settingsactivity
+
+  + agregar los datos de configuracion a la pantalla
