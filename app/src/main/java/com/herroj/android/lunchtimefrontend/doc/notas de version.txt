@@ -258,3 +258,12 @@
   + se eliminan los datos de prueba
   + se consultan los datos al cargar y al seleccionar
     la opcion del menu actualizar
+
+  v0.3.12 Add ShareActionProvider To Detail Fragment Menu
+
+   0 - En desarrollo
+   3 - Nuevos activities y navegar con intents
+  12 - Add ShareActionProvider to detail fragment menu
+
+  + se agrega la opcion de compartir en el menu de detalle
+  + fin del punto v0.3.x

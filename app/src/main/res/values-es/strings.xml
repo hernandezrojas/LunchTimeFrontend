@@ -6,4 +6,5 @@
     <string name="restaurant_action_refresh">Actualizar</string>
     <string name="title_activity_restaurant_detail">Detalles</string>
     <string name="title_activity_restaurant_settings">Configuraciones</string>
+    <string name="restaurant_action_share">Compartir</string>
 </resources>
