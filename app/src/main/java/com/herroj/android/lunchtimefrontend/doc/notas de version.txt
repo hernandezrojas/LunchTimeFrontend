@@ -247,3 +247,14 @@
   10 - Restaurant Prefs
 
   + se establece la ventana de preferencias
+
+
+  v0.3.11 Refactor Fetch Restaurant
+
+   0 - En desarrollo
+   3 - Nuevos activities y navegar con intents
+  11 - Refactor fetch restaurant
+
+  + se eliminan los datos de prueba
+  + se consultan los datos al cargar y al seleccionar
+    la opcion del menu actualizar

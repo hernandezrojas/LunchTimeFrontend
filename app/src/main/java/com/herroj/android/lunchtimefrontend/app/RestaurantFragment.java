@@ -79,64 +79,26 @@ public class RestaurantFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.restaurant_action_refresh) {
-
-            /* RHR
-                2.05 execute fetchestauranttask
-             */
-
-            FetchRestaurantTask restaurantTask = new FetchRestaurantTask();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String location = prefs.getString(getString(R.string.pref_restaurant_key),
-                    getString(R.string.pref_restaurant_default));
-            restaurantTask.execute(location);
-
-            // Fin 2.05 execute fetchestauranttask
+            updateRestaurant();
 
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    // Fin 2.04 inflate menu
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-         /*
-                RHR
-
-                1.04 Creación de dummy datos para mostrarlos por el momento
-         */
-
-        // Create some dummy data for the ListView.  Here's a sample weekly forecast
-        String[] data = {
-                "FCQ - 7:00 - 19:00 - Cafetería",
-                "Hotdogs - 8:30 - 19:30 - Puesto",
-                "FOD -  -  - Cafetería",
-                "FCFM - 8:00 - 17:00 - Cafetería",
-                "Gimnasio - 6:00 - 19:00 - Cafetería",
-                "FACPYA - 8:00 - 21:00 - Cafetería",
-                "FCI - 7:00 - 20:30 - Cafetería"
-        };
-        List<String> restaurantes = new ArrayList<String>(Arrays.asList(data));
-        // Termina 1.04 Creación de dummy datos
-
-
-        /*
-                RHR
-
-                1.05 Create ArrayAdapter to eventually use to populate the ListView
-        */
-        // Now that we have some dummy forecast data, create an ArrayAdapter.
-        // The ArrayAdapter will take data from a source (like our dummy forecast) and
+        // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
         mRestaurantAdapter =
                 new ArrayAdapter<String>(
                         getActivity(), // The current context (this activity)
                         R.layout.list_item_restaurant, // The name of the layout ID.
                         R.id.list_item_restaurant_textview, // The ID of the textview to populate.
-                        restaurantes);
+                        new ArrayList<String>());
         // 1.05 Create ArrayAdapter to eventually use to populate the ListView
 
 
@@ -161,6 +123,28 @@ public class RestaurantFragment extends Fragment {
 
         return rootView;
     }
+
+    private void updateRestaurant() {
+
+        // RHR 2.05 execute fetchestauranttask
+
+        FetchRestaurantTask restaurantTask = new FetchRestaurantTask();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = prefs.getString(getString(R.string.pref_restaurant_key),
+                getString(R.string.pref_restaurant_default));
+        restaurantTask.execute(location);
+
+        // Fin 2.05 execute fetchestauranttask
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateRestaurant();
+    }
+
+    // Fin 2.04 inflate menu
 
     public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
 
@@ -282,7 +266,7 @@ public class RestaurantFragment extends Fragment {
                     builtUri = Uri.parse(RESTAURANT_BASE_URL).buildUpon()
                             .build();
                 } else {
-                    builtUri = Uri.parse(RESTAURANT_BASE_URL+ ID_PARAM + "=" + params[0]).buildUpon()
+                    builtUri = Uri.parse(RESTAURANT_BASE_URL + ID_PARAM + "=" + params[0]).buildUpon()
                             .build();
                 }
 
