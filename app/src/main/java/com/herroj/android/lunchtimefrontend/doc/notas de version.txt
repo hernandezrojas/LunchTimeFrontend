@@ -238,3 +238,12 @@
   9 - Inflate settingsactivity
 
   + agregar los datos de configuracion a la pantalla
+
+
+  v0.3.10 Restaurant Prefs
+
+   0 - En desarrollo
+   3 - Nuevos activities y navegar con intents
+  10 - Restaurant Prefs
+
+  + se establece la ventana de preferencias

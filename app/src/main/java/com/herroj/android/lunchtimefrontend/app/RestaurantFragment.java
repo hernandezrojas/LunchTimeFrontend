@@ -5,9 +5,11 @@ package com.herroj.android.lunchtimefrontend.app;
  */
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -83,7 +85,10 @@ public class RestaurantFragment extends Fragment {
              */
 
             FetchRestaurantTask restaurantTask = new FetchRestaurantTask();
-            restaurantTask.execute("-1");
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String location = prefs.getString(getString(R.string.pref_restaurant_key),
+                    getString(R.string.pref_restaurant_default));
+            restaurantTask.execute(location);
 
             // Fin 2.05 execute fetchestauranttask
 
@@ -269,16 +274,15 @@ public class RestaurantFragment extends Fragment {
 
                 //ahora con el url perteneciente al proyecto Lunch Time
                 final String RESTAURANT_BASE_URL = "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/com.herroj.lunchtimebackend.restaurant/";
-                final String ID_PARAM = "IdRestaurant";
+                final String ID_PARAM = "restaurant";
 
                 Uri builtUri = null;
 
-                if (params[0].compareTo("-1") == 0) {
+                if (params[0].compareTo("") == 0) {
                     builtUri = Uri.parse(RESTAURANT_BASE_URL).buildUpon()
                             .build();
                 } else {
-                    builtUri = Uri.parse(RESTAURANT_BASE_URL).buildUpon()
-                            .appendQueryParameter(ID_PARAM, params[0])
+                    builtUri = Uri.parse(RESTAURANT_BASE_URL+ ID_PARAM + "=" + params[0]).buildUpon()
                             .build();
                 }
 
