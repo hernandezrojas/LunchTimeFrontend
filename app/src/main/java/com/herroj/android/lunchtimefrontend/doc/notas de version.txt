@@ -267,3 +267,14 @@
 
   + se agrega la opcion de compartir en el menu de detalle
   + fin del punto v0.3.x
+
+
+  v0.4.1 Start code for 0.4.x
+
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+   1 - Start code for 0.4.x
+
+  + se crea dbhelper y contract de la db sqllite
+  + archivos de prueba
+
