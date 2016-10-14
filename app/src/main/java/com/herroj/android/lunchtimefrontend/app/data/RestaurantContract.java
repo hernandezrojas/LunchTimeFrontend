@@ -26,7 +26,7 @@ public class RestaurantContract {
         public static final String TABLE_NAME = "restaurant";
 
         // Column with the foreign key into the platillo table.
-        public static final String COLUMN_TIPO_RESTAURANT_KEY = "tipo_restaurant_id";
+        public static final String COLUMN_TIPO_RESTAURANT_ID = "tipo_restaurant_id";
 
         public static final String COLUMN_RESTAURANT = "restaurant";
 

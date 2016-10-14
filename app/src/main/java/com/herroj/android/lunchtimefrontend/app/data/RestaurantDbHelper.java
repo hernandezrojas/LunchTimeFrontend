@@ -30,8 +30,9 @@ public class RestaurantDbHelper extends SQLiteOpenHelper {
                 // should be sorted accordingly.
                 RestaurantEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 RestaurantEntry.COLUMN_RESTAURANT + " TEXT NOT NULL, " +
-                RestaurantEntry.COLUMN_HORA_APERTURA + " TEXT NOT NULL, " +
-                RestaurantEntry.COLUMN_HORA_CIERRE + " TEXT NOT NULL); ";
+                RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID + " INTEGER NOT NULL, " +
+                RestaurantEntry.COLUMN_HORA_APERTURA + " TEXT, " +
+                RestaurantEntry.COLUMN_HORA_CIERRE + " TEXT); ";
 
                 //RestaurantEntry.COLUMN_MIN_TEMP + " REAL NOT NULL, " +
 

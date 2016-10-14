@@ -1,8 +1,10 @@
 package com.herroj.android.lunchtimefrontend.app.data;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -39,54 +41,32 @@ public class TestUtilities extends AndroidTestCase {
         }
     }
 
-    /*
-        Students: Use this to create some default restaurant values for your database tests.
-     */
-    static ContentValues createRestaurantValues(long tipoRestaurantRowId) {
-        ContentValues restaurantValues = new ContentValues();
+    static ContentValues createFCFMRestaurantValues() {
 
-        restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT_KEY, tipoRestaurantRowId);
-        restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT, "Restaurant Prueba");
-        restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA, "8:00 a.m.");
-        restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE, "9:00 p.m.");
+        // Create a new map of values, where column names are the keys
+        ContentValues testValues = new ContentValues();
+        testValues.put(RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT, "FCFM");
+        testValues.put(RestaurantContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID, 1);
+        testValues.put(RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA, "8:00 a.m.");
+        testValues.put(RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE, "9:00 p.m.");
 
-
-        return restaurantValues;
+        return testValues;
     }
 
-    /*
-        Students: You can uncomment this helper function once you have finished creating the
-        LocationEntry part of the WeatherContract.
-     */
-//    static ContentValues createNorthPoleLocationValues() {
-//        // Create a new map of values, where column names are the keys
-//        ContentValues testValues = new ContentValues();
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, TEST_LOCATION);
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole");
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, 64.7488);
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
-//
-//        return testValues;
-//    }
+    static long insertRestaurantValues(Context context) {
+        // insert our test records into the database
+        RestaurantDbHelper dbHelper = new RestaurantDbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues testValues = TestUtilities.createFCFMRestaurantValues();
 
-    /*
-        Students: You can uncomment this function once you have finished creating the
-        LocationEntry part of the WeatherContract as well as the WeatherDbHelper.
-     */
-//    static long insertNorthPoleLocationValues(Context context) {
-//        // insert our test records into the database
-//        WeatherDbHelper dbHelper = new WeatherDbHelper(context);
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
-//
-//        long locationRowId;
-//        locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
-//
-//        // Verify we got a row back.
-//        assertTrue("Error: Failure to insert North Pole Location Values", locationRowId != -1);
-//
-//        return locationRowId;
-//    }
+        long locationRowId;
+        locationRowId = db.insert(RestaurantContract.RestaurantEntry.TABLE_NAME, null, testValues);
+
+        // Verify we got a row back.
+        assertTrue("Error: Failure to insert North Pole Location Values", locationRowId != -1);
+
+        return locationRowId;
+    }
 
     /*
         Students: The functions we provide inside of TestProvider use this utility class to test

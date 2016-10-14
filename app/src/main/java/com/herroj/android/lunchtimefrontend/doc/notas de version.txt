@@ -278,3 +278,11 @@
   + se crea dbhelper y contract de la db sqllite
   + archivos de prueba
 
+
+  v0.4.2 Test Restaurant Table
+
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+   2 - Test restaurant table
+
+  + se hace una prueba de la tabla restaurant
