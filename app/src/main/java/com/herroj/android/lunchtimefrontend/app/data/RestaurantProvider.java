@@ -108,7 +108,15 @@ public class RestaurantProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             // "restaurant"
             case RESTAURANT: {
-                retCursor = null;
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        RestaurantContract.RestaurantEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
             }
 

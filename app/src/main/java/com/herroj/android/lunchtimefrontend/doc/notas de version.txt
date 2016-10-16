@@ -313,3 +313,11 @@
    5 - Register contentprovider
 
   + se registra el proveedor de contenido
+
+
+  v0.4.6 Query
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+   6 - Query
+
+  + se estableció el código del query
