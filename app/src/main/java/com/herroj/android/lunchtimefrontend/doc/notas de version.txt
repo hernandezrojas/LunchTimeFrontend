@@ -363,11 +363,22 @@
   + Reparar bug de pendente tipo restaurant
 
 
-  v0.4.11 cursor adapter
+  v0.4.11 Cursor Adapter
    0 - En desarrollo
    4 - Ciclo de vida de activities y datos
   11 - Cursor adapter
 
   + cursor adapter
+
+
+  v0.4.12 Loaders
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+  12 - Loaders
+
+  + código de Loaders
+
+
+
 
 

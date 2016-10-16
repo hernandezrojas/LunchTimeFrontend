@@ -12,6 +12,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,8 +27,9 @@ import android.widget.ListView;
 
 import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
 
-public class RestaurantFragment extends Fragment {
+public class RestaurantFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final int RESTAURANT_LOADER = 0;
     private RestaurantAdapter mRestaurantAdapter;
 
     public RestaurantFragment() {
@@ -69,17 +73,8 @@ public class RestaurantFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Sort order:  Ascending, by date.
-        String sortOrder = RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " ASC";
-        Uri restaurantUri = RestaurantContract.RestaurantEntry.buildRestaurantUri();
-
-        Cursor cur = getActivity().getContentResolver().query(restaurantUri,
-                null, null, null, sortOrder);
-
-        // The CursorAdapter will take data from our cursor and populate the ListView
-        // However, we cannot use FLAG_AUTO_REQUERY since it is deprecated, so we will end
-        // up with an empty list the first time we run.
-        mRestaurantAdapter = new RestaurantAdapter(getActivity(), cur, 0);
+        // The CursorAdapter will take data from our cursor and populate the ListView.
+        mRestaurantAdapter = new RestaurantAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_restaurant_main, container, false);
 
@@ -88,6 +83,12 @@ public class RestaurantFragment extends Fragment {
         listView.setAdapter(mRestaurantAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(RESTAURANT_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     private void updateRestaurant() {
@@ -103,6 +104,32 @@ public class RestaurantFragment extends Fragment {
     public void onStart() {
         super.onStart();
         updateRestaurant();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+
+        // Sort order:  Ascending, by date.
+        String sortOrder = RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " ASC";
+        Uri restaurantUri = RestaurantContract.RestaurantEntry.buildRestaurantUri();
+
+        return new CursorLoader(getActivity(),
+                restaurantUri,
+                null,
+                null,
+                null,
+                sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        mRestaurantAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+        mRestaurantAdapter.swapCursor(null);
     }
 
 }
