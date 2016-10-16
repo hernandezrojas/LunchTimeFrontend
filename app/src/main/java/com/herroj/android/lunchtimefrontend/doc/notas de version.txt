@@ -330,3 +330,11 @@
 
   + se estableció el código del insert
 
+
+  v0.4.8 Update Delete
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+   8 - Update delete
+
+  + código para update y delete
+
