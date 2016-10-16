@@ -22,7 +22,7 @@ public class Utility {
     private static SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
     private static SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
 
-    public static String getPreferredLocation(Context context) {
+    public static String getPreferredRestaurant(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_restaurant_key),
                 context.getString(R.string.pref_restaurant_default));

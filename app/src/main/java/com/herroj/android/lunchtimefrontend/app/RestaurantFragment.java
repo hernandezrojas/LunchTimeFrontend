@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
@@ -105,6 +106,23 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         ListView listView = (ListView) rootView.findViewById(R.id.listview_restaurant);
         listView.setAdapter(mRestaurantAdapter);
 
+        // We'll call our MainActivity
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                // CursorAdapter returns a cursor at the correct position for getItem(), or null
+                // if it cannot seek to that position.
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                if (cursor != null) {
+                    String restaurantSetting = Utility.getPreferredRestaurant(getActivity());
+                    Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class)
+                            .setData(RestaurantContract.RestaurantEntry.buildRestaurantUri());
+                    startActivity(intent);
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -117,7 +135,7 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
     private void updateRestaurant() {
 
         FetchRestaurantTask restaurantTask = new FetchRestaurantTask(getActivity());
-        String restaurant = Utility.getPreferredLocation(getActivity());
+        String restaurant = Utility.getPreferredRestaurant(getActivity());
 
         restaurantTask.execute(restaurant);
 
@@ -131,7 +149,7 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        String locationSetting = Utility.getPreferredLocation(getActivity());
+        String restaurantSetting = Utility.getPreferredRestaurant(getActivity());
 
         // Sort order:  Ascending, by date.
         String sortOrder = RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " ASC";

@@ -77,8 +77,8 @@ public class RestaurantDetailActivity extends ActionBarActivity {
 
             // The detail Activity called via intent.  Inspect the intent for forecast data.
             Intent intent = getActivity().getIntent();
-            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                mRestaurantStr = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if (intent != null) {
+                mRestaurantStr = intent.getDataString();
             }
             if (null != mRestaurantStr) {
                 ((TextView) rootView.findViewById(R.id.restaurant_detail_text))

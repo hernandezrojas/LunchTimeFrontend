@@ -386,6 +386,14 @@
   + código de projections
 
 
+  v0.4.14 Details View
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+  14 - Details view
+
+  + código de details view
+
+
 
 
 
