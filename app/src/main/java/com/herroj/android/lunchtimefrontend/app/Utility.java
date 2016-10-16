@@ -1,6 +1,9 @@
-package com.herroj.android.lunchtimefrontend.app.util;
+package com.herroj.android.lunchtimefrontend.app;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,14 +13,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Roberto Hernandez on 13/10/2016.
+ * Created by Roberto Hernandez on 16/10/2016.
  */
 
-public class General {
+public class Utility {
 
 
     private static SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
     private static SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
+
+    public static String getPreferredLocation(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_restaurant_key),
+                context.getString(R.string.pref_restaurant_default));
+    }
 
     public static String getStrCampo(JSONObject objeto, String campo) {
 

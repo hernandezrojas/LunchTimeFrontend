@@ -347,11 +347,27 @@
   + código para update y delete
 
 
-  v0.4.9 Bulkinserts With Contentprovider
+  v0.4.9 Refactor Fetchrestaurant
    0 - En desarrollo
    4 - Ciclo de vida de activities y datos
-   9 - Bulkinserts with contentprovider
+   8 - Refactor fetchrestaurant
+
+  + refactor fetchrestaurant
+
+  v0.4.10 Bulkinserts With Contentprovider
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+  10 - Bulkinserts with contentprovider
 
   + Bulkinserts With Contentprovider
   + Reparar bug de pendente tipo restaurant
+
+
+  v0.4.11 cursor adapter
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+  11 - Cursor adapter
+
+  + cursor adapter
+
 

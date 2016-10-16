@@ -37,11 +37,6 @@ public class TestProvider extends AndroidTestCase {
                 null,
                 null
         );
-        mContext.getContentResolver().delete(
-                RestaurantEntry.CONTENT_URI,
-                null,
-                null
-        );
 
         Cursor cursor = mContext.getContentResolver().query(
                 RestaurantEntry.CONTENT_URI,

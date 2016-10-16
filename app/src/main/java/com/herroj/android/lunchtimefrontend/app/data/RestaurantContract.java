@@ -43,10 +43,10 @@ public class RestaurantContract {
         // Table name
         public static final String TABLE_NAME = "restaurant";
         // Column with the foreign key into the platillo table.
-        public static final String COLUMN_TIPO_RESTAURANT_ID = "tipo_restaurant_id";
+        public static final String COLUMN_TIPO_RESTAURANT_ID = "tipoRestaurantidTipoRestaurant";
         public static final String COLUMN_RESTAURANT = "restaurant";
-        public static final String COLUMN_HORA_APERTURA = "hora_apertura";
-        public static final String COLUMN_HORA_CIERRE = "hora_cierre";
+        public static final String COLUMN_HORA_APERTURA = "horaApertura";
+        public static final String COLUMN_HORA_CIERRE = "horaCierre";
 
         public static Uri buildRestaurantUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

@@ -6,6 +6,7 @@ package com.herroj.android.lunchtimefrontend.app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,39 +20,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import static com.herroj.android.lunchtimefrontend.app.util.General.darformatoCadenaHora;
-import static com.herroj.android.lunchtimefrontend.app.util.General.getStrCampo;
+import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
 
 public class RestaurantFragment extends Fragment {
 
-    private ArrayAdapter<String> mRestaurantAdapter;
+    private RestaurantAdapter mRestaurantAdapter;
 
     public RestaurantFragment() {
     }
@@ -94,16 +69,17 @@ public class RestaurantFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // The ArrayAdapter will take data from a source and
-        // use it to populate the ListView it's attached to.
-        mRestaurantAdapter =
-                new ArrayAdapter<String>(
-                        getActivity(), // The current context (this activity)
-                        R.layout.list_item_restaurant, // The name of the layout ID.
-                        R.id.list_item_restaurant_textview, // The ID of the textview to populate.
-                        new ArrayList<String>());
-        // 1.05 Create ArrayAdapter to eventually use to populate the ListView
+        // Sort order:  Ascending, by date.
+        String sortOrder = RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " ASC";
+        Uri restaurantUri = RestaurantContract.RestaurantEntry.buildRestaurantUri();
 
+        Cursor cur = getActivity().getContentResolver().query(restaurantUri,
+                null, null, null, sortOrder);
+
+        // The CursorAdapter will take data from our cursor and populate the ListView
+        // However, we cannot use FLAG_AUTO_REQUERY since it is deprecated, so we will end
+        // up with an empty list the first time we run.
+        mRestaurantAdapter = new RestaurantAdapter(getActivity(), cur, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_restaurant_main, container, false);
 
@@ -111,33 +87,15 @@ public class RestaurantFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listview_restaurant);
         listView.setAdapter(mRestaurantAdapter);
 
-        // Evento que al seleccionar un elemento en el menú se genera el activity
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String restaurant = mRestaurantAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, restaurant);
-                startActivity(intent);
-            }
-
-        });
-
         return rootView;
     }
 
     private void updateRestaurant() {
 
-        // RHR 2.05 execute fetchestauranttask
+        FetchRestaurantTask restaurantTask = new FetchRestaurantTask(getActivity());
+        String restaurant = Utility.getPreferredLocation(getActivity());
 
-        FetchRestaurantTask restaurantTask = new FetchRestaurantTask(getActivity(), mRestaurantAdapter);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String location = prefs.getString(getString(R.string.pref_restaurant_key),
-                getString(R.string.pref_restaurant_default));
-        restaurantTask.execute(location);
-
-        // Fin 2.05 execute fetchestauranttask
+        restaurantTask.execute(restaurant);
 
     }
 

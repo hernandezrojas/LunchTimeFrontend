@@ -26,14 +26,14 @@ import org.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static com.herroj.android.lunchtimefrontend.app.util.General.darformatoCadenaHora;
-import static com.herroj.android.lunchtimefrontend.app.util.General.getStrCampo;
+import static com.herroj.android.lunchtimefrontend.app.Utility.darformatoCadenaHora;
+import static com.herroj.android.lunchtimefrontend.app.Utility.getStrCampo;
 
 /**
  * Created by Roberto Hernandez on 13/10/2016.
  */
 
-public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
+public class FetchRestaurantTask extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = FetchRestaurantTask.class.getSimpleName();
 
@@ -51,38 +51,14 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
     String horaCierre;
 
 
-    private ArrayAdapter<String> mRestaurantAdapter;
     private final Context mContext;
 
-    public FetchRestaurantTask(Context context, ArrayAdapter<String> restaurantAdapter) {
+    public FetchRestaurantTask(Context context) {
         mContext = context;
-        mRestaurantAdapter = restaurantAdapter;
     }
 
     private boolean DEBUG = true;
 
-    /*
-        Students: This code will allow the FetchWeatherTask to continue to return the strings that
-        the UX expects so that we can continue to test the application even once we begin using
-        the database.
-     */
-    String[] convertContentValuesToUXFormat(Vector<ContentValues> cvv) {
-
-
-        // return strings to keep UI functional for now
-        String[] resultStrs = new String[cvv.size()];
-        for (int i = 0; i < cvv.size(); i++) {
-            ContentValues restaurantValues = cvv.elementAt(i);
-
-            NombreRestaurant = getStrCampo(restaurantValues, OWM_TIPO_RESTAURANT_ID);
-            horaApertura = getStrCampo(restaurantValues, OWM_HORA_APERTURA);
-            horaCierre = getStrCampo(restaurantValues, OWM_HORA_CIERRE);
-
-            resultStrs[i] = NombreRestaurant + " - " + horaApertura + " - " + horaCierre;
-
-        }
-        return resultStrs;
-    }
 
     /**
      * Take the String representing the complete forecast in JSON Format and
@@ -91,8 +67,8 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    private String[] getRestaurantDataFromJson(String restaurantJsonStr,
-                                               String tipoRestaurantSetting)
+    private void getRestaurantDataFromJson(String restaurantJsonStr,
+                                           String tipoRestaurantSetting)
             throws JSONException {
 
         try {
@@ -124,49 +100,26 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
                 cVVector.add(restaurantValues);
             }
 
+            int inserted = 0;
             // add to database
             if (cVVector.size() > 0) {
+                mContext.getContentResolver().delete(RestaurantEntry.CONTENT_URI, null, null);
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
-                mContext.getContentResolver().bulkInsert(RestaurantEntry.CONTENT_URI, cvArray);
+                inserted = mContext.getContentResolver().bulkInsert(RestaurantEntry.CONTENT_URI, cvArray);
             }
 
-            // Sort order:  Ascending, by date.
-            String sortOrder = RestaurantEntry.COLUMN_RESTAURANT + " ASC";
-
-            //Uri weatherForLocationUri = WeatherEntry.buildWeatherLocationWithStartDate(
-            //        locationSetting, System.currentTimeMillis());
-
-            Uri buildRestaurantUri = RestaurantEntry.buildRestaurantUri();
-
-            // Students: Uncomment the next lines to display what what you stored in the bulkInsert
-/*
-            Cursor cur = mContext.getContentResolver().query(buildRestaurantUri,
-                    null, null, null, sortOrder);
-
-            cVVector = new Vector<ContentValues>(cur.getCount());
-            if ( cur.moveToFirst() ) {
-                do {
-                    ContentValues cv = new ContentValues();
-                    DatabaseUtils.cursorRowToContentValues(cur, cv);
-                    cVVector.add(cv);
-                } while (cur.moveToNext());
-            }
-*/
-            Log.d(LOG_TAG, "FetchRestaurantTask Complete. " + cVVector.size() + " Inserted");
-
-            String[] resultStrs = convertContentValuesToUXFormat(cVVector);
-            return resultStrs;
+            Log.d(LOG_TAG, "FetchRestaurantTask Complete. " + inserted + " Inserted");
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
-        return null;
+
     }
 
     @Override
-    protected String[] doInBackground(String... params) {
+    protected Void doInBackground(String... params) {
 
         // If there's no zip code, there's nothing to look up.  Verify size of params.
         if (params.length == 0) {
@@ -229,11 +182,14 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
                 return null;
             }
             restaurantJsonStr = buffer.toString();
+            getRestaurantDataFromJson(restaurantJsonStr, "pendiente tipo restaurant");
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
             // to parse it.
-            return null;
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -246,26 +202,7 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
                 }
             }
         }
-
-        try {
-            // TODO establecer el tipo de restaurant
-            return getRestaurantDataFromJson(restaurantJsonStr, "Pediente para tipo restaurant");
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
-        }
-        // This will only happen if there was an error getting or parsing the forecast.
         return null;
     }
 
-    @Override
-    protected void onPostExecute(String[] result) {
-        if (result != null && mRestaurantAdapter != null) {
-            mRestaurantAdapter.clear();
-            for (String dayForecastStr : result) {
-                mRestaurantAdapter.add(dayForecastStr);
-            }
-            // New data is back from the server.  Hooray!
-        }
-    }
 }
