@@ -321,3 +321,12 @@
    6 - Query
 
   + se estableció el código del query
+
+
+  v0.4.7 Insert
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+   7 - Insert
+
+  + se estableció el código del insert
+
