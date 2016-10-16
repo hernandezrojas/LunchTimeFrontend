@@ -35,6 +35,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.herroj.android.lunchtimefrontend.app.RestaurantMainActivity" />
         </activity>
+
+        <provider
+            android:name=".data.RestaurantProvider"
+            android:authorities="com.herroj.android.lunchtimefrontend.app" />
     </application>
 
 </manifest>

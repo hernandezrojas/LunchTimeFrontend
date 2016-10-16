@@ -304,3 +304,12 @@
    4 - Write uri matcher
 
   + se agrega uri matcher
+
+
+  v0.4.5 Register Contentprovider
+
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+   5 - Register contentprovider
+
+  + se registra el proveedor de contenido

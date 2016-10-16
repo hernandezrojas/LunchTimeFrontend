@@ -5,7 +5,11 @@ package com.herroj.android.lunchtimefrontend.app.data;
  */
 
 import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract.RestaurantEntry;
+
+import android.content.ComponentName;
 import android.content.ContentValues;
+import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
@@ -90,28 +94,28 @@ public class TestProvider extends AndroidTestCase {
         This test checks to make sure that the content provider is registered correctly.
         Students: Uncomment this test to make sure you've correctly registered the WeatherProvider.
      */
-//    public void testProviderRegistry() {
-//        PackageManager pm = mContext.getPackageManager();
-//
-//        // We define the component name based on the package name from the context and the
-//        // WeatherProvider class.
-//        ComponentName componentName = new ComponentName(mContext.getPackageName(),
-//                WeatherProvider.class.getName());
-//        try {
-//            // Fetch the provider info using the component name from the PackageManager
-//            // This throws an exception if the provider isn't registered.
-//            ProviderInfo providerInfo = pm.getProviderInfo(componentName, 0);
-//
-//            // Make sure that the registered authority matches the authority from the Contract.
-//            assertEquals("Error: WeatherProvider registered with authority: " + providerInfo.authority +
-//                    " instead of authority: " + WeatherContract.CONTENT_AUTHORITY,
-//                    providerInfo.authority, WeatherContract.CONTENT_AUTHORITY);
-//        } catch (PackageManager.NameNotFoundException e) {
-//            // I guess the provider isn't registered correctly.
-//            assertTrue("Error: WeatherProvider not registered at " + mContext.getPackageName(),
-//                    false);
-//        }
-//    }
+    public void testProviderRegistry() {
+        PackageManager pm = mContext.getPackageManager();
+
+        // We define the component name based on the package name from the context and the
+        // RestaurantProvider class.
+        ComponentName componentName = new ComponentName(mContext.getPackageName(),
+                RestaurantProvider.class.getName());
+        try {
+            // Fetch the provider info using the component name from the PackageManager
+            // This throws an exception if the provider isn't registered.
+            ProviderInfo providerInfo = pm.getProviderInfo(componentName, 0);
+
+            // Make sure that the registered authority matches the authority from the Contract.
+            assertEquals("Error: RestaurantProvider registered with authority: " + providerInfo.authority +
+                            " instead of authority: " + RestaurantContract.CONTENT_AUTHORITY,
+                    providerInfo.authority, RestaurantContract.CONTENT_AUTHORITY);
+        } catch (PackageManager.NameNotFoundException e) {
+            // I guess the provider isn't registered correctly.
+            assertTrue("Error: RestaurantProvider not registered at " + mContext.getPackageName(),
+                    false);
+        }
+    }
 
     /*
             This test doesn't touch the database.  It verifies that the ContentProvider returns
@@ -410,17 +414,18 @@ public class TestProvider extends AndroidTestCase {
 
 
     static private final int BULK_INSERT_RECORDS_TO_INSERT = 3;
+
     static ContentValues[] createBulkInsertWeatherValues(long locationRowId) {
         ContentValues[] returnContentValues = new ContentValues[BULK_INSERT_RECORDS_TO_INSERT];
 
-            ContentValues restaurantValues = new ContentValues();
+        ContentValues restaurantValues = new ContentValues();
 
-            restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT, "FCFM");
-            restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID, 1);
-            restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA, "8:00 a.m.");
-            restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE, "9:00 p.m.");
+        restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT, "FCFM");
+        restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID, 1);
+        restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA, "8:00 a.m.");
+        restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE, "9:00 p.m.");
 
-            returnContentValues[0] = restaurantValues;
+        returnContentValues[0] = restaurantValues;
 
         restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT, "FOD");
         restaurantValues.put(RestaurantContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID, 1);
