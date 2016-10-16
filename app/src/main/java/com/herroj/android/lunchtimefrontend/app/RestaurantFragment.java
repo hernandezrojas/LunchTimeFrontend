@@ -46,6 +46,9 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import static com.herroj.android.lunchtimefrontend.app.util.General.darformatoCadenaHora;
+import static com.herroj.android.lunchtimefrontend.app.util.General.getStrCampo;
+
 public class RestaurantFragment extends Fragment {
 
     private ArrayAdapter<String> mRestaurantAdapter;
@@ -150,8 +153,6 @@ public class RestaurantFragment extends Fragment {
 
         private final String LOG_TAG = FetchRestaurantTask.class.getSimpleName();
 
-        private SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
-        private SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
 
         /**
          * Take the String representing the complete forecast in JSON Format and
@@ -182,7 +183,7 @@ public class RestaurantFragment extends Fragment {
                 // Get the JSON object representing the restaurant
                 JSONObject objRestaurant = restaurantArray.getJSONObject(i);
 
-                NombreRestaurant = objRestaurant.getString(OWM_RESTAURANT);
+                NombreRestaurant = getStrCampo(objRestaurant, OWM_RESTAURANT);
 
                 horaApertura = darformatoCadenaHora(getStrCampo(objRestaurant, OWM_HORA_APERTURA));
                 horaCierre = darformatoCadenaHora(getStrCampo(objRestaurant, OWM_HORA_CIERRE));
@@ -192,37 +193,6 @@ public class RestaurantFragment extends Fragment {
 
             return (String[]) resultStrs;
 
-        }
-
-        private String getStrCampo(JSONObject objeto, String campo) {
-
-            try {
-                if (objeto.has(campo)) {
-                    return objeto.getString(campo);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-            }
-            return "";
-
-        }
-
-        private String darformatoCadenaHora(String hora) {
-
-            if (hora.compareTo("") == 0) {
-                return hora;
-            }
-
-            hora = hora.substring(hora.indexOf('T') + 1, hora.length());
-            hora = hora.substring(0, hora.indexOf('-') - 3);
-            try {
-                Date _24HourDt = _24HourSDF.parse(hora);
-                hora = _12HourSDF.format(_24HourDt);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            return hora;
         }
 
         @Override
