@@ -12,7 +12,7 @@ import android.net.Uri;
 /**
  * Created by Roberto Hernandez on 15/10/2016.
  */
-public class RestaurantProvider  extends ContentProvider {
+public class RestaurantProvider extends ContentProvider {
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
@@ -22,7 +22,7 @@ public class RestaurantProvider  extends ContentProvider {
 
     private static final SQLiteQueryBuilder sRestaurantByTypeQueryBuilder;
 
-    static{
+    static {
         sRestaurantByTypeQueryBuilder = new SQLiteQueryBuilder();
 
         /* RHR Pendiente esta adaptacion para mas adelante
@@ -40,7 +40,7 @@ public class RestaurantProvider  extends ContentProvider {
 
     //Restaurant.restaurant_setting = ?
     private static final String sRestaurantSettingSelection =
-            RestaurantContract.RestaurantEntry.TABLE_NAME+
+            RestaurantContract.RestaurantEntry.TABLE_NAME +
                     "." + RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " = ? ";
 
     /*
@@ -50,16 +50,22 @@ public class RestaurantProvider  extends ContentProvider {
         testUriMatcher test within TestUriMatcher.
      */
     static UriMatcher buildUriMatcher() {
-        // 1) The code passed into the constructor represents the code to return for the root
-        // URI.  It's common to use NO_MATCH as the code for this case. Add the constructor below.
+        // I know what you're thinking.  Why create a UriMatcher when you can use regular
+        // expressions instead?  Because you're not crazy, that's why.
 
+        // All paths added to the UriMatcher have a corresponding code to return when a match is
+        // found.  The code passed into the constructor represents the code to return for the root
+        // URI.  It's common to use NO_MATCH as the code for this case.
+        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+        final String authority = RestaurantContract.CONTENT_AUTHORITY;
 
-        // 2) Use the addURI function to match each of the types.  Use the constants from
-        // WeatherContract to help define the types to the UriMatcher.
+        //// For each type of URI you want to add, create a corresponding code.
+        //matcher.addURI(authority, RestaurantContract.PATH_WEATHER, WEATHER);
+        //matcher.addURI(authority, RestaurantContract.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
+        //matcher.addURI(authority, RestaurantContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
 
-
-        // 3) Return the new matcher!
-        return null;
+        matcher.addURI(authority, RestaurantContract.PATH_RESTAURANT, RESTAURANT);
+        return matcher;
     }
 
     /*
@@ -125,7 +131,7 @@ public class RestaurantProvider  extends ContentProvider {
         switch (match) {
             case RESTAURANT: {
                 long _id = db.insert(RestaurantContract.RestaurantEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
+                if (_id > 0)
                     returnUri = RestaurantContract.RestaurantEntry.buildRestaurantUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);

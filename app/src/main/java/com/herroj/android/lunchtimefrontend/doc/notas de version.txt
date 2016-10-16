@@ -295,3 +295,12 @@
    3 - Start code content provider
 
   + código inicial para el proveedor de contenido
+
+
+  v0.4.4 Write Uri Matcher
+
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+   4 - Write uri matcher
+
+  + se agrega uri matcher
