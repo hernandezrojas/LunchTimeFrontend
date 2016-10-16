@@ -2,6 +2,8 @@ package com.herroj.android.lunchtimefrontend.app;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -36,11 +38,14 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
     private final String LOG_TAG = FetchRestaurantTask.class.getSimpleName();
 
     // These are the names of the JSON objects that need to be extracted.
+
+    final String OWM_TIPO_RESTAURANT_ID = "tipoRestaurantidTipoRestaurant";
     final String OWM_RESTAURANT = "restaurant";
     final String OWM_HORA_APERTURA = "horaApertura";
     final String OWM_HORA_CIERRE = "horaCierre";
 
 
+    String TipoRestaurant;
     String NombreRestaurant;
     String horaApertura;
     String horaCierre;
@@ -69,9 +74,9 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
         for (int i = 0; i < cvv.size(); i++) {
             ContentValues restaurantValues = cvv.elementAt(i);
 
-            NombreRestaurant = getStrCampo(restaurantValues, OWM_RESTAURANT);
-            horaApertura = darformatoCadenaHora(getStrCampo(restaurantValues, OWM_HORA_APERTURA));
-            horaCierre = darformatoCadenaHora(getStrCampo(restaurantValues, OWM_HORA_CIERRE));
+            NombreRestaurant = getStrCampo(restaurantValues, OWM_TIPO_RESTAURANT_ID);
+            horaApertura = getStrCampo(restaurantValues, OWM_HORA_APERTURA);
+            horaCierre = getStrCampo(restaurantValues, OWM_HORA_CIERRE);
 
             resultStrs[i] = NombreRestaurant + " - " + horaApertura + " - " + horaCierre;
 
@@ -102,6 +107,8 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
                 // Get the JSON object representing the day
                 JSONObject objRestaurant = restaurantArray.getJSONObject(i);
 
+                TipoRestaurant = getStrCampo(objRestaurant, OWM_RESTAURANT);
+
                 NombreRestaurant = getStrCampo(objRestaurant, OWM_RESTAURANT);
 
                 horaApertura = darformatoCadenaHora(getStrCampo(objRestaurant, OWM_HORA_APERTURA));
@@ -109,17 +116,19 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
 
                 ContentValues restaurantValues = new ContentValues();
 
-                restaurantValues.put(RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID, 1);
-                restaurantValues.put(RestaurantEntry.COLUMN_RESTAURANT, tipoRestaurantSetting);
-                restaurantValues.put(RestaurantEntry.COLUMN_HORA_APERTURA, tipoRestaurantSetting);
-                restaurantValues.put(RestaurantEntry.COLUMN_HORA_CIERRE, tipoRestaurantSetting);
+                restaurantValues.put(OWM_TIPO_RESTAURANT_ID, TipoRestaurant);
+                restaurantValues.put(OWM_RESTAURANT, NombreRestaurant);
+                restaurantValues.put(OWM_HORA_APERTURA, horaApertura);
+                restaurantValues.put(OWM_HORA_CIERRE, horaCierre);
 
                 cVVector.add(restaurantValues);
             }
 
             // add to database
             if (cVVector.size() > 0) {
-                // Student: call bulkInsert to add the weatherEntries to the database here
+                ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                cVVector.toArray(cvArray);
+                mContext.getContentResolver().bulkInsert(RestaurantEntry.CONTENT_URI, cvArray);
             }
 
             // Sort order:  Ascending, by date.
@@ -131,19 +140,19 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
             Uri buildRestaurantUri = RestaurantEntry.buildRestaurantUri();
 
             // Students: Uncomment the next lines to display what what you stored in the bulkInsert
+/*
+            Cursor cur = mContext.getContentResolver().query(buildRestaurantUri,
+                    null, null, null, sortOrder);
 
-//            Cursor cur = mContext.getContentResolver().query(weatherForLocationUri,
-//                    null, null, null, sortOrder);
-//
-//            cVVector = new Vector<ContentValues>(cur.getCount());
-//            if ( cur.moveToFirst() ) {
-//                do {
-//                    ContentValues cv = new ContentValues();
-//                    DatabaseUtils.cursorRowToContentValues(cur, cv);
-//                    cVVector.add(cv);
-//                } while (cur.moveToNext());
-//            }
-
+            cVVector = new Vector<ContentValues>(cur.getCount());
+            if ( cur.moveToFirst() ) {
+                do {
+                    ContentValues cv = new ContentValues();
+                    DatabaseUtils.cursorRowToContentValues(cur, cv);
+                    cVVector.add(cv);
+                } while (cur.moveToNext());
+            }
+*/
             Log.d(LOG_TAG, "FetchRestaurantTask Complete. " + cVVector.size() + " Inserted");
 
             String[] resultStrs = convertContentValuesToUXFormat(cVVector);
@@ -240,7 +249,7 @@ public class FetchRestaurantTask extends AsyncTask<String, Void, String[]> {
 
         try {
             // TODO establecer el tipo de restaurant
-            return getRestaurantDataFromJson(restaurantJsonStr, "Pedente para tipo restaurant");
+            return getRestaurantDataFromJson(restaurantJsonStr, "Pediente para tipo restaurant");
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
