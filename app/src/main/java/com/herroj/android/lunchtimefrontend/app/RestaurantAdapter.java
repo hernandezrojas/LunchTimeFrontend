@@ -24,13 +24,9 @@ public class RestaurantAdapter extends CursorAdapter {
         string.
      */
     private String convertCursorRowToUXFormat(Cursor cursor) {
-        // get row indices for our cursor
-        int idx_restaurant = cursor.getColumnIndex(RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT);
-        int idx_hora_apertura = cursor.getColumnIndex(RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA);
-        int idx_hora_cierre = cursor.getColumnIndex(RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE);
-        int idx_tipo_restaurant_id = cursor.getColumnIndex(RestaurantContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID);
 
-        return cursor.getString(idx_restaurant) + " - "  + cursor.getString(idx_hora_apertura) + " - " + cursor.getString(idx_hora_cierre);
+
+        return cursor.getString(RestaurantFragment.COL_RESTAURANT) + " - "  + cursor.getString(RestaurantFragment.COL_HORA_APERTURA) + " - " + cursor.getString(RestaurantFragment.COL_HORA_CIERRE);
     }
 
     /*

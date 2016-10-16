@@ -378,6 +378,14 @@
 
   + código de Loaders
 
+  v0.4.13 Projections
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+  13 - Projectionss
+
+  + código de projections
+
+
 
 
 

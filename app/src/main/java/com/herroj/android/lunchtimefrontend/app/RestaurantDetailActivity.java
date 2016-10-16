@@ -79,6 +79,8 @@ public class RestaurantDetailActivity extends ActionBarActivity {
             Intent intent = getActivity().getIntent();
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
                 mRestaurantStr = intent.getStringExtra(Intent.EXTRA_TEXT);
+            }
+            if (null != mRestaurantStr) {
                 ((TextView) rootView.findViewById(R.id.restaurant_detail_text))
                         .setText(mRestaurantStr);
             }
@@ -100,7 +102,7 @@ public class RestaurantDetailActivity extends ActionBarActivity {
 
             // Attach an intent to this ShareActionProvider.  You can update this at any time,
             // like when the user selects a new piece of data they might like to share.
-            if (mShareActionProvider != null ) {
+            if (mShareActionProvider != null) {
                 mShareActionProvider.setShareIntent(createShareForecastIntent());
             } else {
                 Log.d(LOG_TAG, "Share Action Provider is null?");

@@ -30,6 +30,29 @@ import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
 public class RestaurantFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int RESTAURANT_LOADER = 0;
+
+    private static final String[] RESTAURANT_COLUMNS = {
+            // In this case the id needs to be fully qualified with a table name, since
+            // the content provider joins the location & weather tables in the background
+            // (both have an _id column)
+            // On the one hand, that's annoying.  On the other, you can search the weather table
+            // using the location set by the user, which is only in the Location table.
+            // So the convenience is worth it.
+            RestaurantContract.RestaurantEntry.TABLE_NAME + "." + RestaurantContract.RestaurantEntry._ID,
+            RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT,
+            RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA,
+            RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE,
+            RestaurantContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID
+    };
+
+    // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
+    // must change.
+    static final int COL_RESTAURANT_ID = 0;
+    static final int COL_RESTAURANT = 1;
+    static final int COL_HORA_APERTURA = 2;
+    static final int COL_HORA_CIERRE = 3;
+    static final int COL_TIPO_RESTAURANT_ID = 4;
+
     private RestaurantAdapter mRestaurantAdapter;
 
     public RestaurantFragment() {
@@ -116,7 +139,7 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
 
         return new CursorLoader(getActivity(),
                 restaurantUri,
-                null,
+                RESTAURANT_COLUMNS,
                 null,
                 null,
                 sortOrder);
