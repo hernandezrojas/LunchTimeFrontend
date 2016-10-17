@@ -57,11 +57,13 @@ public class RestaurantContract {
             return CONTENT_URI;
         }
 
-        /*
-        public static Uri buildRestaurantporTipoUri(Long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+        public static Uri buildRestaurantporNombreUri(String nombre) {
+            return CONTENT_URI.buildUpon().appendPath(nombre).build();
         }
-        */
+
+        public static String getRestaurantSettingFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
 
     }
 }

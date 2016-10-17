@@ -19,11 +19,15 @@ public class RestaurantProvider extends ContentProvider {
     private RestaurantDbHelper mOpenHelper;
 
     static final int RESTAURANT = 100;
+    static final int RESTAURANT_WITH_NAME = 101;
 
-    private static final SQLiteQueryBuilder sRestaurantByTypeQueryBuilder;
+    private static final SQLiteQueryBuilder sRestaurantQueryBuilder;
 
     static {
-        sRestaurantByTypeQueryBuilder = new SQLiteQueryBuilder();
+        sRestaurantQueryBuilder = new SQLiteQueryBuilder();
+
+        sRestaurantQueryBuilder.setTables(
+                RestaurantContract.RestaurantEntry.TABLE_NAME );
 
         /* RHR Pendiente esta adaptacion para mas adelante
         //This is an inner join which looks like
@@ -38,10 +42,42 @@ public class RestaurantProvider extends ContentProvider {
                         */
     }
 
-    //Restaurant.restaurant_setting = ?
+    //Restaurant.restaurant = ?
     private static final String sRestaurantSettingSelection =
             RestaurantContract.RestaurantEntry.TABLE_NAME +
                     "." + RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " = ? ";
+
+
+    private Cursor getRestaurantByNameSetting(Uri uri, String[] projection, String sortOrder) {
+        String restaurantSetting = RestaurantContract.RestaurantEntry.getRestaurantSettingFromUri(uri);
+
+        String[] selectionArgs = null;
+        String selection = null;
+
+        if (restaurantSetting != null){
+            selection = sRestaurantSettingSelection;
+            selectionArgs = new String[]{restaurantSetting};
+        }
+
+        /*
+        if (startDate == 0) {
+            selection = sLocationSettingSelection;
+            selectionArgs = new String[]{locationSetting};
+        } else {
+            selectionArgs = new String[]{locationSetting, Long.toString(startDate)};
+            selection = sLocationSettingWithStartDateSelection;
+        }
+        */
+
+        return sRestaurantQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
 
     /*
         Students: Here is where you need to create the UriMatcher. This UriMatcher will
@@ -65,6 +101,8 @@ public class RestaurantProvider extends ContentProvider {
         //matcher.addURI(authority, RestaurantContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
 
         matcher.addURI(authority, RestaurantContract.PATH_RESTAURANT, RESTAURANT);
+        matcher.addURI(authority, RestaurantContract.PATH_RESTAURANT + "/*", RESTAURANT_WITH_NAME);
+
         return matcher;
     }
 
@@ -94,6 +132,8 @@ public class RestaurantProvider extends ContentProvider {
 //            case WEATHER_WITH_LOCATION:
             case RESTAURANT:
                 return RestaurantContract.RestaurantEntry.CONTENT_TYPE;
+            case RESTAURANT_WITH_NAME:
+                return RestaurantContract.RestaurantEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -107,6 +147,9 @@ public class RestaurantProvider extends ContentProvider {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             // "restaurant"
+            case RESTAURANT_WITH_NAME:
+                retCursor = getRestaurantByNameSetting(uri, projection, sortOrder);
+                break;
             case RESTAURANT: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         RestaurantContract.RestaurantEntry.TABLE_NAME,
@@ -137,6 +180,7 @@ public class RestaurantProvider extends ContentProvider {
         Uri returnUri;
 
         switch (match) {
+            case RESTAURANT_WITH_NAME:
             case RESTAURANT: {
                 long _id = db.insert(RestaurantContract.RestaurantEntry.TABLE_NAME, null, values);
                 if (_id > 0)
@@ -160,6 +204,7 @@ public class RestaurantProvider extends ContentProvider {
         // this makes delete all rows return the number of rows deleted
         if (null == selection) selection = "1";
         switch (match) {
+            case RESTAURANT_WITH_NAME:
             case RESTAURANT:
                 rowsDeleted = db.delete(
                         RestaurantContract.RestaurantEntry.TABLE_NAME, selection, selectionArgs);
@@ -185,6 +230,7 @@ public class RestaurantProvider extends ContentProvider {
         switch (match)
 
         {
+            case RESTAURANT_WITH_NAME:
             case RESTAURANT:
                 rowsUpdated = db.update(RestaurantContract.RestaurantEntry.TABLE_NAME, values, selection,
                         selectionArgs);
@@ -207,6 +253,7 @@ public class RestaurantProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
+            case RESTAURANT_WITH_NAME:
             case RESTAURANT:
                 db.beginTransaction();
                 int returnCount = 0;

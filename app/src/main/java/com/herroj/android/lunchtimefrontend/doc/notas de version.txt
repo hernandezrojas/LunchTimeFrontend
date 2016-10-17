@@ -394,6 +394,18 @@
   + código de details view
 
 
+  v0.4.15 Fix Details View And Settings
+   0 - En desarrollo
+   4 - Ciclo de vida de activities y datos
+  15 - Fix details view and settings
+
+  + correcciones a vista de detalle y configuraciones
+  + fin de punto 0.4.x
+
+
+
+
+
 
 
 

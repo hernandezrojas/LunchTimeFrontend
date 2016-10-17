@@ -27,21 +27,24 @@ import java.util.List;
 
 /**
  * RHR
- *
+ * <p>
  * 1.01_hola_mundo
  * Esta clase representa la ventana principal de los restaurantes, contiene un menú
  * con un elemento que se llama configuración, esta pantalla muestra un fragment
  * que contiene el texto de hola mundo
- *
+ * <p>
  * 1.04 Creación de dummy datos
- *
+ * <p>
  * 1.05 Create ArrayAdapter to eventually use to populate the ListView
- *
+ * <p>
  * 1.06 Get a reference to the ListView, and attach this adapter to it.
- *
  */
 
 public class RestaurantMainActivity extends ActionBarActivity {
+
+    private final String RESTAURANTFRAGMENT_TAG = "RFTAG";
+
+    private String mRestaurant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,7 @@ public class RestaurantMainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_restaurant_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.restaurant_container, new RestaurantFragment())
+                    .add(R.id.restaurant_container, new RestaurantFragment(), RESTAURANTFRAGMENT_TAG)
                     .commit();
         }
     }
@@ -76,6 +79,20 @@ public class RestaurantMainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String restaurant = Utility.getPreferredRestaurant(this);
+        // update the location in our second pane using the fragment manager
+        if (restaurant != null && !restaurant.equals(mRestaurant)) {
+            RestaurantFragment ff = (RestaurantFragment) getSupportFragmentManager().findFragmentByTag(RESTAURANTFRAGMENT_TAG);
+            if (null != ff) {
+                ff.onLocationChanged();
+            }
+            mRestaurant = restaurant;
+        }
     }
 
 }

@@ -117,7 +117,8 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
                 if (cursor != null) {
                     String restaurantSetting = Utility.getPreferredRestaurant(getActivity());
                     Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class)
-                            .setData(RestaurantContract.RestaurantEntry.buildRestaurantUri());
+                            .setData(RestaurantContract.RestaurantEntry.
+                                    buildRestaurantporNombreUri(cursor.getString(COL_RESTAURANT)));
                     startActivity(intent);
                 }
             }
@@ -132,6 +133,12 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         super.onActivityCreated(savedInstanceState);
     }
 
+        // since we read the location when we create the loader, all we need to do is restart things
+                void onLocationChanged( ) {
+                    updateRestaurant();
+                getLoaderManager().restartLoader(RESTAURANT_LOADER, null, this);
+            }
+
     private void updateRestaurant() {
 
         FetchRestaurantTask restaurantTask = new FetchRestaurantTask(getActivity());
@@ -139,12 +146,6 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
 
         restaurantTask.execute(restaurant);
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        updateRestaurant();
     }
 
     @Override
