@@ -403,6 +403,14 @@
   + fin de punto 0.4.x
 
 
+  v0.5.15 Build List Item
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+   1 - Build list item
+
+  + modificación de elementos de lista
+
+
 
 
 
