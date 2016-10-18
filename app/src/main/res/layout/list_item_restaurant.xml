@@ -26,7 +26,7 @@
         android:paddingLeft="16dp">
 
         <TextView
-            android:id="@+id/list_item_bk1_textview"
+            android:id="@+id/list_item_bk_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

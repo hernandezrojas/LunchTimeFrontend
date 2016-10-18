@@ -419,6 +419,13 @@
   + modificación del adaptor restaurant
 
 
+  v0.5.3 Viewholder
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+   3 - Viewholder
+
+  + codigo de viewholder
+
 
 
 
