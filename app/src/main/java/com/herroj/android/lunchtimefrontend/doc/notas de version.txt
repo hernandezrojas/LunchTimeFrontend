@@ -460,6 +460,16 @@
   + código de elemento de la vista activado
 
 
+  v0.5.8 Scroll Position
+   0 - En esarrollo
+   5 - Rich and responsive layouts
+   8 - Scroll position
+
+  + código de posicion de scroll
+
+
+
+
 
 
 
