@@ -476,3 +476,11 @@
   + código de layout alternativo de detalle para vista panoramica
 
 
+  v0.5.10 Action Bar
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+  10 - Action bar
+
+  + código de action bar que es la barra  de menu del layout
+
+

@@ -1,10 +1,22 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/lunch_time_red</item>
+        <item name="colorPrimaryDark">@color/lunch_time_dark_red</item>
     </style>
+        <!-- Main activity theme. -->
+        <style name="RestaurantTheme" parent="AppTheme">
+            <item name="actionBarStyle">@style/ActionBar.Solid.LunchTime.NoTitle</item>
+        </style>
 
+        <!-- main activity action bar styles -->
+        <style name="ActionBar.Solid.LunchTime.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+            <item name="displayOptions">useLogo|showHome</item>
+            <item name="logo">@drawable/ic_logo</item>
+        </style>
+
+        <!-- Style for restaurant listview -->
     <style name="RestaurantListStyle">
         <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
     for two-pane layout -->

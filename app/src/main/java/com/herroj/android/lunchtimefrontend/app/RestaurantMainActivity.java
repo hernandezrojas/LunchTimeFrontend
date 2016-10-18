@@ -68,6 +68,7 @@ public class RestaurantMainActivity extends ActionBarActivity implements Restaur
             }
         } else {
             mTwoPane = false;
+            getSupportActionBar().setElevation(0f);
         }
     }
 
