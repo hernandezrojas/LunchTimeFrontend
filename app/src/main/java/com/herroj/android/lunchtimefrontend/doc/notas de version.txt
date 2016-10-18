@@ -492,3 +492,11 @@
   + código de action bar de ventana de configuraciones
 
 
+  v0.5.12 Redlines List Item
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+  12 - Redlines list item
+
+  + código de redlines list item
+
+
