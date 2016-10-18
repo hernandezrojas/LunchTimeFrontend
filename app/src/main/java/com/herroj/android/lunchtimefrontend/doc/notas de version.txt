@@ -453,7 +453,7 @@
 
 
   v0.5.7 Activated Item
-   0 - En esarrollo
+   0 - En desarrollo
    5 - Rich and responsive layouts
    7 - Activated item
 
@@ -461,22 +461,18 @@
 
 
   v0.5.8 Scroll Position
-   0 - En esarrollo
+   0 - En desarrollo
    5 - Rich and responsive layouts
    8 - Scroll position
 
   + código de posicion de scroll
 
 
+  v0.5.9 Alternative Detail Layout
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+   9 - Alternative detail layout
 
-
-
-
-
-
-
-
-
-
+  + código de layout alternativo de detalle para vista panoramica
 
 
