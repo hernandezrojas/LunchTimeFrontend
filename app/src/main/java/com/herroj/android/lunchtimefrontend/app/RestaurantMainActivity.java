@@ -1,6 +1,7 @@
 package com.herroj.android.lunchtimefrontend.app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -40,7 +41,7 @@ import java.util.List;
  * 1.06 Get a reference to the ListView, and attach this adapter to it.
  */
 
-public class RestaurantMainActivity extends ActionBarActivity {
+public class RestaurantMainActivity extends ActionBarActivity implements RestaurantFragment.Callback {
 
     private static final String RESTAURANTDETAILFRAGMENT_TAG = "RDFTAG";
 
@@ -104,7 +105,33 @@ public class RestaurantMainActivity extends ActionBarActivity {
             if (null != ff) {
                 ff.onLocationChanged();
             }
+            RestaurantDetailFragment df = (RestaurantDetailFragment) getSupportFragmentManager().findFragmentByTag(RESTAURANTDETAILFRAGMENT_TAG);
+            if (null != df) {
+                df.onRestaurantChanged(restaurant);
+            }
             mRestaurant = restaurant;
+        }
+    }
+
+    @Override
+    public void onItemSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(RestaurantDetailFragment.RESTAURANT_DETAIL_URI, contentUri);
+
+            RestaurantDetailFragment fragment = new RestaurantDetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.restaurant_detail_container, fragment, RESTAURANTDETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, RestaurantDetailActivity.class)
+                    .setData(contentUri);
+            startActivity(intent);
         }
     }
 

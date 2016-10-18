@@ -444,6 +444,15 @@
   + codigo de compatibilidad con dos paneles en tablet
 
 
+  v0.5.6 Selected Item
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+   6 - Selected item
+
+  + código de envío de información de item seleccionado
+
+
+
 
 
 

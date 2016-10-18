@@ -30,8 +30,16 @@ public class RestaurantDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
         if (savedInstanceState == null) {
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
+
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(RestaurantDetailFragment.RESTAURANT_DETAIL_URI, getIntent().getData());
+
+            RestaurantDetailFragment fragment = new RestaurantDetailFragment();
+            fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.restaurant_detail_container, new RestaurantDetailFragment())
+                    .add(R.id.restaurant_detail_container, fragment)
                     .commit();
         }
     }

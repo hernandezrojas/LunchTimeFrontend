@@ -2,6 +2,7 @@ package com.herroj.android.lunchtimefrontend.app;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -28,12 +29,14 @@ import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
 public class RestaurantDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = RestaurantDetailFragment.class.getSimpleName();
+    static final String RESTAURANT_DETAIL_URI = "URI";
 
     private static final String RESTAURANT_SHARE_HASHTAG = " #LunchTimeApp";
 
     private ShareActionProvider mShareActionProvider;
 
     private String mRestaurant;
+    private Uri mUri;
 
     private static final int DETAIL_LOADER = 0;
 
@@ -71,6 +74,11 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(RestaurantDetailFragment.RESTAURANT_DETAIL_URI);
+        }
+
         View rootView = inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
         mIconView = (ImageView) rootView.findViewById(R.id.restaurant_detail_icon);
         mRestaurantView = (TextView) rootView.findViewById(R.id.restaurant_detail_restaurant_textview);
@@ -110,24 +118,31 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
         super.onActivityCreated(savedInstanceState);
     }
 
+    void onRestaurantChanged(String newRestaurant) {
+        // replace the uri, since the location has changed
+        Uri uri = mUri;
+        if (null != uri) {
+            Uri updatedUri = RestaurantContract.RestaurantEntry.buildRestaurantporNombreUri(newRestaurant);
+            mUri = updatedUri;
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+        }
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.v(LOG_TAG, "In onCreateLoader");
-        Intent intent = getActivity().getIntent();
-        if (intent == null || intent.getData() == null) {
-            return null;
+        if (null != mUri) {
+            // Now create and return a CursorLoader that will take care of
+            // creating a Cursor for the data being displayed.
+            return new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    DETAIL_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
         }
-
-        // Now create and return a CursorLoader that will take care of
-        // creating a Cursor for the data being displayed.
-        return new CursorLoader(
-                getActivity(),
-                intent.getData(),
-                DETAIL_COLUMNS,
-                null,
-                null,
-                null
-        );
+        return null;
     }
 
     @Override

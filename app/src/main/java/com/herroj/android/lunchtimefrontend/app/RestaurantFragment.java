@@ -56,6 +56,18 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
 
     private RestaurantAdapter mRestaurantAdapter;
 
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Uri dateUri);
+    }
+
     public RestaurantFragment() {
     }
 
@@ -116,10 +128,9 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
                     String restaurantSetting = Utility.getPreferredRestaurant(getActivity());
-                    Intent intent = new Intent(getActivity(), RestaurantDetailActivity.class)
-                            .setData(RestaurantContract.RestaurantEntry.
+                    ((Callback) getActivity())
+                            .onItemSelected(RestaurantContract.RestaurantEntry.
                                     buildRestaurantporNombreUri(cursor.getString(COL_RESTAURANT)));
-                    startActivity(intent);
                 }
             }
         });
@@ -133,11 +144,11 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         super.onActivityCreated(savedInstanceState);
     }
 
-        // since we read the location when we create the loader, all we need to do is restart things
-                void onLocationChanged( ) {
-                    updateRestaurant();
-                getLoaderManager().restartLoader(RESTAURANT_LOADER, null, this);
-            }
+    // since we read the location when we create the loader, all we need to do is restart things
+    void onLocationChanged() {
+        updateRestaurant();
+        getLoaderManager().restartLoader(RESTAURANT_LOADER, null, this);
+    }
 
     private void updateRestaurant() {
 
