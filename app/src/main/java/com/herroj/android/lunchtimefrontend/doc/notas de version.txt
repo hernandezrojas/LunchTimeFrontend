@@ -484,3 +484,11 @@
   + código de action bar que es la barra  de menu del layout
 
 
+  v0.5.11 Settings Action Bar
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+  11 - Settings action bar
+
+  + código de action bar de ventana de configuraciones
+
+

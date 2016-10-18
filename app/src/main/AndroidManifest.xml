@@ -32,7 +32,8 @@
         <activity
             android:name=".RestaurantSettingsActivity"
             android:label="@string/title_activity_restaurant_settings"
-            android:parentActivityName=".RestaurantMainActivity">
+            android:parentActivityName=".RestaurantMainActivity"
+            android:theme="@style/SettingsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.herroj.android.lunchtimefrontend.app.RestaurantMainActivity" />
