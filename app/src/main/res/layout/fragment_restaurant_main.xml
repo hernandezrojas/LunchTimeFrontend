@@ -24,6 +24,7 @@
     tools:context=".RestaurantFragment">
 
     <ListView
+        style="@style/RestaurantListStyle"
         android:id="@+id/listview_restaurant"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

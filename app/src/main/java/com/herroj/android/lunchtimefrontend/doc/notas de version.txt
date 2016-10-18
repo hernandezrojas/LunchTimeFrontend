@@ -452,6 +452,15 @@
   + código de envío de información de item seleccionado
 
 
+  v0.5.7 Activated Item
+   0 - En esarrollo
+   5 - Rich and responsive layouts
+   7 - Activated item
+
+  + código de elemento de la vista activado
+
+
+
 
 
 

@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="RestaurantListStyle">
+        <item name="android:choiceMode">singleChoice</item>
+    </style>
+
+</resources>
