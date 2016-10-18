@@ -428,6 +428,16 @@
 
 
 
+  v0.5.4 Details Screen
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+   4 - Details screen
+
+  + codigo de pantalla de detalle
+
+
+
+
 
 
 
