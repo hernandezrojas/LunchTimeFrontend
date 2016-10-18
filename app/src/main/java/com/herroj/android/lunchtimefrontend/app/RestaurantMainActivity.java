@@ -42,7 +42,9 @@ import java.util.List;
 
 public class RestaurantMainActivity extends ActionBarActivity {
 
-    private final String RESTAURANTFRAGMENT_TAG = "RFTAG";
+    private static final String RESTAURANTDETAILFRAGMENT_TAG = "RDFTAG";
+
+    private boolean mTwoPane;
 
     private String mRestaurant;
 
@@ -50,10 +52,21 @@ public class RestaurantMainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_main);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.restaurant_container, new RestaurantFragment(), RESTAURANTFRAGMENT_TAG)
-                    .commit();
+        if (findViewById(R.id.restaurant_detail_container) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600dp). If this view is present, then the activity should be
+            // in two-pane mode.
+            mTwoPane = true;
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.restaurant_detail_container, new RestaurantDetailFragment(), RESTAURANTDETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        } else {
+            mTwoPane = false;
         }
     }
 
@@ -87,7 +100,7 @@ public class RestaurantMainActivity extends ActionBarActivity {
         String restaurant = Utility.getPreferredRestaurant(this);
         // update the location in our second pane using the fragment manager
         if (restaurant != null && !restaurant.equals(mRestaurant)) {
-            RestaurantFragment ff = (RestaurantFragment) getSupportFragmentManager().findFragmentByTag(RESTAURANTFRAGMENT_TAG);
+            RestaurantFragment ff = (RestaurantFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_restaurant);
             if (null != ff) {
                 ff.onLocationChanged();
             }

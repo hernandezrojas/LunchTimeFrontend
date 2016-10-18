@@ -436,6 +436,14 @@
   + codigo de pantalla de detalle
 
 
+  v0.5.5 Two Pane Ui
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+   5 - Two pane ui
+
+  + codigo de compatibilidad con dos paneles en tablet
+
+
 
 
 

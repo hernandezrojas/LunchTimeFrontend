@@ -31,7 +31,7 @@ public class RestaurantDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_restaurant_detail);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new RestaurantDetailFragment())
+                    .add(R.id.restaurant_detail_container, new RestaurantDetailFragment())
                     .commit();
         }
     }
