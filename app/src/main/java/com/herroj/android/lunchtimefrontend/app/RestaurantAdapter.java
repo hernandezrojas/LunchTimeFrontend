@@ -6,6 +6,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
@@ -23,11 +24,6 @@ public class RestaurantAdapter extends CursorAdapter {
         This is ported from FetchWeatherTask --- but now we go straight from the cursor to the
         string.
      */
-    private String convertCursorRowToUXFormat(Cursor cursor) {
-
-
-        return cursor.getString(RestaurantFragment.COL_RESTAURANT) + " - "  + cursor.getString(RestaurantFragment.COL_HORA_APERTURA) + " - " + cursor.getString(RestaurantFragment.COL_HORA_CIERRE);
-    }
 
     /*
         Remember that these views are reused as needed.
@@ -47,7 +43,36 @@ public class RestaurantAdapter extends CursorAdapter {
         // our view is pretty simple here --- just a text view
         // we'll keep the UI functional with a simple (and slow!) binding.
 
-        //TextView tv = (TextView) view;
-        //tv.setText(convertCursorRowToUXFormat(cursor));
+        //// Read weather icon ID from cursor
+        //int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_ID);
+
+        // Use placeholder image for now
+        ImageView iconView = (ImageView) view.findViewById(R.id.list_item_icon);
+        iconView.setImageResource(R.mipmap.ic_launcher);
+
+        // Read weather forecast from cursor
+        String bk = "Restaurant";
+        // Find TextView and set weather forecast on it
+        TextView descriptionView = (TextView) view.findViewById(R.id.list_item_bk1_textview);
+        descriptionView.setText(bk);
+
+        // Read date from cursor
+        String restaurant = cursor.getString(RestaurantFragment.COL_RESTAURANT);
+        // Find TextView and set formatted date on it
+        TextView restaurantView = (TextView) view.findViewById(R.id.list_item_restaurant_textview);
+        restaurantView.setText(restaurant);
+
+        // Read date from cursor
+        String horaApertura = cursor.getString(RestaurantFragment.COL_HORA_APERTURA);
+        // Find TextView and set formatted date on it
+        TextView horaAperturaView = (TextView) view.findViewById(R.id.list_item_hora_apertura_textview);
+        horaAperturaView.setText(horaApertura);
+
+        // Read date from cursor
+        String horaCierre = cursor.getString(RestaurantFragment.COL_HORA_CIERRE);
+        // Find TextView and set formatted date on it
+        TextView horaCierreView = (TextView) view.findViewById(R.id.list_item_hora_cierra_textview);
+        horaCierreView.setText(horaCierre);
+
     }
 }
