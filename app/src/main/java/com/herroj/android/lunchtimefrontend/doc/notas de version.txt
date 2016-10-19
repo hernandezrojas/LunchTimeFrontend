@@ -500,3 +500,14 @@
   + código de redlines list item
 
 
+  v0.5.13 Redlines Finish
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+  13 - Redlines finish
+
+  + código de redline
+
+
+
+
+

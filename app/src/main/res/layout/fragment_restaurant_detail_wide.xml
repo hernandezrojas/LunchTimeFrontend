@@ -13,6 +13,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="56dp"
             android:orientation="vertical">
 
             <!-- Header: Day, Date -->
@@ -20,13 +21,19 @@
                 android:id="@+id/detail_day_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="bk1"/>
+                android:fontFamily="sans-serif-condensed"
+                android:minWidth="120dp"
+                android:text="bk1"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/detail_date_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="bk2"/>
+                android:fontFamily="sans-serif-condensed"
+                android:text="bk2"
+                android:textColor="@color/grey_700"
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -41,37 +48,52 @@
                 android:id="@+id/detail_high_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="bk3"/>
+                android:fontFamily="sans-serif-light"
+                android:text="bk3"
+                android:textSize="96sp" />
 
             <TextView
                 android:id="@+id/detail_low_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="bk4"/>
+                android:layout_marginLeft="8dp"
+                android:text="bk4"
+                android:textColor="@color/grey_700"
+                android:textSize="48sp" />
 
             <!-- Humidity, wind, pressure -->
             <TextView
                 android:id="@+id/restaurant_detail_restaurant_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="FCFM"/>
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed"
+                android:text="FCFM"
+                android:textAppearance="?android:textAppearanceLarge" />
 
             <TextView
                 android:id="@+id/restaurant_detail_hora_apertura_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0:00 am"/>
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed"
+                android:text="0:00 am"
+                android:textAppearance="?android:textAppearanceLarge" />
 
             <TextView
                 android:id="@+id/restaurant_detail_hora_cierre_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="23:00 pm"/>
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed"
+                android:text="23:00 pm"
+                android:textAppearance="?android:textAppearanceLarge" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -79,13 +101,16 @@
                 android:id="@+id/restaurant_detail_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher"/>
+                android:src="@drawable/ic_launcher" />
 
             <TextView
                 android:id="@+id/detail_forecast_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="bk5"/>/>
+                android:fontFamily="sans-serif-condensed"
+                android:text="bk5"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/grey_700" />/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

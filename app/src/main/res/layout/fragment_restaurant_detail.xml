@@ -6,6 +6,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:gravity="center_vertical"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -14,44 +16,56 @@
             android:id="@+id/detail_day_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="bk1" />
+            android:fontFamily="sans-serif-condensed"
+            android:text="bk1"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/detail_date_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="bk2"/>
+            android:fontFamily="sans-serif-condensed"
+            android:text="bk2"
+            android:textColor="@color/grey_700"
+            android:textSize="16sp" />
 
         <!-- Main content: high, low, art, weather state -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="left"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/detail_high_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="bk3"/>
+                    android:fontFamily="sans-serif-light"
+                    android:text="bk3"
+                    android:textSize="96sp" />
 
                 <TextView
                     android:id="@+id/detail_low_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="bk4" />
+                    android:layout_gravity="center_horizontal"
+                    android:text="bk4"
+                    android:textColor="@color/grey_700"
+                    android:textSize="48sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -65,27 +79,40 @@
                     android:id="@+id/detail_forecast_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="bk5" />
+                    android:text="bk5"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/grey_700" />
             </LinearLayout>
         </LinearLayout>
 
         <!-- Humidity, wind, pressure -->
-        <TextView
-            android:id="@+id/restaurant_detail_restaurant_textview"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="FCFM" />
+            android:layout_height="match_parent"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/restaurant_detail_hora_apertura_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="0:00 am" />
+            <TextView
+                android:id="@+id/restaurant_detail_restaurant_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceLarge" />
 
-        <TextView
-            android:id="@+id/restaurant_detail_hora_cierre_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="23:00 pm" />
+            <TextView
+                android:id="@+id/restaurant_detail_hora_apertura_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/restaurant_detail_hora_cierre_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
