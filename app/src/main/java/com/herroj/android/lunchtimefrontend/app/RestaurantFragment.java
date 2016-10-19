@@ -4,6 +4,9 @@ package com.herroj.android.lunchtimefrontend.app;
  * Created by Roberto Hernandez on 10/10/2016.
  */
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -170,10 +173,16 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
     }
 
     private void updateRestaurant() {
-        Intent intent = new Intent(getActivity(), LunchTimeService.class);
-        intent.putExtra(LunchTimeService.RESTAURANT_QUERY_EXTRA,
-                Utility.getPreferredRestaurant(getActivity()));
-        getActivity().startService(intent);
+        Intent alarmIntent = new Intent(getActivity(), LunchTimeService.AlarmReceiver.class);
+        alarmIntent.putExtra(LunchTimeService.RESTAURANT_QUERY_EXTRA, Utility.getPreferredRestaurant(getActivity()));
+
+        //Wrap in a pending intent which only fires once.
+        PendingIntent pi = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_ONE_SHOT);//getBroadcast(context, 0, i, 0);
+
+        AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        //Set the AlarmManager to wake up the system.
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pi);
 
     }
 

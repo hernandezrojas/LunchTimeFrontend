@@ -1,6 +1,7 @@
 package com.herroj.android.lunchtimefrontend.app.service;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -199,4 +200,14 @@ public class LunchTimeService extends IntentService {
 
     }
 
+    public static class AlarmReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent sendIntent = new Intent(context, LunchTimeService.class);
+            sendIntent.putExtra(LunchTimeService.RESTAURANT_QUERY_EXTRA, intent.getStringExtra(LunchTimeService.RESTAURANT_QUERY_EXTRA));
+            context.startService(sendIntent);
+
+        }
+    }
 }

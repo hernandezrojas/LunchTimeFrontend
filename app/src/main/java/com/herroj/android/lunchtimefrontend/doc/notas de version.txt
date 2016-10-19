@@ -524,6 +524,14 @@
   + código de servicios
 
 
+  v0.6.2 Alarma
+   0 - En desarrollo
+   6 - Servicios y notificaciones
+   2 - Alarma
+
+  + código de alarma
+
+
 
 
 

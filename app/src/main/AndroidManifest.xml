@@ -43,6 +43,7 @@
             android:name=".data.RestaurantProvider"
             android:authorities="com.herroj.android.lunchtimefrontend.app" />
         <service android:name=".service.LunchTimeService"/>
+        <receiver android:name=".service.LunchTimeService$AlarmReceiver" android:enabled="true"/>
     </application>
 
 </manifest>
