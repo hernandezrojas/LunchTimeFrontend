@@ -42,6 +42,7 @@
         <provider
             android:name=".data.RestaurantProvider"
             android:authorities="com.herroj.android.lunchtimefrontend.app" />
+        <service android:name=".service.LunchTimeService"/>
     </application>
 
 </manifest>

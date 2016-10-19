@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
+import com.herroj.android.lunchtimefrontend.app.service.LunchTimeService;
 
 public class RestaurantFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -169,11 +170,10 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
     }
 
     private void updateRestaurant() {
-
-        FetchRestaurantTask restaurantTask = new FetchRestaurantTask(getActivity());
-        String restaurant = Utility.getPreferredRestaurant(getActivity());
-
-        restaurantTask.execute(restaurant);
+        Intent intent = new Intent(getActivity(), LunchTimeService.class);
+        intent.putExtra(LunchTimeService.RESTAURANT_QUERY_EXTRA,
+                Utility.getPreferredRestaurant(getActivity()));
+        getActivity().startService(intent);
 
     }
 
