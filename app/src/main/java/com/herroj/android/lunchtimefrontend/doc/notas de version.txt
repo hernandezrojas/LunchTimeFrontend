@@ -532,6 +532,13 @@
   + código de alarma
 
 
+  v0.6.3 Implement Sync Adapter
+   0 - En desarrollo
+   6 - Servicios y notificaciones
+   3 - Implement sync adapter
+
+  + código de implementacion de adaptador de sicronizacion
+
 
 
 

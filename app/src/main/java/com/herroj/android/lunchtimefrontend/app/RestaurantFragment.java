@@ -30,7 +30,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
-import com.herroj.android.lunchtimefrontend.app.service.LunchTimeService;
+import com.herroj.android.lunchtimefrontend.app.sync.LunchTimeSyncAdapter;
 
 public class RestaurantFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -173,17 +173,9 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
     }
 
     private void updateRestaurant() {
-        Intent alarmIntent = new Intent(getActivity(), LunchTimeService.AlarmReceiver.class);
-        alarmIntent.putExtra(LunchTimeService.RESTAURANT_QUERY_EXTRA, Utility.getPreferredRestaurant(getActivity()));
-
-        //Wrap in a pending intent which only fires once.
-        PendingIntent pi = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_ONE_SHOT);//getBroadcast(context, 0, i, 0);
-
-        AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-
-        //Set the AlarmManager to wake up the system.
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pi);
-
+        //String restaurant = Utility.getPreferredRestaurant(getActivity());
+        //new FetchRestaurantTask(getActivity()).execute(restaurant);
+        LunchTimeSyncAdapter.syncImmediately(getActivity());
     }
 
     @Override
