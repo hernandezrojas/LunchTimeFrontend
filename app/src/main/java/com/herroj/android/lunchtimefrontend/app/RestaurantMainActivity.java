@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.herroj.android.lunchtimefrontend.app.sync.LunchTimeSyncAdapter;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,6 +72,7 @@ public class RestaurantMainActivity extends ActionBarActivity implements Restaur
             mTwoPane = false;
             getSupportActionBar().setElevation(0f);
         }
+        LunchTimeSyncAdapter.initializeSyncAdapter(this);
     }
 
     @Override

@@ -548,7 +548,10 @@
   + finalización de código de sync adapter
 
 
+  v0.6.5 Scheduled Sync
+   0 - En desarrollo
+   6 - Servicios y notificaciones
+   5 - Scheduled sync
 
-
-
+  + programacion de sincronización
 
