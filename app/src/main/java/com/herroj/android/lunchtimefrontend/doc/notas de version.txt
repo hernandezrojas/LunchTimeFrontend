@@ -540,5 +540,15 @@
   + código de implementacion de adaptador de sicronizacion
 
 
+  v0.6.4 Finish Sync Adapter
+   0 - En desarrollo
+   6 - Servicios y notificaciones
+   4 - Finish sync adapter
+
+  + finalización de código de sync adapter
+
+
+
+
 
 

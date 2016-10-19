@@ -173,8 +173,6 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
     }
 
     private void updateRestaurant() {
-        //String restaurant = Utility.getPreferredRestaurant(getActivity());
-        //new FetchRestaurantTask(getActivity()).execute(restaurant);
         LunchTimeSyncAdapter.syncImmediately(getActivity());
     }
 
