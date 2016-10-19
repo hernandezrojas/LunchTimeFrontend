@@ -555,3 +555,11 @@
 
   + programacion de sincronización
 
+
+  v0.6.6 Notifications Quiz
+   0 - En desarrollo
+   6 - Servicios y notificaciones
+   6 - Notifications quiz
+
+  + programacion de notifications quiz
+

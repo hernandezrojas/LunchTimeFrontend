@@ -7,15 +7,19 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.herroj.android.lunchtimefrontend.app.R;
 import com.herroj.android.lunchtimefrontend.app.Utility;
+import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
 import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract.RestaurantEntry;
 
 import org.json.JSONArray;
@@ -30,6 +34,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Vector;
 
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static com.herroj.android.lunchtimefrontend.app.Utility.darformatoCadenaHora;
 import static com.herroj.android.lunchtimefrontend.app.Utility.getStrCampo;
 
@@ -43,6 +48,22 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
     // 60 seconds (1 minute) * 180 = 3 hours
     public static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+    private static final int RESTAURANT_NOTIFICATION_ID = 3004;
+
+
+    private static final String[] NOTIFY_RESTAURANT_PROJECTION = new String[]{
+            RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID,
+            RestaurantEntry.COLUMN_RESTAURANT,
+            RestaurantEntry.COLUMN_HORA_APERTURA,
+            RestaurantEntry.COLUMN_HORA_CIERRE
+    };
+
+    // these indices must match the projection
+    private static final int INDEX_RESTAURANT = 0;
+    private static final int INDEX_TIPO_RESTAURANT_ID = 1;
+    private static final int INDEX_HORA_APERTURA = 2;
+    private static final int INDEX_HORA_CIERRE = 3;
 
     public LunchTimeSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -205,6 +226,46 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
+        }
+
+    }
+
+    private void notifyLunchTime() {
+        Context context = getContext();
+        //checking the last update and notify if it' the first of the day
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastNotificationKey = context.getString(R.string.pref_last_notification);
+        long lastSync = prefs.getLong(lastNotificationKey, 0);
+
+        if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
+            // Last sync was more than 1 day ago, let's send a notification with the weather.
+            String restaurantQuery = Utility.getPreferredRestaurant(context);
+
+            Uri weatherUri = RestaurantContract.RestaurantEntry.buildRestaurantporNombreUri(restaurantQuery);
+
+            // we'll query our contentProvider, as always
+            Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_RESTAURANT_PROJECTION, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                String restaurant = cursor.getString(INDEX_RESTAURANT);
+                int high = cursor.getInt(INDEX_TIPO_RESTAURANT_ID);
+                String horaApertura = cursor.getString(INDEX_HORA_APERTURA);
+                String horaCierre = cursor.getString(INDEX_HORA_CIERRE);
+
+
+                // Define the text of the forecast.
+                String contentText = String.format(context.getString(R.string.format_notification),
+                        restaurant,
+                        horaApertura,
+                        horaCierre);
+
+                //build your notification here.
+
+                //refreshing last sync
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putLong(lastNotificationKey, System.currentTimeMillis());
+                editor.commit();
+            }
         }
 
     }
