@@ -508,6 +508,14 @@
   + código de redline
 
 
+  v0.5.14 Accessibility
+   0 - En desarrollo
+   5 - Rich and responsive layouts
+  14 - Accessibility
+
+  + código de accessibilidad
+
+
 
 
 

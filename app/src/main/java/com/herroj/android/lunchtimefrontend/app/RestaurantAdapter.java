@@ -66,6 +66,9 @@ public class RestaurantAdapter extends CursorAdapter {
         String restaurant = cursor.getString(RestaurantFragment.COL_RESTAURANT);
         viewHolder.restaurantView.setText(restaurant);
 
+        // For accessibility, add a content description to the icon field
+        viewHolder.iconView.setContentDescription(restaurant);
+
         // Read date from cursor
         String horaApertura = cursor.getString(RestaurantFragment.COL_HORA_APERTURA);
         viewHolder.horaAperturaView.setText(horaApertura);

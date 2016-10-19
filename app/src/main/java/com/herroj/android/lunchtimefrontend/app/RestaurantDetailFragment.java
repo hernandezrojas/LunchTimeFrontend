@@ -157,6 +157,9 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
             String restaurant = data.getString(COL_RESTAURANT);
             mRestaurantView.setText(restaurant);
 
+            // For accessibility, add a content description to the icon field
+            mIconView.setContentDescription(restaurant);
+
             String horaApertura = data.getString(COL_HORA_APERTURA);
             mHoraAperturaView.setText(horaApertura);
 
