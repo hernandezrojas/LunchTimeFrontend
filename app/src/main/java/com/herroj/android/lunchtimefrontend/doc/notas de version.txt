@@ -571,3 +571,11 @@
 
   + programacion de respuesta notificaciones
 
+
+  v0.6.8 Turn off Notifications
+   0 - En desarrollo
+   6 - Servicios y notificaciones
+   8 - Turn off notifications
+
+  + programacion de configurar habilitar/inhabilitar notificaciones
+

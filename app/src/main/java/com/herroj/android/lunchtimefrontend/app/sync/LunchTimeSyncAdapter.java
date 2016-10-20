@@ -13,7 +13,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -240,70 +243,83 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
         Context context = getContext();
         //checking the last update and notify if it' the first of the day
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String lastNotificationKey = context.getString(R.string.pref_last_notification);
-        long lastSync = prefs.getLong(lastNotificationKey, 0);
 
-        if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
-            // Last sync was more than 1 day ago, let's send a notification with the weather.
-            String restaurantQuery = Utility.getPreferredRestaurant(context);
+        String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
+        boolean displayNotifications = prefs.getBoolean(displayNotificationsKey,
+                Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
 
-            Uri weatherUri = RestaurantContract.RestaurantEntry.buildRestaurantporNombreUri(restaurantQuery);
+        if (displayNotifications) {
 
-            // we'll query our contentProvider, as always
-            Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_RESTAURANT_PROJECTION, null, null, null);
+            String lastNotificationKey = context.getString(R.string.pref_last_notification);
+            long lastSync = prefs.getLong(lastNotificationKey, 0);
 
-            if (cursor.moveToFirst()) {
-                String restaurant = cursor.getString(INDEX_RESTAURANT);
-                int high = cursor.getInt(INDEX_TIPO_RESTAURANT_ID);
-                String horaApertura = cursor.getString(INDEX_HORA_APERTURA);
-                String horaCierre = cursor.getString(INDEX_HORA_CIERRE);
+            if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
+                // Last sync was more than 1 day ago, let's send a notification with the weather.
+                String restaurantQuery = Utility.getPreferredRestaurant(context);
 
-                int iconId = R.drawable.ic_logo;
-                String title = context.getString(R.string.app_name);
+                Uri weatherUri = RestaurantContract.RestaurantEntry.buildRestaurantporNombreUri(restaurantQuery);
 
-                // Define the text of the forecast.
-                String contentText = String.format(context.getString(R.string.format_notification),
-                        restaurant,
-                        horaApertura,
-                        horaCierre);
+                // we'll query our contentProvider, as always
+                Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_RESTAURANT_PROJECTION, null, null, null);
 
-                // NotificationCompatBuilder is a very convenient way to build backward-compatible
-                // notifications.  Just throw in some data.
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(getContext())
-                                .setSmallIcon(iconId)
-                                .setContentTitle(title)
-                                .setContentText(contentText);
+                if (cursor.moveToFirst()) {
+                    String restaurant = cursor.getString(INDEX_RESTAURANT);
+                    int high = cursor.getInt(INDEX_TIPO_RESTAURANT_ID);
+                    String horaApertura = cursor.getString(INDEX_HORA_APERTURA);
+                    String horaCierre = cursor.getString(INDEX_HORA_CIERRE);
 
-                // Make something interesting happen when the user clicks on the notification.
-                // In this case, opening the app is sufficient.
-                Intent resultIntent = new Intent(context, RestaurantMainActivity.class);
+                    int iconId = R.drawable.ic_logo;
+                    Resources resources = context.getResources();
+                    Bitmap largeIcon = BitmapFactory.decodeResource(resources,
+                            R.drawable.ic_logo);
+                    String title = context.getString(R.string.app_name);
 
-                // The stack builder object will contain an artificial back stack for the
-                // started Activity.
-                // This ensures that navigating backward from the Activity leads out of
-                // your application to the Home screen.
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                stackBuilder.addNextIntent(resultIntent);
-                PendingIntent resultPendingIntent =
-                        stackBuilder.getPendingIntent(
-                                0,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        );
-                mBuilder.setContentIntent(resultPendingIntent);
+                    // Define the text of the forecast.
+                    String contentText = String.format(context.getString(R.string.format_notification),
+                            restaurant,
+                            horaApertura,
+                            horaCierre);
 
-                NotificationManager mNotificationManager =
-                        (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                // WEATHER_NOTIFICATION_ID allows you to update the notification later on.
-                mNotificationManager.notify(RESTAURANT_NOTIFICATION_ID, mBuilder.build());
+                    // NotificationCompatBuilder is a very convenient way to build backward-compatible
+                    // notifications.  Just throw in some data.
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(getContext())
+                                    .setColor(resources.getColor(R.color.lunch_time_light_red))
+                                    .setSmallIcon(iconId)
+                                    .setLargeIcon(largeIcon)
+                                    .setContentTitle(title)
+                                    .setContentText(contentText);
 
-                //refreshing last sync
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putLong(lastNotificationKey, System.currentTimeMillis());
-                editor.commit();
+                    // Make something interesting happen when the user clicks on the notification.
+                    // In this case, opening the app is sufficient.
+                    Intent resultIntent = new Intent(context, RestaurantMainActivity.class);
+
+                    // The stack builder object will contain an artificial back stack for the
+                    // started Activity.
+                    // This ensures that navigating backward from the Activity leads out of
+                    // your application to the Home screen.
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                    stackBuilder.addNextIntent(resultIntent);
+                    PendingIntent resultPendingIntent =
+                            stackBuilder.getPendingIntent(
+                                    0,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                            );
+                    mBuilder.setContentIntent(resultPendingIntent);
+
+                    NotificationManager mNotificationManager =
+                            (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    // WEATHER_NOTIFICATION_ID allows you to update the notification later on.
+                    mNotificationManager.notify(RESTAURANT_NOTIFICATION_ID, mBuilder.build());
+
+                    //refreshing last sync
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putLong(lastNotificationKey, System.currentTimeMillis());
+                    editor.commit();
+                }
+                cursor.close();
             }
         }
-
     }
 
 
