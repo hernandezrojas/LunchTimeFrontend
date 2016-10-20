@@ -579,3 +579,12 @@
 
   + programacion de configurar habilitar/inhabilitar notificaciones
 
+
+  v0.6.9 Actualizacion Gradle
+   0 - En desarrollo
+   6 - Servicios y notificaciones
+   8 - Actualizacion gradle
+
+  + actualización de gradle
+  + mandar llamar a notificación al actualizar
+
