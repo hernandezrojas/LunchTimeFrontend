@@ -1,25 +1,12 @@
 package com.herroj.android.lunchtimefrontend.app;
 
-/**
- * Created by Roberto Hernandez on 10/10/2016.
- */
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,17 +40,14 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
             RestaurantContract.RestaurantEntry.TABLE_NAME + "." + RestaurantContract.RestaurantEntry._ID,
             RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT,
             RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA,
-            RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE,
-            RestaurantContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID
+            RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE
     };
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
-    static final int COL_RESTAURANT_ID = 0;
     static final int COL_RESTAURANT = 1;
     static final int COL_HORA_APERTURA = 2;
     static final int COL_HORA_CIERRE = 3;
-    static final int COL_TIPO_RESTAURANT_ID = 4;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -74,7 +58,7 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(Uri dateUri);
+        void onItemSelected(Uri dateUri);
     }
 
     public RestaurantFragment() {
@@ -137,7 +121,6 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                    String restaurantSetting = Utility.getPreferredRestaurant(getActivity());
                     ((Callback) getActivity())
                             .onItemSelected(RestaurantContract.RestaurantEntry.
                                     buildRestaurantporNombreUri(cursor.getString(COL_RESTAURANT)));
@@ -198,9 +181,7 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         // Sort order:  Ascending, by date.
         String sortOrder = RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " ASC";
 
-        String restaurantSetting = Utility.getPreferredRestaurant(getActivity());
-
-        Uri restaurantUri = RestaurantContract.RestaurantEntry.buildRestaurantUri();
+        Uri restaurantUri = RestaurantContract.RestaurantEntry.CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 restaurantUri,

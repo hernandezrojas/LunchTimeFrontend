@@ -10,25 +10,18 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
 
-/**
- * Created by Roberto Hernandez on 18/10/2016.
- */
-
 public class RestaurantDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String LOG_TAG = RestaurantDetailFragment.class.getSimpleName();
     static final String RESTAURANT_DETAIL_URI = "URI";
 
     private static final String RESTAURANT_SHARE_HASHTAG = " #LunchTimeApp";
@@ -44,8 +37,7 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
             RestaurantContract.RestaurantEntry.TABLE_NAME + "." + RestaurantContract.RestaurantEntry._ID,
             RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT,
             RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA,
-            RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE,
-            RestaurantContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID
+            RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE
 
             // Sirve para traer despues si se ocupa el tipo de restaurant
             // /// This works because the WeatherProvider returns location data joined with
@@ -55,17 +47,13 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
 
     // these constants correspond to the projection defined above, and must change if the
     // projection changes
-    static final int COL_RESTAURANT_ID = 0;
-    static final int COL_RESTAURANT = 1;
-    static final int COL_HORA_APERTURA = 2;
-    static final int COL_HORA_CIERRE = 3;
-    static final int COL_TIPO_RESTAURANT_ID = 4;
+    private static final int COL_RESTAURANT = 1;
+    private static final int COL_HORA_APERTURA = 2;
+    private static final int COL_HORA_CIERRE = 3;
 
-    private ImageView mIconView;
     private TextView mRestaurantView;
     private TextView mHoraAperturaView;
     private TextView mHoraCierreView;
-    private TextView mBkView;
 
     public RestaurantDetailFragment() {
         setHasOptionsMenu(true);
@@ -80,7 +68,6 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
         }
 
         View rootView = inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
-        mIconView = (ImageView) rootView.findViewById(R.id.restaurant_detail_icon);
         mRestaurantView = (TextView) rootView.findViewById(R.id.restaurant_detail_restaurant_textview);
         mHoraAperturaView = (TextView) rootView.findViewById(R.id.restaurant_detail_hora_apertura_textview);
         mHoraCierreView = (TextView) rootView.findViewById(R.id.restaurant_detail_hora_cierre_textview);
@@ -106,7 +93,9 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
 
     private Intent createShareRestaurantIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, mRestaurant + RESTAURANT_SHARE_HASHTAG);
         return shareIntent;
@@ -122,8 +111,7 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
         // replace the uri, since the location has changed
         Uri uri = mUri;
         if (null != uri) {
-            Uri updatedUri = RestaurantContract.RestaurantEntry.buildRestaurantporNombreUri(newRestaurant);
-            mUri = updatedUri;
+            mUri = RestaurantContract.RestaurantEntry.buildRestaurantporNombreUri(newRestaurant);
             getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
         }
     }
@@ -148,17 +136,11 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            // Read weather condition ID from cursor
-            int weatherId = data.getInt(COL_RESTAURANT_ID);
-            // Use placeholder Image
-            mIconView.setImageResource(R.drawable.ic_launcher);
+
 
             // Read date from cursor and update views for day of week and date
             String restaurant = data.getString(COL_RESTAURANT);
             mRestaurantView.setText(restaurant);
-
-            // For accessibility, add a content description to the icon field
-            mIconView.setContentDescription(restaurant);
 
             String horaApertura = data.getString(COL_HORA_APERTURA);
             mHoraAperturaView.setText(horaApertura);

@@ -6,27 +6,22 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
 
 /**
  * {@link RestaurantAdapter} exposes a list of restaurant forecasts
  * + * from a {@link Cursor} to a {@link android.widget.ListView}.
  */
 
-public class RestaurantAdapter extends CursorAdapter {
+class RestaurantAdapter extends CursorAdapter {
 
-    public static class ViewHolder {
-        public final ImageView iconView;
-        public final TextView bkView;
-        public final TextView restaurantView;
-        public final TextView horaAperturaView;
-        public final TextView horaCierreView;
+    private static class ViewHolder {
+        final TextView bkView;
+        final TextView restaurantView;
+        final TextView horaAperturaView;
+        final TextView horaCierreView;
 
-        public ViewHolder(View view) {
-            iconView = (ImageView) view.findViewById(R.id.list_item_icon);
+        ViewHolder(View view) {
             bkView = (TextView) view.findViewById(R.id.list_item_bk_textview);
             restaurantView = (TextView) view.findViewById(R.id.list_item_restaurant_textview);
             horaAperturaView = (TextView) view.findViewById(R.id.list_item_hora_apertura_textview);
@@ -34,7 +29,7 @@ public class RestaurantAdapter extends CursorAdapter {
         }
     }
 
-    public RestaurantAdapter(Context context, Cursor c, int flags) {
+    RestaurantAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
 
@@ -55,9 +50,6 @@ public class RestaurantAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        // Use placeholder image for now
-        viewHolder.iconView.setImageResource(R.drawable.ic_launcher);
-
         // Read weather forecast from cursor
         String bk = "Restaurant";
         viewHolder.bkView.setText(bk);
@@ -65,9 +57,6 @@ public class RestaurantAdapter extends CursorAdapter {
         // Read date from cursor
         String restaurant = cursor.getString(RestaurantFragment.COL_RESTAURANT);
         viewHolder.restaurantView.setText(restaurant);
-
-        // For accessibility, add a content description to the icon field
-        viewHolder.iconView.setContentDescription(restaurant);
 
         // Read date from cursor
         String horaApertura = cursor.getString(RestaurantFragment.COL_HORA_APERTURA);

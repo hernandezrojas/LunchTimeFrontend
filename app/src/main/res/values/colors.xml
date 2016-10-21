@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="grey">#cccccc</color>
-
-
-    <color name="white">#FFFFFF</color>
     <color name="grey_700">#646464</color>
     <color name="black">#000000</color>
-
-    <color name="lunch_time_light_blue">#ff64c2f4</color>
-    <color name="lunch_time_blue">#ff1ca8f4</color>
-    <color name="lunch_time_dark_blue">#0288D1</color>
 
     <color name="lunch_time_light_red">#ffff2222</color>
     <color name="lunch_time_red">#ffcc2222</color>

@@ -2,31 +2,12 @@ package com.herroj.android.lunchtimefrontend.app;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.herroj.android.lunchtimefrontend.app.sync.LunchTimeSyncAdapter;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * RHR
@@ -43,7 +24,7 @@ import java.util.List;
  * 1.06 Get a reference to the ListView, and attach this adapter to it.
  */
 
-public class RestaurantMainActivity extends ActionBarActivity implements RestaurantFragment.Callback {
+public class RestaurantMainActivity extends AppCompatActivity implements RestaurantFragment.Callback {
 
     private static final String RESTAURANTDETAILFRAGMENT_TAG = "RDFTAG";
 
@@ -70,7 +51,9 @@ public class RestaurantMainActivity extends ActionBarActivity implements Restaur
             }
         } else {
             mTwoPane = false;
-            getSupportActionBar().setElevation(0f);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setElevation(0f);
+            }
         }
         LunchTimeSyncAdapter.initializeSyncAdapter(this);
     }

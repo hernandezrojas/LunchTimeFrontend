@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
+        android:layout_gravity="start"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:padding="16dp">
@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:text="bk1"
+            android:text="@string/bk"
             android:textColor="@color/black"
             android:textSize="24sp" />
 
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:text="bk2"
+            android:text="@string/bk"
             android:textColor="@color/grey_700"
             android:textSize="16sp" />
 
@@ -41,7 +41,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
+                android:gravity="start"
                 android:orientation="vertical">
 
                 <TextView
@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="bk3"
+                    android:text="@string/bk"
                     android:textSize="96sp" />
 
                 <TextView
@@ -57,39 +57,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="bk4"
+                    android:text="@string/bk"
                     android:textColor="@color/grey_700"
                     android:textSize="48sp" />
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/detail_forecast_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/restaurant_detail_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher" />
-
-                <TextView
-                    android:id="@+id/detail_forecast_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="bk5"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:textColor="@color/grey_700" />
-            </LinearLayout>
+                android:text="@string/bk"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/grey_700" />
         </LinearLayout>
 
         <!-- Humidity, wind, pressure -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginTop="16dp"
             android:orientation="vertical">
 

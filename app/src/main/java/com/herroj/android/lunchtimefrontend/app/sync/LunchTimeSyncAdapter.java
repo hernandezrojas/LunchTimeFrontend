@@ -13,16 +13,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.herroj.android.lunchtimefrontend.app.R;
@@ -41,28 +39,32 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Vector;
 
-import static android.text.format.DateUtils.DAY_IN_MILLIS;
-import static com.herroj.android.lunchtimefrontend.app.Utility.darformatoCadenaHora;
-import static com.herroj.android.lunchtimefrontend.app.Utility.getStrCampo;
-
 /**
- * Created by Roberto Hernandez on 18/10/2016.
+ * LunchTimeSyncAdapter es un lugar central para colocar todas las transferencias de datos del
+ * dispositivo en un solo lugar
  */
 
 public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
-    public final String LOG_TAG = LunchTimeSyncAdapter.class.getSimpleName();
+
+    private final String LOG_TAG = LunchTimeSyncAdapter.class.getSimpleName();
     // Interval at which to sync with the weather, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
-    public static final int SYNC_INTERVAL = 60 * 180;
-    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+    private static final int SYNC_INTERVAL = 60 * 180;
+    private static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
     private static final int RESTAURANT_NOTIFICATION_ID = 3004;
+    private static final SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+    private static final SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm", Locale.getDefault());
+
 
 
     private static final String[] NOTIFY_RESTAURANT_PROJECTION = new String[]{
-            RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID,
             RestaurantEntry.COLUMN_RESTAURANT,
             RestaurantEntry.COLUMN_HORA_APERTURA,
             RestaurantEntry.COLUMN_HORA_CIERRE
@@ -70,11 +72,10 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
     // these indices must match the projection
     private static final int INDEX_RESTAURANT = 0;
-    private static final int INDEX_TIPO_RESTAURANT_ID = 1;
-    private static final int INDEX_HORA_APERTURA = 2;
-    private static final int INDEX_HORA_CIERRE = 3;
+    private static final int INDEX_HORA_APERTURA = 1;
+    private static final int INDEX_HORA_CIERRE = 2;
 
-    public LunchTimeSyncAdapter(Context context, boolean autoInitialize) {
+    LunchTimeSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
     }
 
@@ -89,7 +90,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
         BufferedReader reader = null;
 
         // Will contain the raw JSON response as a string.
-        String restaurantJsonStr = null;
+        String restaurantJsonStr;
 
         try {
             // Construct the URL for the OpenWeatherMap query
@@ -99,7 +100,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                     "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/com.herroj.lunchtimebackend.restaurant/";
             final String NOMBRE_RESTAURANT_PARAM = "restaurant";
 
-            Uri builtUri = null;
+            Uri builtUri;
 
             if (restaurantQuery.compareTo("") == 0) {
                 builtUri = Uri.parse(RESTAURANT_BASE_URL).buildUpon()
@@ -120,7 +121,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // Nothing to do.
                 return;
@@ -132,7 +133,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {
@@ -140,16 +141,13 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 return;
             }
             restaurantJsonStr = buffer.toString();
-            getRestaurantDataFromJson(restaurantJsonStr, "pendiente tipo restaurant");
+            getRestaurantDataFromJson(restaurantJsonStr);
 
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -162,7 +160,6 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 }
             }
         }
-        return;
     }
 
     /**
@@ -172,9 +169,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    private void getRestaurantDataFromJson(String restaurantJsonStr,
-                                           String tipoRestaurantSetting)
-            throws JSONException {
+    private void getRestaurantDataFromJson(String restaurantJsonStr) {
 
         // Now we have a String representing the complete forecast in JSON Format.
         // Fortunately parsing is easy:  constructor takes the JSON string and converts it
@@ -182,12 +177,10 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // These are the names of the JSON objects that need to be extracted.
 
-        final String OWM_TIPO_RESTAURANT_ID = "tipoRestaurantidTipoRestaurant";
         final String OWM_RESTAURANT = "restaurant";
         final String OWM_HORA_APERTURA = "horaApertura";
         final String OWM_HORA_CIERRE = "horaCierre";
 
-        String TipoRestaurant;
         String NombreRestaurant;
         String horaApertura;
         String horaCierre;
@@ -197,14 +190,12 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             JSONArray restaurantArray = new JSONArray(restaurantJsonStr);
 
             // Insert the new weather information into the database
-            Vector<ContentValues> cVVector = new Vector<ContentValues>(restaurantArray.length());
+            Vector<ContentValues> cVVector = new Vector<>(restaurantArray.length());
 
             for (int i = 0; i < restaurantArray.length(); i++) {
 
                 // Get the JSON object representing the day
                 JSONObject objRestaurant = restaurantArray.getJSONObject(i);
-
-                TipoRestaurant = getStrCampo(objRestaurant, OWM_RESTAURANT);
 
                 NombreRestaurant = getStrCampo(objRestaurant, OWM_RESTAURANT);
 
@@ -213,7 +204,6 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 ContentValues restaurantValues = new ContentValues();
 
-                restaurantValues.put(RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID, TipoRestaurant);
                 restaurantValues.put(RestaurantEntry.COLUMN_RESTAURANT, NombreRestaurant);
                 restaurantValues.put(RestaurantEntry.COLUMN_HORA_APERTURA, horaApertura);
                 restaurantValues.put(RestaurantEntry.COLUMN_HORA_CIERRE, horaCierre);
@@ -221,7 +211,6 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 cVVector.add(restaurantValues);
             }
 
-            int inserted = 0;
             // add to database
             if (cVVector.size() > 0) {
                 getContext().getContentResolver().delete(RestaurantEntry.CONTENT_URI, null, null);
@@ -238,6 +227,37 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
 
+    }
+
+    private static String getStrCampo(JSONObject objeto, String campo) {
+
+        try {
+            if (objeto.has(campo)) {
+                return objeto.getString(campo);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+        return "";
+
+    }
+
+    private static String darformatoCadenaHora(String hora) {
+
+        if (hora.compareTo("") == 0) {
+            return hora;
+        }
+
+        hora = hora.substring(hora.indexOf('T') + 1, hora.length());
+        hora = hora.substring(0, hora.indexOf('-') - 3);
+        try {
+            Date _24HourDt = _24HourSDF.parse(hora);
+            hora = _12HourSDF.format(_24HourDt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return hora;
     }
 
     private void notifyLunchTime() {
@@ -263,16 +283,11 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 // we'll query our contentProvider, as always
                 Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_RESTAURANT_PROJECTION, null, null, null);
 
-                if (cursor.moveToFirst()) {
+                if (cursor != null && cursor.moveToFirst()) {
                     String restaurant = cursor.getString(INDEX_RESTAURANT);
-                    int high = cursor.getInt(INDEX_TIPO_RESTAURANT_ID);
                     String horaApertura = cursor.getString(INDEX_HORA_APERTURA);
                     String horaCierre = cursor.getString(INDEX_HORA_CIERRE);
 
-                    int iconId = R.drawable.ic_logo;
-                    Resources resources = context.getResources();
-                    Bitmap largeIcon = BitmapFactory.decodeResource(resources,
-                            R.drawable.ic_logo);
                     String title = context.getString(R.string.app_name);
 
                     // Define the text of the forecast.
@@ -285,9 +300,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                     // notifications.  Just throw in some data.
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(getContext())
-                                    .setColor(resources.getColor(R.color.lunch_time_light_red))
-                                    .setSmallIcon(iconId)
-                                    .setLargeIcon(largeIcon)
+                                    .setColor(ContextCompat.getColor(context, R.color.lunch_time_light_red))
                                     .setContentTitle(title)
                                     .setContentText(contentText);
 
@@ -316,9 +329,11 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                     //refreshing last sync
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putLong(lastNotificationKey, System.currentTimeMillis());
-                    editor.commit();
+                    editor.apply();
                 }
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
     }
@@ -341,7 +356,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
     /*
          * Helper method to schedule the sync adapter periodic execution
          */
-    public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
+    private static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context);
         String authority = context.getString(R.string.content_authority);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -365,7 +380,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
      * @param context The context used to access the account service
      * @return a fake account.
      */
-    public static Account getSyncAccount(Context context) {
+    private static Account getSyncAccount(Context context) {
         // Get an instance of the Android account manager
         AccountManager accountManager =
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);

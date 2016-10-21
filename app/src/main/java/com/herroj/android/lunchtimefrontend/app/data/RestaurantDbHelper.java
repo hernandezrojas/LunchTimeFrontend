@@ -6,17 +6,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract.RestaurantEntry;
 
 /**
- * Created by Roberto Hernandez on 13/10/2016.
+ * RestaurantDbHelper contiene el código para crear e inicializar la base de datos
  */
 
-public class RestaurantDbHelper extends SQLiteOpenHelper {
+class RestaurantDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
-    static final String DATABASE_NAME = "lunchtime.db";
+    private static final String DATABASE_NAME = "lunchtime.db";
 
-    public RestaurantDbHelper(Context context) {
+    RestaurantDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -30,7 +30,6 @@ public class RestaurantDbHelper extends SQLiteOpenHelper {
                 // should be sorted accordingly.
                 RestaurantEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 RestaurantEntry.COLUMN_RESTAURANT + " TEXT NOT NULL, " +
-                RestaurantEntry.COLUMN_TIPO_RESTAURANT_ID + " INTEGER NOT NULL, " +
                 RestaurantEntry.COLUMN_HORA_APERTURA + " TEXT, " +
                 RestaurantEntry.COLUMN_HORA_CIERRE + " TEXT); ";
 

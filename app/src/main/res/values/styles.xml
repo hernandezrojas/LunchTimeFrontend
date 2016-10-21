@@ -7,16 +7,10 @@
     </style>
     <!-- Main activity theme. -->
     <style name="RestaurantTheme" parent="AppTheme">
-        <item name="actionBarStyle">@style/ActionBar.Solid.LunchTime.NoTitle</item>
     </style>
 
     <!-- Settings activity theme. -->
-    <style name="SettingsTheme" parent="AppTheme"></style>
-
-    <!-- main activity action bar styles -->
-    <style name="ActionBar.Solid.LunchTime.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="displayOptions">useLogo|showHome</item>
-        <item name="logo">@drawable/ic_logo</item>
+    <style name="SettingsTheme" parent="AppTheme">
     </style>
 
     <!-- Style for restaurant listview -->

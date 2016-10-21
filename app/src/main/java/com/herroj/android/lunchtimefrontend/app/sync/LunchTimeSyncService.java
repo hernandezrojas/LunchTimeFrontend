@@ -6,7 +6,9 @@ import android.os.IBinder;
 import android.util.Log;
 
 /**
- * Created by Roberto Hernandez on 18/10/2016.
+ * LunchTimeSyncService es el servicio de sincronización de datos de la aplicación
+ * Nota: un servicio es una tarea que puede continuar cuando la actividad no es visible,
+ * como el oir musica
  */
 
 public class LunchTimeSyncService extends Service {

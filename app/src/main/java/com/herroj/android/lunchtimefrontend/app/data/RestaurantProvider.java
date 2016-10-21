@@ -8,9 +8,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 /**
- * Created by Roberto Hernandez on 15/10/2016.
+ * RestaurantProvider es un proveedor de contenidos que nos ayuda eficientemente sicronizar desde
+ * internet combinado con las utilidades del android framework
  */
 public class RestaurantProvider extends ContentProvider {
 
@@ -18,8 +20,8 @@ public class RestaurantProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private RestaurantDbHelper mOpenHelper;
 
-    static final int RESTAURANT = 100;
-    static final int RESTAURANT_WITH_NAME = 101;
+    private static final int RESTAURANT = 100;
+    private static final int RESTAURANT_WITH_NAME = 101;
 
     private static final SQLiteQueryBuilder sRestaurantQueryBuilder;
 
@@ -27,7 +29,7 @@ public class RestaurantProvider extends ContentProvider {
         sRestaurantQueryBuilder = new SQLiteQueryBuilder();
 
         sRestaurantQueryBuilder.setTables(
-                RestaurantContract.RestaurantEntry.TABLE_NAME );
+                RestaurantContract.RestaurantEntry.TABLE_NAME);
 
         /* RHR Pendiente esta adaptacion para mas adelante
         //This is an inner join which looks like
@@ -54,7 +56,7 @@ public class RestaurantProvider extends ContentProvider {
         String[] selectionArgs = null;
         String selection = null;
 
-        if (restaurantSetting != null){
+        if (restaurantSetting != null) {
             selection = sRestaurantSettingSelection;
             selectionArgs = new String[]{restaurantSetting};
         }
@@ -85,7 +87,7 @@ public class RestaurantProvider extends ContentProvider {
         and LOCATION integer constants defined above.  You can test this by uncommenting the
         testUriMatcher test within TestUriMatcher.
      */
-    static UriMatcher buildUriMatcher() {
+    private static UriMatcher buildUriMatcher() {
         // I know what you're thinking.  Why create a UriMatcher when you can use regular
         // expressions instead?  Because you're not crazy, that's why.
 
@@ -121,7 +123,7 @@ public class RestaurantProvider extends ContentProvider {
         test this by uncommenting testGetType in TestProvider.
      */
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
 
         // Use the Uri Matcher to determine what kind of URI this is.
         final int match = sUriMatcher.match(uri);
@@ -140,7 +142,7 @@ public class RestaurantProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
         // and query the database accordingly.
@@ -166,7 +168,9 @@ public class RestaurantProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        if (getContext() != null) {
+            retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        }
         return retCursor;
     }
 
@@ -174,7 +178,7 @@ public class RestaurantProvider extends ContentProvider {
         Student: Add the ability to insert Locations to the implementation of this function.
      */
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         Uri returnUri;
@@ -192,12 +196,14 @@ public class RestaurantProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        getContext().getContentResolver().notifyChange(uri, null);
+        if (getContext() != null) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
         return returnUri;
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
@@ -213,7 +219,7 @@ public class RestaurantProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         // Because a null deletes all rows
-        if (rowsDeleted != 0) {
+        if (rowsDeleted != 0 && getContext() != null) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsDeleted;
@@ -221,7 +227,7 @@ public class RestaurantProvider extends ContentProvider {
 
     @Override
     public int update(
-            Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+            @NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
         final int match = sUriMatcher.match(uri);
@@ -239,7 +245,7 @@ public class RestaurantProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        if (rowsUpdated != 0)
+        if (rowsUpdated != 0 && getContext() != null)
 
         {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -249,7 +255,7 @@ public class RestaurantProvider extends ContentProvider {
     }
 
     @Override
-    public int bulkInsert(Uri uri, ContentValues[] values) {
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
@@ -268,7 +274,9 @@ public class RestaurantProvider extends ContentProvider {
                 } finally {
                     db.endTransaction();
                 }
-                getContext().getContentResolver().notifyChange(uri, null);
+                if (getContext() != null) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
                 return returnCount;
             default:
                 return super.bulkInsert(uri, values);
