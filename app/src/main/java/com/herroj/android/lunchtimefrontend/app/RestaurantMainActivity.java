@@ -24,7 +24,8 @@ import com.herroj.android.lunchtimefrontend.app.sync.LunchTimeSyncAdapter;
  * 1.06 Get a reference to the ListView, and attach this adapter to it.
  */
 
-public class RestaurantMainActivity extends AppCompatActivity implements RestaurantFragment.Callback {
+public class RestaurantMainActivity extends AppCompatActivity
+        implements RestaurantFragment.Callback {
 
     private static final String RESTAURANTDETAILFRAGMENT_TAG = "RDFTAG";
 
@@ -46,7 +47,8 @@ public class RestaurantMainActivity extends AppCompatActivity implements Restaur
             // fragment transaction.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.restaurant_detail_container, new RestaurantDetailFragment(), RESTAURANTDETAILFRAGMENT_TAG)
+                        .replace(R.id.restaurant_detail_container,
+                                new RestaurantDetailFragment(), RESTAURANTDETAILFRAGMENT_TAG)
                         .commit();
             }
         } else {
@@ -70,10 +72,8 @@ public class RestaurantMainActivity extends AppCompatActivity implements Restaur
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.restaurant_action_settings) {
+        if (item.getItemId() == R.id.restaurant_action_settings) {
             // se invoca la pantalla de configuración
             startActivity(new Intent(this, RestaurantSettingsActivity.class));
             return true;
@@ -88,11 +88,15 @@ public class RestaurantMainActivity extends AppCompatActivity implements Restaur
         String restaurant = Utility.getPreferredRestaurant(this);
         // update the location in our second pane using the fragment manager
         if (restaurant != null && !restaurant.equals(mRestaurant)) {
-            RestaurantFragment ff = (RestaurantFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_restaurant);
+            RestaurantFragment ff =
+                    (RestaurantFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.fragment_restaurant);
             if (null != ff) {
                 ff.onLocationChanged();
             }
-            RestaurantDetailFragment df = (RestaurantDetailFragment) getSupportFragmentManager().findFragmentByTag(RESTAURANTDETAILFRAGMENT_TAG);
+            RestaurantDetailFragment df =
+                    (RestaurantDetailFragment) getSupportFragmentManager()
+                            .findFragmentByTag(RESTAURANTDETAILFRAGMENT_TAG);
             if (null != df) {
                 df.onRestaurantChanged(restaurant);
             }
@@ -113,7 +117,8 @@ public class RestaurantMainActivity extends AppCompatActivity implements Restaur
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.restaurant_detail_container, fragment, RESTAURANTDETAILFRAGMENT_TAG)
+                    .replace(R.id.restaurant_detail_container,
+                            fragment, RESTAURANTDETAILFRAGMENT_TAG)
                     .commit();
         } else {
             Intent intent = new Intent(this, RestaurantDetailActivity.class)

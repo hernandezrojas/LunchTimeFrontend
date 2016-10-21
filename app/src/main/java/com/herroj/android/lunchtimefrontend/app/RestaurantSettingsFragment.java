@@ -7,7 +7,8 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 
-public class RestaurantSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener{
+public class RestaurantSettingsFragment extends PreferenceFragment
+        implements Preference.OnPreferenceChangeListener{
 
     @Override
     public void onCreate(final Bundle savedInstanceState)

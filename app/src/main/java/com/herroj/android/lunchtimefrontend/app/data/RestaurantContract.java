@@ -36,7 +36,8 @@ public class RestaurantContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_RESTAURANT).build();
 
         static final String CONTENT_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_RESTAURANT;
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" +
+                        CONTENT_AUTHORITY + "/" + PATH_RESTAURANT;
 
         // Table name
         public static final String TABLE_NAME = "restaurant";

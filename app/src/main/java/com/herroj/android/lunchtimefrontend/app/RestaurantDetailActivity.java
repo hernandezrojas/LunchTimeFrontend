@@ -19,7 +19,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             // using a fragment transaction.
 
             Bundle arguments = new Bundle();
-            arguments.putParcelable(RestaurantDetailFragment.RESTAURANT_DETAIL_URI, getIntent().getData());
+            arguments.putParcelable(
+                    RestaurantDetailFragment.RESTAURANT_DETAIL_URI, getIntent().getData());
 
             RestaurantDetailFragment fragment = new RestaurantDetailFragment();
             fragment.setArguments(arguments);

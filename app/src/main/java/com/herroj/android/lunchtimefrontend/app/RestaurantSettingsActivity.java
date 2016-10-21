@@ -13,7 +13,8 @@ public class RestaurantSettingsActivity extends PreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new RestaurantSettingsFragment()).commit();
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new RestaurantSettingsFragment()).commit();
 
     }
 

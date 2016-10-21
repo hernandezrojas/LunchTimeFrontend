@@ -51,7 +51,8 @@ public class RestaurantProvider extends ContentProvider {
 
 
     private Cursor getRestaurantByNameSetting(Uri uri, String[] projection, String sortOrder) {
-        String restaurantSetting = RestaurantContract.RestaurantEntry.getRestaurantSettingFromUri(uri);
+        String restaurantSetting =
+                RestaurantContract.RestaurantEntry.getRestaurantSettingFromUri(uri);
 
         String[] selectionArgs = null;
         String selection = null;
@@ -100,7 +101,8 @@ public class RestaurantProvider extends ContentProvider {
         //// For each type of URI you want to add, create a corresponding code.
         //matcher.addURI(authority, RestaurantContract.PATH_WEATHER, WEATHER);
         //matcher.addURI(authority, RestaurantContract.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
-        //matcher.addURI(authority, RestaurantContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
+        //matcher.addURI(authority,
+        // RestaurantContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
 
         matcher.addURI(authority, RestaurantContract.PATH_RESTAURANT, RESTAURANT);
         matcher.addURI(authority, RestaurantContract.PATH_RESTAURANT + "/*", RESTAURANT_WITH_NAME);
@@ -142,8 +144,8 @@ public class RestaurantProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
-                        String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection,
+                        String selection, String[] selectionArgs,String sortOrder) {
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
         // and query the database accordingly.
         Cursor retCursor;
@@ -238,8 +240,8 @@ public class RestaurantProvider extends ContentProvider {
         {
             case RESTAURANT_WITH_NAME:
             case RESTAURANT:
-                rowsUpdated = db.update(RestaurantContract.RestaurantEntry.TABLE_NAME, values, selection,
-                        selectionArgs);
+                rowsUpdated = db.update(RestaurantContract.RestaurantEntry.TABLE_NAME,
+                        values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -265,7 +267,8 @@ public class RestaurantProvider extends ContentProvider {
                 int returnCount = 0;
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(RestaurantContract.RestaurantEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(
+                                RestaurantContract.RestaurantEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
                         }

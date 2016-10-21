@@ -20,7 +20,8 @@ import android.widget.TextView;
 
 import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
 
-public class RestaurantDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class RestaurantDetailFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     static final String RESTAURANT_DETAIL_URI = "URI";
 
@@ -34,7 +35,8 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
     private static final int DETAIL_LOADER = 0;
 
     private static final String[] DETAIL_COLUMNS = {
-            RestaurantContract.RestaurantEntry.TABLE_NAME + "." + RestaurantContract.RestaurantEntry._ID,
+            RestaurantContract.RestaurantEntry.TABLE_NAME + "." +
+                    RestaurantContract.RestaurantEntry._ID,
             RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT,
             RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA,
             RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE
@@ -68,9 +70,12 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
         }
 
         View rootView = inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
-        mRestaurantView = (TextView) rootView.findViewById(R.id.restaurant_detail_restaurant_textview);
-        mHoraAperturaView = (TextView) rootView.findViewById(R.id.restaurant_detail_hora_apertura_textview);
-        mHoraCierreView = (TextView) rootView.findViewById(R.id.restaurant_detail_hora_cierre_textview);
+        mRestaurantView =
+                (TextView) rootView.findViewById(R.id.restaurant_detail_restaurant_textview);
+        mHoraAperturaView =
+                (TextView) rootView.findViewById(R.id.restaurant_detail_hora_apertura_textview);
+        mHoraCierreView =
+                (TextView) rootView.findViewById(R.id.restaurant_detail_hora_cierre_textview);
         return rootView;
     }
 

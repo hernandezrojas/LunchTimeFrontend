@@ -10,57 +10,6 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="56dp"
-            android:orientation="vertical">
-
-            <!-- Header: Day, Date -->
-            <TextView
-                android:id="@+id/detail_day_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
-                android:minWidth="120dp"
-                android:text="@string/bk"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/detail_date_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
-                android:text="@string/bk"
-                android:textColor="@color/grey_700"
-                android:textSize="20sp" />
-
-        </LinearLayout>
-
-        <!-- Main content: high, low, art, weather state -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/detail_high_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/bk"
-                android:textSize="96sp" />
-
-            <TextView
-                android:id="@+id/detail_low_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/bk"
-                android:textColor="@color/grey_700"
-                android:textSize="48sp" />
-
             <!-- Humidity, wind, pressure -->
             <TextView
                 android:id="@+id/restaurant_detail_restaurant_textview"
@@ -89,14 +38,4 @@
                 android:text="@string/bk"
                 android:textAppearance="?android:textAppearanceLarge" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/detail_forecast_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/bk"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:textColor="@color/grey_700" />
-    </LinearLayout>
 </ScrollView>

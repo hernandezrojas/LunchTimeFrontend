@@ -11,6 +11,10 @@
     <string name="pref_enable_notifications_label">Notificaciones Lunch Time</string>
     <string name="pref_enable_notifications_true">Habilitado</string>
     <!-- Notification Format -->
-    <string name="format_notification">Restaurant: <xliff:g id="restaurant">%1$s</xliff:g> Hora de Apertura: <xliff:g id="horaApertura">%2$s</xliff:g> Hora de Cierre: <xliff:g id="horaCierre">%3$s</xliff:g></string>
+    <string name="format_notification">
+        Restaurant: <xliff:g id="restaurant">%1$s</xliff:g>
+        Hora de Apertura: <xliff:g id="horaApertura">%2$s</xliff:g>
+        Hora de Cierre: <xliff:g id="horaCierre">%3$s</xliff:g>
+    </string>
 
 </resources>

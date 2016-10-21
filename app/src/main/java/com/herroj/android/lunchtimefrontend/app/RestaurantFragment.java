@@ -37,7 +37,8 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
             // On the one hand, that's annoying.  On the other, you can search the weather table
             // using the location set by the user, which is only in the Location table.
             // So the convenience is worth it.
-            RestaurantContract.RestaurantEntry.TABLE_NAME + "." + RestaurantContract.RestaurantEntry._ID,
+            RestaurantContract.RestaurantEntry.TABLE_NAME + "." +
+                    RestaurantContract.RestaurantEntry._ID,
             RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT,
             RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA,
             RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE

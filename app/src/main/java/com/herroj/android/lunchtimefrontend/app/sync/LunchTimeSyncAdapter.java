@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.BuildConfig;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
@@ -59,9 +60,10 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
     private static final int RESTAURANT_NOTIFICATION_ID = 3004;
-    private static final SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-    private static final SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm", Locale.getDefault());
-
+    private static final SimpleDateFormat _12HourSDF =
+            new SimpleDateFormat("hh:mm a", Locale.getDefault());
+    private static final SimpleDateFormat _24HourSDF =
+            new SimpleDateFormat("HH:mm", Locale.getDefault());
 
 
     private static final String[] NOTIFY_RESTAURANT_PROJECTION = new String[]{
@@ -80,7 +82,8 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     @Override
-    public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+    public void onPerformSync(Account account, Bundle extras, String authority,
+                              ContentProviderClient provider, SyncResult syncResult) {
         Log.d(LOG_TAG, "Starting sync");
         String restaurantQuery = Utility.getPreferredRestaurant(getContext());
 
@@ -97,7 +100,8 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
             final String RESTAURANT_BASE_URL =
-                    "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/com.herroj.lunchtimebackend.restaurant/";
+                    "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/" +
+                            "com.herroj.lunchtimebackend.restaurant/";
             final String NOMBRE_RESTAURANT_PARAM = "restaurant";
 
             Uri builtUri;
@@ -220,8 +224,9 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 notifyLunchTime();
             }
 
-            Log.d(LOG_TAG, "Sync Complete. " + cVVector.size() + " Inserted");
-
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "Sync Complete. " + cVVector.size() + " Inserted");
+            }
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -267,7 +272,8 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
         String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
         boolean displayNotifications = prefs.getBoolean(displayNotificationsKey,
-                Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
+                Boolean.parseBoolean(
+                        context.getString(R.string.pref_enable_notifications_default)));
 
         if (displayNotifications) {
 
@@ -278,10 +284,12 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 // Last sync was more than 1 day ago, let's send a notification with the weather.
                 String restaurantQuery = Utility.getPreferredRestaurant(context);
 
-                Uri weatherUri = RestaurantContract.RestaurantEntry.buildRestaurantporNombreUri(restaurantQuery);
+                Uri weatherUri = RestaurantContract.RestaurantEntry
+                        .buildRestaurantporNombreUri(restaurantQuery);
 
                 // we'll query our contentProvider, as always
-                Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_RESTAURANT_PROJECTION, null, null, null);
+                Cursor cursor = context.getContentResolver().
+                        query(weatherUri, NOTIFY_RESTAURANT_PROJECTION, null, null, null);
 
                 if (cursor != null && cursor.moveToFirst()) {
                     String restaurant = cursor.getString(INDEX_RESTAURANT);
@@ -291,16 +299,19 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                     String title = context.getString(R.string.app_name);
 
                     // Define the text of the forecast.
-                    String contentText = String.format(context.getString(R.string.format_notification),
+                    String contentText =
+                            String.format(context.getString(R.string.format_notification),
                             restaurant,
                             horaApertura,
                             horaCierre);
 
-                    // NotificationCompatBuilder is a very convenient way to build backward-compatible
+                    // NotificationCompatBuilder is a very convenient
+                    // way to build backward-compatible
                     // notifications.  Just throw in some data.
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(getContext())
-                                    .setColor(ContextCompat.getColor(context, R.color.lunch_time_light_red))
+                                    .setColor(ContextCompat
+                                            .getColor(context, R.color.lunch_time_light_red))
                                     .setContentTitle(title)
                                     .setContentText(contentText);
 
@@ -322,7 +333,8 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                     mBuilder.setContentIntent(resultPendingIntent);
 
                     NotificationManager mNotificationManager =
-                            (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                            (NotificationManager) getContext()
+                                    .getSystemService(Context.NOTIFICATION_SERVICE);
                     // WEATHER_NOTIFICATION_ID allows you to update the notification later on.
                     mNotificationManager.notify(RESTAURANT_NOTIFICATION_ID, mBuilder.build());
 
@@ -387,7 +399,8 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // Create the account type and default account
         Account newAccount = new Account(
-                context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
+                context.getString(R.string.app_name),
+                context.getString(R.string.sync_account_type));
 
         // If the password doesn't exist, the account doesn't exist
         if (null == accountManager.getPassword(newAccount)) {
@@ -419,7 +432,8 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                        /*
          * Without calling setSyncAutomatically, our periodic sync will not be enabled.
          */
-        ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
+        ContentResolver.setSyncAutomatically(
+                newAccount, context.getString(R.string.content_authority), true);
 
                         /*
          * Finally, let's do a sync to get things started
