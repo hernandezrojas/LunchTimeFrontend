@@ -590,20 +590,13 @@
 
 
 
-  v0.7.1 Inspect Code Default Project Config
+  v0.7.1 Inspect Code
    0 - En desarrollo
    7 - Limpieza de código y comentarios
-   1 - Inspect code default project config
+   1 - Inspect code
 
-  + inspect code default project config
+  + inspect code
 
-
-  v0.7.2 Inspect Mas Opciones 
-   0 - En desarrollo
-   7 - Limpieza de código y comentarios
-   2 - Inspect mas opciones 
-
-  + inspect con mas opciones seleccionadas
 
 
 

@@ -1,4 +1,4 @@
-package com.herroj.android.lunchtimefrontend.app;
+package com.herroj.android.lunchtime.app;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,15 +16,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract;
-import com.herroj.android.lunchtimefrontend.app.sync.LunchTimeSyncAdapter;
+import com.herroj.android.lunchtime.app.data.RestaurantContract;
+import com.herroj.android.lunchtime.app.sync.LunchTimeSyncAdapter;
 
 public class RestaurantFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private RestaurantAdapter mRestaurantAdapter;
+    private RestaurantAdapter m_restaurantAdapter;
 
-    private ListView mListView;
-    private int mPosition = ListView.INVALID_POSITION;
+    private ListView m_listView;
+    private int m_position = ListView.INVALID_POSITION;
 
     private static final String SELECTED_KEY = "selected_position";
 
@@ -37,7 +37,7 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
             // On the one hand, that's annoying.  On the other, you can search the weather table
             // using the location set by the user, which is only in the Location table.
             // So the convenience is worth it.
-            RestaurantContract.RestaurantEntry.TABLE_NAME + "." +
+            RestaurantContract.RestaurantEntry.TABLE_NAME + '.' +
                     RestaurantContract.RestaurantEntry._ID,
             RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT,
             RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA,
@@ -62,9 +62,6 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         void onItemSelected(Uri dateUri);
     }
 
-    public RestaurantFragment() {
-    }
-
     /*
         2.04 inflate menu
 
@@ -73,23 +70,23 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
 
       */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public final void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         inflater.inflate(R.menu.restaurantfragment, menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public final boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        final int id = item.getItemId();
         if (id == R.id.restaurant_action_refresh) {
             updateRestaurant();
 
@@ -100,33 +97,34 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public final View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                                   final Bundle savedInstanceState) {
 
         // The RestaurantAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
-        mRestaurantAdapter = new RestaurantAdapter(getActivity(), null, 0);
+        m_restaurantAdapter = new RestaurantAdapter(getActivity(), null, 0);
 
-        View rootView = inflater.inflate(R.layout.fragment_restaurant_main, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_restaurant_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        mListView = (ListView) rootView.findViewById(R.id.listview_restaurant);
-        mListView.setAdapter(mRestaurantAdapter);
+        m_listView = (ListView) rootView.findViewById(R.id.listview_restaurant);
+        m_listView.setAdapter(m_restaurantAdapter);
 
         // We'll call our MainActivity
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        m_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemClick(final AdapterView<?> adapterView,
+                                    final View view, final int i, final long l) {
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
                 // if it cannot seek to that position.
-                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                final Cursor cursor = (Cursor) adapterView.getItemAtPosition(i);
                 if (cursor != null) {
                     ((Callback) getActivity())
                             .onItemSelected(RestaurantContract.RestaurantEntry.
                                     buildRestaurantporNombreUri(cursor.getString(COL_RESTAURANT)));
                 }
-                mPosition = position;
+                m_position = i;
             }
         });
 
@@ -135,23 +133,23 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         // does crazy lifecycle related things.  It should feel like some stuff stretched out,
         // or magically appeared to take advantage of room, but data or place in the app was never
         // actually *lost*.
-        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+        if ((savedInstanceState != null) && savedInstanceState.containsKey(SELECTED_KEY)) {
             // The listview probably hasn't even been populated yet.  Actually perform the
             // swapout in onLoadFinished.
-            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+            m_position = savedInstanceState.getInt(SELECTED_KEY);
         }
 
         return rootView;
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public final void onActivityCreated(final Bundle savedInstanceState) {
         getLoaderManager().initLoader(RESTAURANT_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
     // since we read the location when we create the loader, all we need to do is restart things
-    void onLocationChanged() {
+    final void onLocationChanged() {
         updateRestaurant();
         getLoaderManager().restartLoader(RESTAURANT_LOADER, null, this);
     }
@@ -161,18 +159,18 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public final void onSaveInstanceState(final Bundle outState) {
         // When tablets rotate, the currently selected list item needs to be saved.
         // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
         // so check for that before storing.
-        if (mPosition != ListView.INVALID_POSITION) {
-            outState.putInt(SELECTED_KEY, mPosition);
+        if (m_position != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, m_position);
         }
         super.onSaveInstanceState(outState);
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+    public final Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         // This is called when a new Loader needs to be created.  This
         // fragment only uses one loader, so we don't care about checking the id.
 
@@ -180,9 +178,9 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         // dates after or including today.
 
         // Sort order:  Ascending, by date.
-        String sortOrder = RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " ASC";
+        final String sortOrder = RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " ASC";
 
-        Uri restaurantUri = RestaurantContract.RestaurantEntry.CONTENT_URI;
+        final Uri restaurantUri = RestaurantContract.RestaurantEntry.CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 restaurantUri,
@@ -193,18 +191,18 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mRestaurantAdapter.swapCursor(data);
-        if (mPosition != ListView.INVALID_POSITION) {
+    public final void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
+        m_restaurantAdapter.swapCursor(data);
+        if (m_position != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
-            mListView.smoothScrollToPosition(mPosition);
+            m_listView.smoothScrollToPosition(m_position);
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-        mRestaurantAdapter.swapCursor(null);
+    public final void onLoaderReset(final Loader<Cursor> loader) {
+        m_restaurantAdapter.swapCursor(null);
     }
 
 }

@@ -1,16 +1,18 @@
-package com.herroj.android.lunchtimefrontend.app.data;
+package com.herroj.android.lunchtime.app.data;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import java.io.File;
+
 /**
  * RestaurantContract es un acuerdo entre el modelo de datos, el almacenamiento y la vista de
  * presentación, describiendo como la información es accesada
  */
-
-public class RestaurantContract {
+public enum RestaurantContract {
+    ;
 
     // The "Content authority" is a name for the entire content provider, similar to the
     // relationship between a domain name and its website.  A convenient string to use for the
@@ -30,14 +32,14 @@ public class RestaurantContract {
     static final String PATH_RESTAURANT = "restaurant";
 
     /* Inner class that defines the table contents of the restaurant table */
-    public static final class RestaurantEntry implements BaseColumns {
+    public static class RestaurantEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_RESTAURANT).build();
 
         static final String CONTENT_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" +
-                        CONTENT_AUTHORITY + "/" + PATH_RESTAURANT;
+                ContentResolver.CURSOR_DIR_BASE_TYPE + File.separator +
+                        CONTENT_AUTHORITY + File.separator + PATH_RESTAURANT;
 
         // Table name
         public static final String TABLE_NAME = "restaurant";
@@ -46,15 +48,15 @@ public class RestaurantContract {
         public static final String COLUMN_HORA_APERTURA = "horaApertura";
         public static final String COLUMN_HORA_CIERRE = "horaCierre";
 
-        static Uri buildRestaurantUri(long id) {
+        static Uri buildRestaurantUri(final long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildRestaurantporNombreUri(String nombre) {
+        public static Uri buildRestaurantporNombreUri(final String nombre) {
             return CONTENT_URI.buildUpon().appendPath(nombre).build();
         }
 
-        static String getRestaurantSettingFromUri(Uri uri) {
+        static String getRestaurantSettingFromUri(final Uri uri) {
             return uri.getPathSegments().get(1);
         }
 

@@ -1,4 +1,4 @@
-package com.herroj.android.lunchtimefrontend.app;
+package com.herroj.android.lunchtime.app;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.herroj.android.lunchtimefrontend.app.sync.LunchTimeSyncAdapter;
+import com.herroj.android.lunchtime.app.sync.LunchTimeSyncAdapter;
 
 /**
  * RHR
@@ -29,19 +29,19 @@ public class RestaurantMainActivity extends AppCompatActivity
 
     private static final String RESTAURANTDETAILFRAGMENT_TAG = "RDFTAG";
 
-    private boolean mTwoPane;
+    private boolean m_twoPane;
 
-    private String mRestaurant;
+    private String m_restaurant;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_main);
         if (findViewById(R.id.restaurant_detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts
             // (res/layout-sw600dp). If this view is present, then the activity should be
             // in two-pane mode.
-            mTwoPane = true;
+            m_twoPane = true;
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
@@ -52,23 +52,23 @@ public class RestaurantMainActivity extends AppCompatActivity
                         .commit();
             }
         } else {
-            mTwoPane = false;
+            m_twoPane = false;
             if (getSupportActionBar() != null) {
-                getSupportActionBar().setElevation(0f);
+                getSupportActionBar().setElevation(0.0f);
             }
         }
         LunchTimeSyncAdapter.initializeSyncAdapter(this);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public final boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.restaurant_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public final boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -83,37 +83,37 @@ public class RestaurantMainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume() {
+    protected final void onResume() {
         super.onResume();
-        String restaurant = Utility.getPreferredRestaurant(this);
+        final String restaurant = Utilidad.getPreferredRestaurant(this);
         // update the location in our second pane using the fragment manager
-        if (restaurant != null && !restaurant.equals(mRestaurant)) {
-            RestaurantFragment ff =
+        if ((restaurant != null) && !restaurant.equals(m_restaurant)) {
+            final RestaurantFragment restaurantFragment =
                     (RestaurantFragment) getSupportFragmentManager()
                             .findFragmentById(R.id.fragment_restaurant);
-            if (null != ff) {
-                ff.onLocationChanged();
+            if (restaurantFragment != null) {
+                restaurantFragment.onLocationChanged();
             }
-            RestaurantDetailFragment df =
+            final RestaurantDetailFragment restaurantDetailFragment =
                     (RestaurantDetailFragment) getSupportFragmentManager()
                             .findFragmentByTag(RESTAURANTDETAILFRAGMENT_TAG);
-            if (null != df) {
-                df.onRestaurantChanged(restaurant);
+            if (restaurantDetailFragment != null) {
+                restaurantDetailFragment.onRestaurantChanged(restaurant);
             }
-            mRestaurant = restaurant;
+            m_restaurant = restaurant;
         }
     }
 
     @Override
-    public void onItemSelected(Uri contentUri) {
-        if (mTwoPane) {
+    public final void onItemSelected(final Uri dateUri) {
+        if (m_twoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            Bundle args = new Bundle();
-            args.putParcelable(RestaurantDetailFragment.RESTAURANT_DETAIL_URI, contentUri);
+            final Bundle args = new Bundle();
+            args.putParcelable(RestaurantDetailFragment.RESTAURANT_DETAIL_URI, dateUri);
 
-            RestaurantDetailFragment fragment = new RestaurantDetailFragment();
+            final RestaurantDetailFragment fragment = new RestaurantDetailFragment();
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
@@ -121,8 +121,8 @@ public class RestaurantMainActivity extends AppCompatActivity
                             fragment, RESTAURANTDETAILFRAGMENT_TAG)
                     .commit();
         } else {
-            Intent intent = new Intent(this, RestaurantDetailActivity.class)
-                    .setData(contentUri);
+            final Intent intent = new Intent(this, RestaurantDetailActivity.class)
+                    .setData(dateUri);
             startActivity(intent);
         }
     }

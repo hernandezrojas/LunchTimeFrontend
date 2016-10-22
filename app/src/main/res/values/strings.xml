@@ -35,7 +35,7 @@
     <string name="restaurant_action_share">Share</string>
 
     <!-- SyncAdapter related -->
-    <string name="sync_account_type" translatable="false">lunchtimefrontend.herroj.com</string>
+    <string name="sync_account_type" translatable="false">lunchtime.herroj.com</string>
     <string name="content_authority" translatable="false">
         com.herroj.android.lunchtimefrontend.app
     </string>

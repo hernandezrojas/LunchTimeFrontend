@@ -1,4 +1,4 @@
-package com.herroj.android.lunchtimefrontend.app;
+package com.herroj.android.lunchtime.app;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -11,7 +11,7 @@ public class RestaurantSettingsFragment extends PreferenceFragment
         implements Preference.OnPreferenceChangeListener{
 
     @Override
-    public void onCreate(final Bundle savedInstanceState)
+    public final void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
@@ -28,7 +28,7 @@ public class RestaurantSettingsFragment extends PreferenceFragment
      * Also fires the listener once, to initialize the summary (so it shows up before the value
      * is changed.)
      */
-    private void bindPreferenceSummaryToValue(Preference preference) {
+    private void bindPreferenceSummaryToValue(final Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(this);
 
@@ -41,14 +41,14 @@ public class RestaurantSettingsFragment extends PreferenceFragment
     }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object value) {
-        String stringValue = value.toString();
+    public final boolean onPreferenceChange(final Preference preference, final Object o) {
+        final String stringValue = o.toString();
 
         if (preference instanceof ListPreference) {
             // For list preferences, look up the correct display value in
             // the preference's 'entries' list (since they have separate labels/values).
-            ListPreference listPreference = (ListPreference) preference;
-            int prefIndex = listPreference.findIndexOfValue(stringValue);
+            final ListPreference listPreference = (ListPreference) preference;
+            final int prefIndex = listPreference.findIndexOfValue(stringValue);
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.herroj.android.lunchtimefrontend.app">
+    package="com.herroj.android.lunchtime.app">
 
     <!--RHR 2.06 add internet permissions-->
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
@@ -34,7 +34,7 @@
             android:parentActivityName=".RestaurantMainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.herroj.android.lunchtimefrontend.app.RestaurantMainActivity" />
+                android:value="com.herroj.android.lunchtime.app.RestaurantMainActivity" />
         </activity>
         <activity
             android:name=".RestaurantSettingsActivity"
@@ -43,7 +43,7 @@
             android:theme="@style/SettingsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.herroj.android.lunchtimefrontend.app.RestaurantMainActivity" />
+                android:value="com.herroj.android.lunchtime.app.RestaurantMainActivity" />
         </activity>
 
         <provider

@@ -1,14 +1,17 @@
-package com.herroj.android.lunchtimefrontend.app.data;
+package com.herroj.android.lunchtime.app.data;
 
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+
+import java.io.File;
 
 /**
  * RestaurantProvider es un proveedor de contenidos que nos ayuda eficientemente sicronizar desde
@@ -17,18 +20,18 @@ import android.support.annotation.NonNull;
 public class RestaurantProvider extends ContentProvider {
 
     // The URI Matcher used by this content provider.
-    private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private RestaurantDbHelper mOpenHelper;
+    private static final UriMatcher S_URI_MATCHER = buildUriMatcher();
+    private RestaurantDbHelper m_openHelper;
 
     private static final int RESTAURANT = 100;
     private static final int RESTAURANT_WITH_NAME = 101;
 
-    private static final SQLiteQueryBuilder sRestaurantQueryBuilder;
+    private static final SQLiteQueryBuilder S_RESTAURANT_QUERY_BUILDER;
 
     static {
-        sRestaurantQueryBuilder = new SQLiteQueryBuilder();
+        S_RESTAURANT_QUERY_BUILDER = new SQLiteQueryBuilder();
 
-        sRestaurantQueryBuilder.setTables(
+        S_RESTAURANT_QUERY_BUILDER.setTables(
                 RestaurantContract.RestaurantEntry.TABLE_NAME);
 
         /* RHR Pendiente esta adaptacion para mas adelante
@@ -45,20 +48,21 @@ public class RestaurantProvider extends ContentProvider {
     }
 
     //Restaurant.restaurant = ?
-    private static final String sRestaurantSettingSelection =
+    private static final String S_RESTAURANT_SETTING_SELECTION =
             RestaurantContract.RestaurantEntry.TABLE_NAME +
-                    "." + RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " = ? ";
+                    '.' + RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " = ? ";
 
 
-    private Cursor getRestaurantByNameSetting(Uri uri, String[] projection, String sortOrder) {
-        String restaurantSetting =
+    private Cursor getRestaurantByNameSetting(
+            final Uri uri, final String[] projection, final String sortOrder) {
+        final String restaurantSetting =
                 RestaurantContract.RestaurantEntry.getRestaurantSettingFromUri(uri);
 
         String[] selectionArgs = null;
         String selection = null;
 
         if (restaurantSetting != null) {
-            selection = sRestaurantSettingSelection;
+            selection = S_RESTAURANT_SETTING_SELECTION;
             selectionArgs = new String[]{restaurantSetting};
         }
 
@@ -72,7 +76,7 @@ public class RestaurantProvider extends ContentProvider {
         }
         */
 
-        return sRestaurantQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return S_RESTAURANT_QUERY_BUILDER.query(m_openHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -105,7 +109,8 @@ public class RestaurantProvider extends ContentProvider {
         // RestaurantContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
 
         matcher.addURI(authority, RestaurantContract.PATH_RESTAURANT, RESTAURANT);
-        matcher.addURI(authority, RestaurantContract.PATH_RESTAURANT + "/*", RESTAURANT_WITH_NAME);
+        matcher.addURI(authority, RestaurantContract.PATH_RESTAURANT + File.separator  + '*',
+                RESTAURANT_WITH_NAME);
 
         return matcher;
     }
@@ -115,8 +120,8 @@ public class RestaurantProvider extends ContentProvider {
         here.
      */
     @Override
-    public boolean onCreate() {
-        mOpenHelper = new RestaurantDbHelper(getContext());
+    public final boolean onCreate() {
+        m_openHelper = new RestaurantDbHelper(getContext());
         return true;
     }
 
@@ -125,10 +130,10 @@ public class RestaurantProvider extends ContentProvider {
         test this by uncommenting testGetType in TestProvider.
      */
     @Override
-    public String getType(@NonNull Uri uri) {
+    public final String getType(@NonNull final Uri uri) {
 
         // Use the Uri Matcher to determine what kind of URI this is.
-        final int match = sUriMatcher.match(uri);
+        final int match = S_URI_MATCHER.match(uri);
 
         switch (match) {
             // Student: Uncomment and fill out these two cases
@@ -144,25 +149,25 @@ public class RestaurantProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(@NonNull Uri uri, String[] projection,
-                        String selection, String[] selectionArgs,String sortOrder) {
+    public final Cursor query(@NonNull final Uri uri, final String[] strings, final String s,
+                              final String[] strings1, final String s1) {
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
         // and query the database accordingly.
-        Cursor retCursor;
-        switch (sUriMatcher.match(uri)) {
+        final Cursor retCursor;
+        switch (S_URI_MATCHER.match(uri)) {
             // "restaurant"
             case RESTAURANT_WITH_NAME:
-                retCursor = getRestaurantByNameSetting(uri, projection, sortOrder);
+                retCursor = getRestaurantByNameSetting(uri, strings, s1);
                 break;
             case RESTAURANT: {
-                retCursor = mOpenHelper.getReadableDatabase().query(
+                retCursor = m_openHelper.getReadableDatabase().query(
                         RestaurantContract.RestaurantEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
+                        strings,
+                        s,
+                        strings1,
                         null,
                         null,
-                        sortOrder
+                        s1
                 );
                 break;
             }
@@ -180,19 +185,22 @@ public class RestaurantProvider extends ContentProvider {
         Student: Add the ability to insert Locations to the implementation of this function.
      */
     @Override
-    public Uri insert(@NonNull Uri uri, ContentValues values) {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
-        Uri returnUri;
+    public final Uri insert(@NonNull final Uri uri, final ContentValues contentValues) {
+        final SQLiteDatabase db = m_openHelper.getWritableDatabase();
+        final int match = S_URI_MATCHER.match(uri);
+        final Uri returnUri;
 
         switch (match) {
             case RESTAURANT_WITH_NAME:
             case RESTAURANT: {
-                long _id = db.insert(RestaurantContract.RestaurantEntry.TABLE_NAME, null, values);
-                if (_id > 0)
-                    returnUri = RestaurantContract.RestaurantEntry.buildRestaurantUri(_id);
-                else
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                final long id =
+                        db.insert(RestaurantContract.RestaurantEntry.TABLE_NAME,
+                                null, contentValues);
+                if (id > 0L) {
+                    returnUri = RestaurantContract.RestaurantEntry.buildRestaurantUri(id);
+                } else {
+                    throw new SQLException("Failed to insert row into " + uri);
+                }
                 break;
             }
             default:
@@ -205,35 +213,40 @@ public class RestaurantProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
-        int rowsDeleted;
+    public final int delete(
+            @NonNull final Uri uri, final String s, final String[] strings) {
+        final SQLiteDatabase db = m_openHelper.getWritableDatabase();
+        final int match = S_URI_MATCHER.match(uri);
+        String strSelection = s;
+
         // this makes delete all rows return the number of rows deleted
-        if (null == selection) selection = "1";
+        if (strSelection == null) {
+            strSelection = "1";
+        }
+        final int rowsDeleted;
         switch (match) {
             case RESTAURANT_WITH_NAME:
             case RESTAURANT:
                 rowsDeleted = db.delete(
-                        RestaurantContract.RestaurantEntry.TABLE_NAME, selection, selectionArgs);
+                        RestaurantContract.RestaurantEntry.TABLE_NAME, strSelection, strings);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         // Because a null deletes all rows
-        if (rowsDeleted != 0 && getContext() != null) {
+        if ((rowsDeleted != 0) && (getContext() != null)) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsDeleted;
     }
 
     @Override
-    public int update(
-            @NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+    public final int update(@NonNull final Uri uri, final ContentValues contentValues,
+                            final String s, final String[] strings) {
+        final SQLiteDatabase db = m_openHelper.getWritableDatabase();
 
-        final int match = sUriMatcher.match(uri);
-        int rowsUpdated;
+        final int match = S_URI_MATCHER.match(uri);
+        final int rowsUpdated;
 
         switch (match)
 
@@ -241,13 +254,13 @@ public class RestaurantProvider extends ContentProvider {
             case RESTAURANT_WITH_NAME:
             case RESTAURANT:
                 rowsUpdated = db.update(RestaurantContract.RestaurantEntry.TABLE_NAME,
-                        values, selection, selectionArgs);
+                        contentValues, s, strings);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        if (rowsUpdated != 0 && getContext() != null)
+        if ((rowsUpdated != 0) && (getContext() != null))
 
         {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -257,32 +270,31 @@ public class RestaurantProvider extends ContentProvider {
     }
 
     @Override
-    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
-        switch (match) {
-            case RESTAURANT_WITH_NAME:
-            case RESTAURANT:
-                db.beginTransaction();
-                int returnCount = 0;
-                try {
-                    for (ContentValues value : values) {
-                        long _id = db.insert(
-                                RestaurantContract.RestaurantEntry.TABLE_NAME, null, value);
-                        if (_id != -1) {
-                            returnCount++;
-                        }
+    public final int bulkInsert(@NonNull final Uri uri, @NonNull final ContentValues[] values) {
+        final SQLiteDatabase db = m_openHelper.getWritableDatabase();
+        final int match = S_URI_MATCHER.match(uri);
+        if ((match == RESTAURANT_WITH_NAME) || (match == RESTAURANT)) {
+
+            db.beginTransaction();
+            int returnCount = 0;
+            try {
+                for (final ContentValues value : values) {
+                    final long id = db.insert(
+                            RestaurantContract.RestaurantEntry.TABLE_NAME, null, value);
+                    if (id != -1L) {
+                        returnCount++;
                     }
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
                 }
-                if (getContext() != null) {
-                    getContext().getContentResolver().notifyChange(uri, null);
-                }
-                return returnCount;
-            default:
-                return super.bulkInsert(uri, values);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+            if (getContext() != null) {
+                getContext().getContentResolver().notifyChange(uri, null);
+            }
+            return returnCount;
+        } else {
+            return super.bulkInsert(uri, values);
         }
     }
 
@@ -291,8 +303,8 @@ public class RestaurantProvider extends ContentProvider {
     // http://developer.android.com/reference/android/content/ContentProvider.html#shutdown()
     @Override
     @TargetApi(11)
-    public void shutdown() {
-        mOpenHelper.close();
+    public final void shutdown() {
+        m_openHelper.close();
         super.shutdown();
     }
 }

@@ -1,4 +1,4 @@
-package com.herroj.android.lunchtimefrontend.app;
+package com.herroj.android.lunchtime.app;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.view.MenuItem;
 public class RestaurantDetailActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected final void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
@@ -18,11 +18,11 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
 
-            Bundle arguments = new Bundle();
+            final Bundle arguments = new Bundle();
             arguments.putParcelable(
                     RestaurantDetailFragment.RESTAURANT_DETAIL_URI, getIntent().getData());
 
-            RestaurantDetailFragment fragment = new RestaurantDetailFragment();
+            final RestaurantDetailFragment fragment = new RestaurantDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.restaurant_detail_container, fragment)
@@ -32,18 +32,18 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public final boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.restaurant_detail, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public final boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        final int id = item.getItemId();
 
         if (id == R.id.restaurant_action_settings) {
             // se invoca la pantalla de configuración

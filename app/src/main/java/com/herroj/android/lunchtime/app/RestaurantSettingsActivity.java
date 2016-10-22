@@ -1,4 +1,4 @@
-package com.herroj.android.lunchtimefrontend.app;
+package com.herroj.android.lunchtime.app;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.preference.PreferenceActivity;
 public class RestaurantSettingsActivity extends PreferenceActivity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getFragmentManager().beginTransaction()
@@ -20,7 +20,7 @@ public class RestaurantSettingsActivity extends PreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public Intent getParentActivityIntent() {
+    public final Intent getParentActivityIntent() {
 
         if (super.getParentActivityIntent() != null) {
             return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

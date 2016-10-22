@@ -1,9 +1,9 @@
-package com.herroj.android.lunchtimefrontend.app.data;
+package com.herroj.android.lunchtime.app.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.herroj.android.lunchtimefrontend.app.data.RestaurantContract.RestaurantEntry;
+import com.herroj.android.lunchtime.app.data.RestaurantContract.RestaurantEntry;
 
 /**
  * RestaurantDbHelper contiene el código para crear e inicializar la base de datos
@@ -16,13 +16,13 @@ class RestaurantDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "lunchtime.db";
 
-    RestaurantDbHelper(Context context) {
+    RestaurantDbHelper(final Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        final String SQL_CREATE_RESTAURANT_TABLE =
+    public final void onCreate(final SQLiteDatabase sqLiteDatabase) {
+        final String sqlCreateRestaurantTable =
                 "CREATE TABLE " + RestaurantEntry.TABLE_NAME + " (" +
                 // Why AutoIncrement here, and not above?
                 // Unique keys will be auto-generated in either case.  But for weather
@@ -45,11 +45,12 @@ class RestaurantDbHelper extends SQLiteOpenHelper {
                 //" UNIQUE (" + WeatherEntry.COLUMN_DATE + ", " +
                 //WeatherEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
 
-        sqLiteDatabase.execSQL(SQL_CREATE_RESTAURANT_TABLE);
+        sqLiteDatabase.execSQL(sqlCreateRestaurantTable);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+    public final void onUpgrade(
+            final SQLiteDatabase sqLiteDatabase, final int i, final int i1) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
         // Note that this only fires if you change the version number for your database.
