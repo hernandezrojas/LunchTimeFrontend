@@ -598,6 +598,15 @@
   + inspect code
 
 
+  v0.7.2 Eliminar Opcion Actualizar En Menu
+   0 - En desarrollo
+   7 - Limpieza de código y comentarios
+   2 - Eliminar opcion actualizar en menu
+
+  + eliminar opcion actualizar en menu
+
+
+
 
 
 

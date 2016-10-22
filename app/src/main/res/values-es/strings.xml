@@ -2,7 +2,6 @@
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">Lunch Time</string>
     <string name="restaurant_action_settings">Configuraciones</string>
-    <string name="restaurant_action_refresh">Actualizar</string>
     <string name="title_activity_restaurant_detail">Detalles</string>
     <string name="title_activity_restaurant_settings">Configuraciones</string>
     <string name="restaurant_action_share">Compartir</string>

@@ -18,7 +18,6 @@
 
     <!-- Menu label to fetch updated weather info from the server -->
 
-    <string name="restaurant_action_refresh">Refresh</string>
     <string name="title_activity_restaurant_detail">Details</string>
 
     <string name="title_activity_restaurant_settings">Settings</string>

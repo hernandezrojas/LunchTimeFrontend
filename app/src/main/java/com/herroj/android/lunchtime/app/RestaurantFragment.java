@@ -8,9 +8,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -75,26 +72,6 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
     }
-
-    @Override
-    public final void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
-        inflater.inflate(R.menu.restaurantfragment, menu);
-    }
-
-    @Override
-    public final boolean onOptionsItemSelected(final MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        final int id = item.getItemId();
-        if (id == R.id.restaurant_action_refresh) {
-            updateRestaurant();
-
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     @Override
     public final View onCreateView(final LayoutInflater inflater, final ViewGroup container,
