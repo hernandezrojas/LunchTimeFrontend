@@ -7,32 +7,54 @@ import android.content.Context;
 import android.os.Bundle;
 
 /**
- * Manages "Authentication" to Sunshine's backend service.  The SyncAdapter framework
- * requires an authenticator object, so syncing to a service that doesn't need authentication
- * typically means creating a stub authenticator like this one.
- * This code is copied directly, in its entirety, from
+ * Maneja la "Authentication" al servicio backend de Lunch Time. El framework SyncAdapter
+ * requere un objeto autentificador, por lo que la sincronizacion con un servicio que no necesita
+ * el autenticacion normalmente significa la creacion de un autentificador como este.
+ * Este código es copiado, en su totalidad a partir de
  * http://developer.android.com/training/sync-adapters/creating-authenticator.html
- * Which is a pretty handy reference when creating your own syncadapters.  Just sayin'.
  */
 class LunchTimeAuthenticator extends AbstractAccountAuthenticator {
 
     /**
-     * Instantiates a new Lunch time authenticator.
+     * Se crea una instancia de autentificador de Lunch Time
      *
-     * @param context the context
+     * @param context el contexto donde se creara
      */
     LunchTimeAuthenticator(final Context context) {
+
         super(context);
+
     }
 
-    // No properties to edit.
+    /**
+     * Devuelve un bundle que contiene el intent del activity que se puede utilizar para
+     * editar las propiedades
+     *
+     * @param accountAuthenticatorResponse usada para establecer el resultado de la consulta
+     * @param s es el accountType cuyas propiedades serán editadas
+     * @return un bundle que contiene el resultado o el intent de empezar a seguir la consulta
+     */
     @Override
     public final Bundle editProperties(
-            final AccountAuthenticatorResponse accountAuthenticatorResponse, final String s) {
+            final AccountAuthenticatorResponse accountAuthenticatorResponse,
+            final String s) {
+
         throw new UnsupportedOperationException(getClass().getSimpleName());
+
     }
 
-    // Because we're not actually adding an account to the device, just return null.
+    /**
+     * addAccount agrega una cuenta a un especifico AccountType
+     *
+     * @param accountAuthenticatorResponse para enviar el resultado al AccountManager
+     * @param s es el tipo de cuenta a agregar
+     * @param s1 tipo de autentificacion token a recuperar despues de agregar
+     *                      la cuenta
+     * @param strings un arreglo de String de funciones de authenticator-specific
+     *                         que la cuenta debe tener
+     * @param bundle un bundle de opciones authenticator-specific
+     * @return un Bundle con los resultados o nulo
+     */
     @Override
     public final Bundle addAccount(
             final AccountAuthenticatorResponse accountAuthenticatorResponse,
@@ -40,48 +62,98 @@ class LunchTimeAuthenticator extends AbstractAccountAuthenticator {
             final String s1,
             final String[] strings,
             final Bundle bundle) {
+
         return null;
+
     }
 
-    // Ignore attempts to confirm credentials
+    /**
+     * confirmCredentials Comprueba que el usuario conoce las credenciales de una cuenta
+     *
+     * @param accountAuthenticatorResponse para enviar el resultado al AccountManager
+     * @param account la cuenta de la cual se verificaran las credenciales
+     * @param bundle un bundle de opciones authenticator-specific
+     * @return un Bundle con los resultados o nulo
+     */
     @Override
     public final Bundle confirmCredentials(
             final AccountAuthenticatorResponse accountAuthenticatorResponse,
             final Account account,
             final Bundle bundle) {
+
         return null;
+
     }
 
-    // Getting an authentication token is not supported
+    /**
+     * getAuthToken obtiene el AuthToken de una cuenta
+     *
+     * @param accountAuthenticatorResponse para enviar el resultado al AccountManager
+     * @param account la cuenta de la cual se verificaran las credenciales
+     * @param s tipo de autentificacion token a recuperar despues de agregar
+     *                      la cuenta
+     * @param bundle un bundle de opciones authenticator-specific
+     * @return un Bundle con los resultados o nulo
+     */
     @Override
     public final Bundle getAuthToken(
             final AccountAuthenticatorResponse accountAuthenticatorResponse,
             final Account account,
             final String s,
             final Bundle bundle) {
+
         throw new UnsupportedOperationException(getClass().getSimpleName());
+
     }
 
-    // Getting a label for the auth token is not supported
+    /**
+     * getAuthTokenLabel busca un label del authTokenType
+     *
+     * @param s label buscada
+     * @return el label
+     */
     @Override
     public final String getAuthTokenLabel(final String s) {
+
         throw new UnsupportedOperationException(getClass().getSimpleName());
+
     }
 
-    // Updating user credentials is not supported
+    /**
+     * updateCredentials actualiza las credenciales localmente almacenadas para una cuenta
+     *
+     * @param accountAuthenticatorResponse para enviar el resultado al AccountManager
+     * @param account la cuenta a la cual se le actualizaran las credenciales
+     * @param s tipo de autentificacion token a recuperar despues de agregar la cuenta
+     * @param bundle un bundle de opciones authenticator-specific
+     * @return un Bundle con los resultados o nulo
+     */
     @Override
     public final Bundle updateCredentials(
             final AccountAuthenticatorResponse accountAuthenticatorResponse,
             final Account account,
             final String s, final Bundle bundle) {
+
         throw new UnsupportedOperationException(getClass().getSimpleName());
+
     }
 
-    // Checking features for the account is not supported
+    /**
+     * hasFeatures verifica si la cuenta es compatible con todas las caracteristicas
+     * del autentificador especificado
+     *
+     * @param accountAuthenticatorResponse para enviar el resultado al AccountManager
+     * @param account cuenta a verificar
+     * @param strings un array con caracteristicas a verificar
+     * @return un Bundle con los resultados o nulo
+     */
     @Override
     public final Bundle hasFeatures(
             final AccountAuthenticatorResponse accountAuthenticatorResponse,
             final Account account, final String[] strings) {
+
         throw new UnsupportedOperationException(getClass().getSimpleName());
+
     }
+
 }

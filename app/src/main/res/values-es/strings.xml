@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">Lunch Time</string>
+
     <string name="restaurant_action_settings">Configuraciones</string>
     <string name="title_activity_restaurant_detail">Detalles</string>
     <string name="title_activity_restaurant_settings">Configuraciones</string>
+
     <string name="restaurant_action_share">Compartir</string>
+
     <string name="pref_last_notification">ultima_notificacion</string>
     <string name="pref_enable_notifications_false">No Habilitado</string>
     <string name="pref_enable_notifications_label">Notificaciones Lunch Time</string>
     <string name="pref_enable_notifications_true">Habilitado</string>
-    <!-- Notification Format -->
+
+    <!-- Formato de notificacion -->
     <string name="format_notification">
         Restaurant: <xliff:g id="restaurant">%1$s</xliff:g>
         Hora de Apertura: <xliff:g id="horaApertura">%2$s</xliff:g>

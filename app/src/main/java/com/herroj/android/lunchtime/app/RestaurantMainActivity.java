@@ -10,41 +10,43 @@ import android.view.MenuItem;
 import com.herroj.android.lunchtime.app.sync.LunchTimeSyncAdapter;
 
 /**
- * RHR
- * <p>
- * 1.01_hola_mundo
- * Esta clase representa la ventana principal de los restaurantes, contiene un menú
- * con un elemento que se llama configuración, esta pantalla muestra un fragment
- * que contiene el texto de hola mundo
- * <p>
- * 1.04 Creación de dummy datos
- * <p>
- * 1.05 Create ArrayAdapter to eventually use to populate the ListView
- * <p>
- * 1.06 Get a reference to the ListView, and attach this adapter to it.
+ * Activity de restaurantes, que agrega los elementos necesarios dentro
+ * de la pantalla de detalle
  */
-
 public class RestaurantMainActivity extends AppCompatActivity
         implements RestaurantFragment.Callback {
 
+    /**
+     * etiqueta que identifica al fragment del detalle de los restaurantes
+     */
     private static final String RESTAURANTDETAILFRAGMENT_TAG = "RDFTAG";
 
+    /**
+     * variable que indica si se van a mostrar uno o dos paneles a la vez
+     */
     private boolean m_twoPane;
 
+    /**
+     * restaurant elegido en la pantalla de configuracion
+     */
     private String m_restaurant;
 
+    /**
+     * se llama cuando el activity se crea
+     *
+     * @param savedInstanceState Si la actividad se reinicializa después previamente
+     *                           de ser cerrado, este bundle contiene los datos
+     *                           que más recientemente ha suministrado en los onSaveInstanceState
+     *                           (Bundle). Nota: En caso contrario es nulo.
+     */
     @Override
     protected final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_main);
         if (findViewById(R.id.restaurant_detail_container) != null) {
-            // The detail container view will be present only in the large-screen layouts
-            // (res/layout-sw600dp). If this view is present, then the activity should be
-            // in two-pane mode.
+
             m_twoPane = true;
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
+
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.restaurant_detail_container,
@@ -60,18 +62,30 @@ public class RestaurantMainActivity extends AppCompatActivity
         LunchTimeSyncAdapter.initializeSyncAdapter(this);
     }
 
+    /**
+     * Inicializar el contenido del menú de opciones estándar de la actividad.
+     * se debe colocar sus elementos de menú al menú.
+     *
+     * @param menu El menu de opciones en la que colocan los articulos
+     * @return verdadero si sera visto
+     */
     @Override
     public final boolean onCreateOptionsMenu(final Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.restaurant_main, menu);
+
         return true;
+
     }
 
+    /**
+     * este metodo se llama cada vez que se elige un elemento del menu
+     *
+     * @param item el elemento del menu seleccionado
+     * @return regresa falso si se procesa de manera normal, verdadero si se consume
+     */
     @Override
     public final boolean onOptionsItemSelected(final MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
 
         if (item.getItemId() == R.id.restaurant_action_settings) {
             // se invoca la pantalla de configuración
@@ -82,17 +96,20 @@ public class RestaurantMainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Llamado cuando el fragment es visible al usuario y corriendo activamente
+     */
     @Override
     protected final void onResume() {
         super.onResume();
         final String restaurant = Utilidad.getPreferredRestaurant(this);
-        // update the location in our second pane using the fragment manager
+
         if ((restaurant != null) && !restaurant.equals(m_restaurant)) {
             final RestaurantFragment restaurantFragment =
                     (RestaurantFragment) getSupportFragmentManager()
                             .findFragmentById(R.id.fragment_restaurant);
             if (restaurantFragment != null) {
-                restaurantFragment.onLocationChanged();
+                restaurantFragment.onRestaurantChanged();
             }
             final RestaurantDetailFragment restaurantDetailFragment =
                     (RestaurantDetailFragment) getSupportFragmentManager()
@@ -104,14 +121,16 @@ public class RestaurantMainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * este metodo implementa la interfaz del fragment de onItemSelected
+     *
+     * @param restaurantUri uri del elemento seleccionado
+     */
     @Override
-    public final void onItemSelected(final Uri dateUri) {
+    public final void onItemSelected(final Uri restaurantUri) {
         if (m_twoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
             final Bundle args = new Bundle();
-            args.putParcelable(RestaurantDetailFragment.RESTAURANT_DETAIL_URI, dateUri);
+            args.putParcelable(RestaurantDetailFragment.RESTAURANT_DETAIL_URI, restaurantUri);
 
             final RestaurantDetailFragment fragment = new RestaurantDetailFragment();
             fragment.setArguments(args);
@@ -122,7 +141,7 @@ public class RestaurantMainActivity extends AppCompatActivity
                     .commit();
         } else {
             final Intent intent = new Intent(this, RestaurantDetailActivity.class)
-                    .setData(dateUri);
+                    .setData(restaurantUri);
             startActivity(intent);
         }
     }

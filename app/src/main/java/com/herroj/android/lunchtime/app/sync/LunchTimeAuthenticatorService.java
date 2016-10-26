@@ -5,24 +5,36 @@ import android.content.Intent;
 import android.os.IBinder;
 
 /**
- * The service which allows the sync adapter framework to access the authenticator.
+ * El servicio que permite al framework sync adapter accesar al authenticator
  */
 public class LunchTimeAuthenticatorService extends Service {
-    // Instance field that stores the authenticator object
+
+    /**
+     * Instancia que almacena el objeto authentificador
+     */
     private LunchTimeAuthenticator m_authenticator;
 
+    /**
+     * Llamado por el sistema cuando el servicio es creado por primera vez
+     */
     @Override
     public final void onCreate() {
-        // Create a new authenticator object
+
         m_authenticator = new LunchTimeAuthenticator(this);
+
     }
 
-    /*
-     * When the system binds to this Service to make the RPC call
-     * return the authenticator's IBinder.
+    /**
+     * Regresa el canal de comunicacion al servicio
+     *
+     * @param intent el intent que fue usado para unirse al servicio
+     * @return regresa un IBinder a traves del cual los clientes pueden llamar para el servicio.
      */
     @Override
     public final IBinder onBind(final Intent intent) {
+
         return m_authenticator.getIBinder();
+
     }
+
 }

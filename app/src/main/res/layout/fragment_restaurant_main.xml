@@ -1,18 +1,3 @@
-<!--
-
-    RHR
-
-    1.01_hola_mundo
-
-    Este layout muestra el texto hola mundo por el momento
-
-    1.03 Update fragment layout
-
-    Layout que ahora contiene un list view que mostrará los items
-    en el layout creado en el branch 1.02 list_item_restaurant.xml
-
--->
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

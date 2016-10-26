@@ -13,151 +13,196 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.herroj.android.lunchtime.app.data.RestaurantContract;
+import com.herroj.android.lunchtime.app.data.LunchTimeContract;
 import com.herroj.android.lunchtime.app.sync.LunchTimeSyncAdapter;
 
+/**
+ * Fragment que muestra una lista de restaurantes, implementa una interfaz de cursor
+ */
 public class RestaurantFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    /**
+     * Instancia que expone una lista de restaurantes desde un cursor a un list view
+     */
     private RestaurantAdapter m_restaurantAdapter;
 
+    /**
+     * listView que mostrara los restaurantes
+     */
     private ListView m_listView;
-    private int m_position = ListView.INVALID_POSITION;
-
-    private static final String SELECTED_KEY = "selected_position";
-
-    private static final int RESTAURANT_LOADER = 0;
-
-    private static final String[] RESTAURANT_COLUMNS = {
-            // In this case the id needs to be fully qualified with a table name, since
-            // the content provider joins the location & weather tables in the background
-            // (both have an _id column)
-            // On the one hand, that's annoying.  On the other, you can search the weather table
-            // using the location set by the user, which is only in the Location table.
-            // So the convenience is worth it.
-            RestaurantContract.RestaurantEntry.TABLE_NAME + '.' +
-                    RestaurantContract.RestaurantEntry._ID,
-            RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT,
-            RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA,
-            RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE
-    };
-
-    // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
-    // must change.
-    static final int COL_RESTAURANT = 1;
-    static final int COL_HORA_APERTURA = 2;
-    static final int COL_HORA_CIERRE = 3;
 
     /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
+     * variable que muestra la posicion del cursor en la lista
+     */
+    private int m_position = ListView.INVALID_POSITION;
+
+    /**
+     * Llave de posicion seleccionada
+     */
+    private static final String SELECTED_KEY = "selected_position";
+
+    /**
+     * identificador para el fragment de lista de restaurantes en el loader
+     */
+    private static final int RESTAURANT_LOADER = 0;
+
+    /**
+     * Campos que se muestran en la tabla de restaurant
+     */
+    private static final String[] RESTAURANT_COLUMNS = {
+            LunchTimeContract.RestaurantEntry.TABLE_NAME + '.' +
+                    LunchTimeContract.RestaurantEntry._ID,
+            LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT,
+            LunchTimeContract.RestaurantEntry.COLUMN_HORA_APERTURA,
+            LunchTimeContract.RestaurantEntry.COLUMN_HORA_CIERRE
+    };
+
+    /**
+     * indice del campo restaurante
+     */
+    static final int IDX_COL_RESTAURANT = 1;
+
+    /**
+     * indice del campo hora de apertura
+     */
+    static final int IDX_COL_HORA_APERTURA = 2;
+
+    /**
+     * indice del campo hora de cierre
+     */
+    static final int IDX_COL_HORA_CIERRE = 3;
+
+    /**
+     * Una interfaz Callback que todas las actividades que implementan fragment deben implementar.
+     * Este mecanismo permite a las activities ser notificado del elemento seleccionado
      */
     public interface Callback {
         /**
-         * DetailFragmentCallback for when an item has been selected.
+         * implementacion del evento de elemento seleccionado
          */
-        void onItemSelected(Uri dateUri);
+        void onItemSelected(Uri restaurantUri);
     }
 
-    /*
-        2.04 inflate menu
-
-        se agrega el elemento del menu actualizar al menu, aun sin ejecutar alguna acción
-        en el punto 2.04
-
-      */
+    /**
+     * es llamado al inicializar la creacion de un fragment
+     *
+     * @param savedInstanceState Si el fragment se vuelve a crear desde un estado guardado, este
+     *                           es el estado
+     */
     @Override
     public final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
     }
 
+    /**
+     * implementacion que se usa cuando se infla con LayoutInflater
+     *
+     * @param inflater nombre de etiqueta a ser inflado
+     * @param container el contexto donde la view se crea
+     * @param savedInstanceState atributos de infar especificados en un archivo XML
+     * @return la view creada
+     */
     @Override
     public final View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                                    final Bundle savedInstanceState) {
 
-        // The RestaurantAdapter will take data from a source and
-        // use it to populate the ListView it's attached to.
+        /*
+        el RestaurantAdapter tomara datos desde una fuente y los usa para poblar
+        la ListView enlazada
+         */
         m_restaurantAdapter = new RestaurantAdapter(getActivity(), null, 0);
 
         final View rootView = inflater.inflate(R.layout.fragment_restaurant_main, container, false);
 
-        // Get a reference to the ListView, and attach this adapter to it.
+        // Obtiene una referencia a la ListView, y la enlaza al adaptador
         m_listView = (ListView) rootView.findViewById(R.id.listview_restaurant);
         m_listView.setAdapter(m_restaurantAdapter);
 
-        // We'll call our MainActivity
         m_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(final AdapterView<?> adapterView,
                                     final View view, final int i, final long l) {
-                // CursorAdapter returns a cursor at the correct position for getItem(), or null
-                // if it cannot seek to that position.
+
+                /*
+                CursorAdapter regresa un cursor a la correcta posicion del getItem(), o nulo
+                si no encuentra la posicion
+                 */
                 final Cursor cursor = (Cursor) adapterView.getItemAtPosition(i);
                 if (cursor != null) {
                     ((Callback) getActivity())
-                            .onItemSelected(RestaurantContract.RestaurantEntry.
-                                    buildRestaurantporNombreUri(cursor.getString(COL_RESTAURANT)));
+                            .onItemSelected(LunchTimeContract.RestaurantEntry.
+                                    buildRestaurantporNombreUri(
+                                            cursor.getString(IDX_COL_RESTAURANT)));
                 }
                 m_position = i;
             }
         });
 
-        // If there's instance state, mine it for useful information.
-        // The end-goal here is that the user never knows that turning their device sideways
-        // does crazy lifecycle related things.  It should feel like some stuff stretched out,
-        // or magically appeared to take advantage of room, but data or place in the app was never
-        // actually *lost*.
         if ((savedInstanceState != null) && savedInstanceState.containsKey(SELECTED_KEY)) {
-            // The listview probably hasn't even been populated yet.  Actually perform the
-            // swapout in onLoadFinished.
             m_position = savedInstanceState.getInt(SELECTED_KEY);
         }
 
         return rootView;
+
     }
 
+    /**
+     * Llamado cuando el fragment del activity ha sido creado y este fragment de view
+     * instanciado
+     * @param savedInstanceState Si el fragmento se vuelve a crear a partir de un estado guardado
+     *                           anterior, este es el estado.
+     */
     @Override
     public final void onActivityCreated(final Bundle savedInstanceState) {
         getLoaderManager().initLoader(RESTAURANT_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
-    // since we read the location when we create the loader, all we need to do is restart things
-    final void onLocationChanged() {
+    /**
+     * al cambiar el nombre del restaurant en configuracion, actualizamos los datos
+     */
+    final void onRestaurantChanged() {
         updateRestaurant();
         getLoaderManager().restartLoader(RESTAURANT_LOADER, null, this);
     }
 
+    /**
+     * se manda a sincronizar los datos, al llamar a actualizar Restaurant
+     */
     private void updateRestaurant() {
         LunchTimeSyncAdapter.syncImmediately(getActivity());
     }
 
+    /**
+     * es llamado para preguntar al fragment para salvar su estado dinamico actual, por lo que
+     * mas tarde puede ser reconstruido en una nueva instancia si el proceso se reinicia
+     *
+     * @param outState Bundle donde se guarda el estado
+     */
     @Override
     public final void onSaveInstanceState(final Bundle outState) {
-        // When tablets rotate, the currently selected list item needs to be saved.
-        // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
-        // so check for that before storing.
+
         if (m_position != ListView.INVALID_POSITION) {
             outState.putInt(SELECTED_KEY, m_position);
         }
         super.onSaveInstanceState(outState);
     }
 
+    /**
+     * Instancia y retorna un nuevo Loader para el id dado
+     *
+     * @param id id cuyo Loader se va a crear
+     * @param args argumentos proporcionados por el caller
+     * @return regresa una nueva instancia de Loader que esta listo para empezar a cargar
+     */
     @Override
     public final Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        // This is called when a new Loader needs to be created.  This
-        // fragment only uses one loader, so we don't care about checking the id.
 
-        // To only show current and future dates, filter the query to return weather only for
-        // dates after or including today.
+        final String sortOrder = LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT + " ASC";
 
-        // Sort order:  Ascending, by date.
-        final String sortOrder = RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT + " ASC";
-
-        final Uri restaurantUri = RestaurantContract.RestaurantEntry.CONTENT_URI;
+        final Uri restaurantUri = LunchTimeContract.RestaurantEntry.CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 restaurantUri,
@@ -165,8 +210,15 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
                 null,
                 null,
                 sortOrder);
+
     }
 
+    /**
+     * es llamado cuando un loader creado previamente ha terminado de cargarse
+     *
+     * @param loader el loader que ha terminado de cargarse
+     * @param data el data que es generado por el Loader
+     */
     @Override
     public final void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         m_restaurantAdapter.swapCursor(data);
@@ -177,6 +229,11 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         }
     }
 
+    /**
+     * Se llama cuando un cargador creado anteriormente se restablece
+     *
+     * @param loader el loader que se esta restableciendo
+     */
     @Override
     public final void onLoaderReset(final Loader<Cursor> loader) {
         m_restaurantAdapter.swapCursor(null);

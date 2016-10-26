@@ -7,9 +7,7 @@
     android:orientation="horizontal"
     tools:context="com.herroj.android.lunchtime.app.RestaurantMainActivity">
 
-    <!--
-    This layout is a two-pane layout for the Items master/detail flow.
-    -->
+    <!-- Este layout es un layout de dos paneles con el flujo master/detail -->
 
     <fragment
         android:id="@+id/fragment_restaurant"

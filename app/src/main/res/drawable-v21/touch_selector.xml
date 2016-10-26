@@ -2,16 +2,15 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- State when a row is being pressed, but hasn't yet been activated (finger down) -->
+    <!-- Estado cuando la fila es precionada, pero no activada (tecla hacia abajo) -->
     <item android:state_pressed="true">
         <ripple android:color="@color/grey" />
     </item>
 
-    <!-- When the view is "activated".  In SINGLE_CHOICE_MODE, it flags the active row
-         of a ListView -->
+    <!-- Cuando el view es activado-->
     <item android:state_activated="true"
         android:drawable="@color/lunch_time_light_red" />
 
-    <!-- Default, "just hangin' out" state. -->
+    <!-- Default -->
     <item android:drawable="@android:color/transparent" />
 </selector>

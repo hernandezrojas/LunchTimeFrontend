@@ -7,55 +7,67 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 
+/**
+ * fragment de la pantalla de configuracion
+ */
 public class RestaurantSettingsFragment extends PreferenceFragment
         implements Preference.OnPreferenceChangeListener{
 
+    /**
+     * es llamado al inicializar la creacion de un fragment
+     *
+     * @param savedInstanceState Si el fragment se vuelve a crear desde un estado guardado, este
+     *                           es el estado
+     */
     @Override
     public final void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        // Add 'general' preferences, defined in the XML file
+
         addPreferencesFromResource(R.xml.restaurant_pref_general);
 
-        // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
-        // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_restaurant_key)));
 
     }
 
     /**
-     * Attaches a listener so the summary is always updated with the preference value.
-     * Also fires the listener once, to initialize the summary (so it shows up before the value
-     * is changed.)
+     * Se fija un listener por lo que el summary siempre se actualiza con el valor de preferencia.
+     * Tambien lanza el listener una vez, para inicializar el summary (por lo que se muestra antes
+     * de que cambia de valor)
+     *
+     * @param preference preferencia a enlazar
      */
     private void bindPreferenceSummaryToValue(final Preference preference) {
-        // Set the listener to watch for value changes.
+
         preference.setOnPreferenceChangeListener(this);
 
-        // Trigger the listener immediately with the preference's
-        // current value.
         onPreferenceChange(preference,
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
     }
 
+    /**
+     * Llamado cuando un Preference ha sido cambiado por el usuario
+     *
+     * @param preference Preference cambiado
+     * @param o el nuevo valor de la Preference
+     * @return devuelve true si el valor es cambiado
+     */
     @Override
     public final boolean onPreferenceChange(final Preference preference, final Object o) {
         final String stringValue = o.toString();
 
         if (preference instanceof ListPreference) {
-            // For list preferences, look up the correct display value in
-            // the preference's 'entries' list (since they have separate labels/values).
             final ListPreference listPreference = (ListPreference) preference;
             final int prefIndex = listPreference.findIndexOfValue(stringValue);
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
         } else {
-            // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
         }
         return true;
     }
+
 }

@@ -18,54 +18,102 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.herroj.android.lunchtime.app.data.RestaurantContract;
+import com.herroj.android.lunchtime.app.data.LunchTimeContract;
 
+/**
+ * Fragment que muestra el restaurant de manera detallada, implementa una interfaz de cursor
+ */
 public class RestaurantDetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    /**
+     * uri del restaurant detail que se usa al momento de invocar el fragment de detalle
+     */
     static final String RESTAURANT_DETAIL_URI = "URI";
 
-    private static final String RESTAURANT_SHARE_HASHTAG = " #LunchTimeApp";
-
+    /**
+     * objeto del ShareActionProvider para manejar la funcion de compartir de la aplicacion
+     */
     private ShareActionProvider m_shareActionProvider;
 
+    /**
+     * texto que se compartira en el proveedor de la accion de compartir
+     */
     private String m_restaurant;
+
+    /**
+     * uri para identificar la informacion a compartir
+     */
     private Uri m_uri;
 
+    /**
+     * id que se usa en el loader para el detalle del restaurant
+     */
     private static final int DETAIL_LOADER = 0;
 
+    /**
+     * campos de la tabla restaurant que se usaran en la clase
+     */
     private static final String[] DETAIL_COLUMNS = {
-            RestaurantContract.RestaurantEntry.TABLE_NAME + '.' +
-                    RestaurantContract.RestaurantEntry._ID,
-            RestaurantContract.RestaurantEntry.COLUMN_RESTAURANT,
-            RestaurantContract.RestaurantEntry.COLUMN_HORA_APERTURA,
-            RestaurantContract.RestaurantEntry.COLUMN_HORA_CIERRE
-
-            // Sirve para traer despues si se ocupa el tipo de restaurant
-            // /// This works because the WeatherProvider returns location data joined with
-            // // weather data, even though they're stored in two different tables.
-            // WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING
+            LunchTimeContract.RestaurantEntry.TABLE_NAME + '.' +
+                    LunchTimeContract.RestaurantEntry._ID,
+            LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT,
+            LunchTimeContract.RestaurantEntry.COLUMN_HORA_APERTURA,
+            LunchTimeContract.RestaurantEntry.COLUMN_HORA_CIERRE
     };
 
-    // these constants correspond to the projection defined above, and must change if the
-    // projection changes
-    private static final int COL_RESTAURANT = 1;
-    private static final int COL_HORA_APERTURA = 2;
-    private static final int COL_HORA_CIERRE = 3;
+    /**
+     * posicion del campo restaurant
+     */
+    private static final int IDX_COL_RESTAURANT = 1;
 
+    /**
+     * posicion del campo hora de apertura
+     */
+    private static final int IDX_COL_HORA_APERTURA = 2;
+
+    /**
+     * posicion del campo hora de cierre
+     */
+    private static final int IDX_COL_HORA_CIERRE = 3;
+
+    /**
+     * TextView del campo restaurante
+     */
     private TextView m_restaurantView;
+
+    /**
+     * TextView del campo hora apertura
+     */
     private TextView m_horaAperturaView;
+
+    /**
+     * TextView del campo hora cierre
+     */
     private TextView m_horaCierreView;
 
+    /**
+     * se establece que el fragment de detalle tendra menu
+     */
     public RestaurantDetailFragment() {
         super();
         setHasOptionsMenu(true);
     }
 
+    /**
+     * implementacion que se usa cuando se infla con LayoutInflater
+     *
+     * @param inflater nombre de etiqueta a ser inflado
+     * @param container el contexto donde la view se crea
+     * @param savedInstanceState atributos de infar especificados en un archivo XML
+     * @return la view creada
+     */
     @Override
     public final View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                                    final Bundle savedInstanceState) {
+
         final Bundle arguments = getArguments();
+
         if (arguments != null) {
             m_uri = arguments.getParcelable(RESTAURANT_DETAIL_URI);
         }
@@ -79,53 +127,91 @@ public class RestaurantDetailFragment extends Fragment
         m_horaCierreView =
                 (TextView) rootView.findViewById(R.id.restaurant_detail_hora_cierre_textview);
         return rootView;
+
     }
 
+    /**
+     * inicializa el menu de opciones de la activity
+     *
+     * @param menu el menu de opciones en el cual se ingresaran los elementos
+     * @param inflater MenuInflater
+     */
     @Override
     public final void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
+        // infla el menu, este agrega elementos en el accion bar si esta presente
         inflater.inflate(R.menu.restaurantdetailfragment, menu);
 
-        // Retrieve the share menu item
+        // Recupera el elemento de menu Compartir
         final MenuItem menuItem = menu.findItem(R.id.action_share);
 
-        // Get the provider and hold onto it to set/change the share intent.
+        // Obtiene el proveedor y guardarlo para establecer/cambiar el intent de compartir
         m_shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
-        // If onLoadFinished happens before this, we can go ahead and set the share intent now.
+        // Si onLoadFinished pasa antes de esto, establecemos el intent de compartir
         if (m_restaurant != null) {
             m_shareActionProvider.setShareIntent(createShareRestaurantIntent());
         }
+
     }
 
+    /**
+     * crea el intent para compartir
+     *
+     * @return el intent creado
+     */
     private Intent createShareRestaurantIntent() {
+
         final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        final String restaurantShareHashtag = " #LunchTimeApp";
 
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, m_restaurant + RESTAURANT_SHARE_HASHTAG);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, m_restaurant + restaurantShareHashtag);
+
         return shareIntent;
+
     }
 
+    /**
+     * Llamado cuando el fragment del activity ha sido creado y este fragment de view
+     * instanciado
+     * @param savedInstanceState Si el fragmento se vuelve a crear a partir de un estado guardado
+     *                           anterior, este es el estado.
+     */
     @Override
     public final void onActivityCreated(final Bundle savedInstanceState) {
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
+    /**
+     * metodo que se llama al cambiar de restaurant en la pantalla de configuracion
+     *
+     * @param newRestaurant restaurant que se ingreso
+     */
     final void onRestaurantChanged(final String newRestaurant) {
         if (m_uri != null) {
-            m_uri = RestaurantContract.RestaurantEntry.buildRestaurantporNombreUri(newRestaurant);
+            m_uri = LunchTimeContract.RestaurantEntry.buildRestaurantporNombreUri(newRestaurant);
             getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
         }
     }
 
+    /**
+     * Instancia y retorna un nuevo Loader para el id dado
+     *
+     * @param id id cuyo Loader se va a crear
+     * @param args argumentos proporcionados por el caller
+     * @return regresa una nueva instancia de Loader que esta listo para empezar a cargar
+     */
     @Override
     public final Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         if (m_uri != null) {
-            // Now create and return a CursorLoader that will take care of
-            // creating a Cursor for the data being displayed.
+
+            /*
+            crea y regresa un CursorLoader  que se encargara de crear un cursor para el que se
+            muestran los datos.
+             */
             return new CursorLoader(
                     getActivity(),
                     m_uri,
@@ -138,31 +224,41 @@ public class RestaurantDetailFragment extends Fragment
         return null;
     }
 
+    /**
+     * es llamado cuando un loader creado previamente ha terminado de cargarse
+     *
+     * @param loader el loader que ha terminado de cargarse
+     * @param data el data que es generado por el Loader
+     */
     @Override
     public final void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         if ((data != null) && data.moveToFirst()) {
 
-
-            // Read date from cursor and update views for day of week and date
-            final String restaurant = data.getString(COL_RESTAURANT);
+            // Lee datos del cursor y actualiza las vistas
+            final String restaurant = data.getString(IDX_COL_RESTAURANT);
             m_restaurantView.setText(restaurant);
 
-            final String horaApertura = data.getString(COL_HORA_APERTURA);
+            final String horaApertura = data.getString(IDX_COL_HORA_APERTURA);
             m_horaAperturaView.setText(horaApertura);
 
-            final String horaCierre = data.getString(COL_HORA_CIERRE);
+            final String horaCierre = data.getString(IDX_COL_HORA_CIERRE);
             m_horaCierreView.setText(horaCierre);
 
-            // We still need this for the share intent
+            // se crea la cadena que se ingresara en el intent
             m_restaurant = String.format("%s - %s - %s", restaurant, horaApertura, horaCierre);
 
-            // If onCreateOptionsMenu has already happened, we need to update the share intent now.
+            // Si onCreateOptionsMenu ya ha pasado, actualizamos el intent de compartir ahora
             if (m_shareActionProvider != null) {
                 m_shareActionProvider.setShareIntent(createShareRestaurantIntent());
             }
         }
     }
 
+    /**
+     * Se llama cuando un cargador creado anteriormente se restablece
+     *
+     * @param loader el loader que se esta restableciendo
+     */
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
     }

@@ -27,8 +27,8 @@ import android.util.Log;
 import com.herroj.android.lunchtime.app.R;
 import com.herroj.android.lunchtime.app.RestaurantMainActivity;
 import com.herroj.android.lunchtime.app.Utilidad;
-import com.herroj.android.lunchtime.app.data.RestaurantContract;
-import com.herroj.android.lunchtime.app.data.RestaurantContract.RestaurantEntry;
+import com.herroj.android.lunchtime.app.data.LunchTimeContract;
+import com.herroj.android.lunchtime.app.data.LunchTimeContract.RestaurantEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,61 +56,110 @@ import java.util.Locale;
  */
 public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
+    /**
+     * m_logTag etiqueta que muestra la clase en la que se ejecuta el log
+     */
     private final String m_logTag = LunchTimeSyncAdapter.class.getSimpleName();
-    // Interval at which to sync with the weather, in seconds.
-    // 60 seconds (1 minute) * 180 = 3 hours
+
+    /**
+     * SYNC_INTERVAL intervalo deseado al cual se sincroniza la aplicacion, en segundos.
+     * 60 segundos (1 minuto) * 180 = 3 horas
+     */
     private static final int SYNC_INTERVAL = 60 * 180;
+
+    /**
+     * SYNC_FLEXTIME la cantidad de tiempo flexible en segundos antes del tiempo deseado
+     * que permitas para que la sincronizacion tenga lugar
+     */
     private static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+
+    /**
+     * DAY_IN_MILLIS la cantidad de milisegundos que tiene un dia
+     */
     private static final long DAY_IN_MILLIS = (1000 * 60 * 60 * 24);
+
+    /**
+     * RESTAURANT_NOTIFICATION_ID es un identificador único para esta notificación dentro de la
+     * aplicación.
+     */
     private static final int RESTAURANT_NOTIFICATION_ID = 3004;
+
+    /**
+     * SDF_12_HOUR formato con el que se mostrara la hora en pantalla
+     */
     private static final SimpleDateFormat SDF_12_HOUR =
             new SimpleDateFormat("hh:mm a", Locale.getDefault());
+
+    /**
+     * SDF_24_HOUR formato auxiliar en el proceso de formato de hora a mostrar
+     */
     private static final SimpleDateFormat SDF_24_HOUR =
             new SimpleDateFormat("HH:mm", Locale.getDefault());
 
-
+    /**
+     * NOTIFY_RESTAURANT_PROJECTION informacion que mostrará la notificacion
+     */
     private static final String[] NOTIFY_RESTAURANT_PROJECTION = {
-            RestaurantEntry.COLUMN_RESTAURANT,
-            RestaurantEntry.COLUMN_HORA_APERTURA,
-            RestaurantEntry.COLUMN_HORA_CIERRE
+            LunchTimeContract.RestaurantEntry.TABLE_NAME + '.' +
+                    LunchTimeContract.RestaurantEntry._ID,
+            LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT,
+            LunchTimeContract.RestaurantEntry.COLUMN_HORA_APERTURA,
+            LunchTimeContract.RestaurantEntry.COLUMN_HORA_CIERRE
     };
 
-    // these indices must match the projection
-    private static final int INDEX_RESTAURANT = 0;
-    private static final int INDEX_HORA_APERTURA = 1;
-    private static final int INDEX_HORA_CIERRE = 2;
+    /**
+     * INDEX_RESTAURANT indice del campo 0 restaurant
+     */
+    private static final int INDEX_RESTAURANT = 1;
 
     /**
-     * Instantiates a new Lunch time sync adapter.
+     * INDEX_HORA_APERTURA indice del campo 1 hora de apertura
+     */
+    private static final int INDEX_HORA_APERTURA = 2;
+
+    /**
+     * INDEX_HORA_CIERRE indice del campo 2 hora de cierre
+     */
+    private static final int INDEX_HORA_CIERRE = 3;
+
+    /**
+     * Instancia un nuevo Lunch Time sync adapter.
      *
-     * @param context        the context
-     * @param autoInitialize the auto initialize
+     * @param context contexto en el que se ejecutara
+     * @param autoInitialize si es verdadero se podra autoinicializar
      */
     LunchTimeSyncAdapter(final Context context, final boolean autoInitialize) {
+
         super(context, autoInitialize);
+
     }
 
+    /**
+     * onPerformSync realiza una sincronizacion de la cuenta
+     *
+     * @param account cuenta que debera sincronizarse
+     * @param bundle parametros SyncAdapter-specific
+     * @param s el authority de la solicitud de sincronizacion
+     * @param contentProviderClient un ContentProviderClient que apunta al proveedor de contenido
+     *                              de esta authority
+     * @param syncResult parametros SyncAdapter-specific
+     */
     @Override
     public final void onPerformSync(final Account account, final Bundle bundle, final String s,
                                     final ContentProviderClient contentProviderClient,
                                     final SyncResult syncResult) {
+
         Log.d(m_logTag, "Starting sync");
         final String restaurantQuery = Utilidad.getPreferredRestaurant(getContext());
 
-        // These two need to be declared outside the try/catch
-        // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
 
-        // Will contain the raw JSON response as a string.
-
         try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
+
+            // construccion de la URL para consulta a Lunch Time Backend
             final String restaurantBaseUrl =
                     "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/" +
                             "com.herroj.lunchtimebackend.restaurant" + File.separator;
-
             final Uri builtUri;
 
             if (restaurantQuery.compareTo("") == 0) {
@@ -124,18 +173,18 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
             final URL url = new URL(builtUri.toString());
 
-            // Create the request to OpenWeatherMap, and open the connection
+            // se crea una solicitu a Lunch Time Backend, y se abre la conexion
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             final String mediaType = "application/json";
             urlConnection.setRequestProperty("Accept", mediaType);
             urlConnection.connect();
 
-            // Read the input stream into a String
+            // lectura del flujo de entrada a una cadena
             final InputStream inputStream = urlConnection.getInputStream();
             final StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
-                // Nothing to do.
+                // si no se obtiene nada de la nube, se aborta el proceso de sincronizacion
                 return;
             }
 
@@ -145,19 +194,16 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 String line = reader.readLine();
                 while (line != null) {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
                     buffer.append(line).append(System.lineSeparator());
                     line = reader.readLine();
                 }
 
                 if (buffer.length() == 0) {
-                    // Stream was empty.  No point in parsing.
+                    // si no se obtiene nada del flujo, no hay que sincronizar
                     return;
                 }
-                final String restaurantJsonStr = buffer.toString();
-                getRestaurantDataFromJson(restaurantJsonStr);
+                final String lunchTimeJsonStr = buffer.toString();
+                getRestaurantDataFromJson(lunchTimeJsonStr);
             }
 
         } catch (MalformedURLException e) {
@@ -166,8 +212,6 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(m_logTag, "Error ", e);
         } catch (final IOException e) {
             Log.e(m_logTag, "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attempting
-            // to parse it.
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -176,25 +220,19 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     /**
-     * Take the String representing the complete forecast in JSON Format and
-     * pull out the data we need to construct the Strings needed for the wireframes.
-     * <p>
-     * Fortunately parsing is easy:  constructor takes the JSON string and converts it
-     * into an Object hierarchy for us.
+     * getRestaurantDataFromJson Se tiene un String representando la informacion completa
+     * de la aplicacion en formato JSON y hay que extraer los datos necesarios
+     * para construir String manejables
+     *
+     * @param lunchTimeJsonStr cadena que contiene la informacion en formato JSON
      */
-    private void getRestaurantDataFromJson(final String restaurantJsonStr) {
-
-        // Now we have a String representing the complete forecast in JSON Format.
-        // Fortunately parsing is easy:  constructor takes the JSON string and converts it
-        // into an Object hierarchy for us.
-
-        // These are the names of the JSON objects that need to be extracted.
+    private void getRestaurantDataFromJson(final String lunchTimeJsonStr) {
 
         try {
 
-            final JSONArray restaurantArray = new JSONArray(restaurantJsonStr);
+            final JSONArray restaurantArray = new JSONArray(lunchTimeJsonStr);
 
-            // Insert the new weather information into the database
+            // Ingresa informacion nueva de restaurant obtenida de la base de datos
             final Collection<ContentValues> cVArrayList = new ArrayList<>(restaurantArray.length());
 
             final String ownRestaurant = "restaurant";
@@ -206,15 +244,14 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
             for (int i = 0; i < numRestaurantes; i++) {
 
-                // Get the JSON object representing the day
                 final JSONObject objRestaurant = restaurantArray.getJSONObject(i);
 
                 String nombreRestaurant = getStrCampo(objRestaurant, ownRestaurant);
 
                 String horaApertura =
-                        darformatoCadenaHora(getStrCampo(objRestaurant, ownHoraApertura));
+                        darFormatoCadenaHora(getStrCampo(objRestaurant, ownHoraApertura));
                 String horaCierre =
-                        darformatoCadenaHora(getStrCampo(objRestaurant, owmHoraCierre));
+                        darFormatoCadenaHora(getStrCampo(objRestaurant, owmHoraCierre));
 
                 restaurantValues = new ContentValues();
                 restaurantValues.put(RestaurantEntry.COLUMN_RESTAURANT, nombreRestaurant);
@@ -224,7 +261,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 cVArrayList.add(restaurantValues);
             }
 
-            // add to database
+            // se agrega a la base de datos local
             if (!cVArrayList.isEmpty()) {
                 getContext().getContentResolver().delete(RestaurantEntry.CONTENT_URI, null, null);
                 final ContentValues[] cvArray = new ContentValues[cVArrayList.size()];
@@ -234,7 +271,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             }
 
             if (BuildConfig.DEBUG) {
-                Log.d(m_logTag, "Sync Complete. " + cVArrayList.size() + " Inserted");
+                Log.d(m_logTag, "Sincronizacion completa. " + cVArrayList.size() + " Insertado");
             }
         } catch (final JSONException e) {
             Log.e(m_logTag, e.getMessage(), e);
@@ -242,6 +279,13 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
     }
 
+    /**
+     * getStrCampo maneja la obtencion de los campos desde el JSONObject
+     *
+     * @param objeto objeto JSON del cual se extraera la informacion
+     * @param campo campo del cual se obtendra la cadena
+     * @return devuelve una cadena que representa el campo seleccionado
+     */
     private static String getStrCampo(final JSONObject objeto, final String campo) {
 
         try {
@@ -252,11 +296,18 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(LunchTimeSyncAdapter.class.getSimpleName(), e.getMessage(), e);
 
         }
+
         return "";
 
     }
 
-    private static String darformatoCadenaHora(final String hora) {
+    /**
+     * darFormatoCadenaHora devuelve la hora en el formato de salida deseado
+     *
+     * @param hora String con la hora sin formato
+     * @return devuelve un String de la hora con el formato deseado
+     */
+    private static String darFormatoCadenaHora(final String hora) {
 
         String strHora = hora;
 
@@ -272,35 +323,37 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
         } catch (final ParseException e) {
             Log.e(LunchTimeSyncAdapter.class.getSimpleName(), e.getMessage(), e);
         }
+
         return strHora;
+
     }
 
+    /**
+     * notifyLunchTime metodo que genera la notificacion del proyecto
+     */
     private void notifyLunchTime() {
-        Context context = getContext();
-        //checking the last update and notify if it' the first of the day
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
+        Context context = getContext();
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final String dispNotificationsKey =
                 context.getString(R.string.pref_enable_notifications_key);
         final boolean dispNotifications = prefs.getBoolean(dispNotificationsKey,
                 Boolean.parseBoolean(
                         context.getString(R.string.pref_enable_notifications_default)));
 
+        // verifica que esten activadas las notificaciones en la pantalla de configuacion
         if (dispNotifications) {
 
             final String lastNotificationKey = context.getString(R.string.pref_last_notification);
             final long lastSync = prefs.getLong(lastNotificationKey, 0L);
 
+            // Si la ultima sincronizacion fue hace um dia o mas, se envia una notificacion
             if ((System.currentTimeMillis() - lastSync) >= DAY_IN_MILLIS) {
-                // Last sync was more than 1 day ago, let's send a notification with the weather.
-                final String restaurantQuery = Utilidad.getPreferredRestaurant(context);
 
-                final Uri weatherUri = RestaurantContract.RestaurantEntry
-                        .buildRestaurantporNombreUri(restaurantQuery);
+                final Uri restaurantUri = RestaurantEntry.CONTENT_URI;
 
-                // we'll query our contentProvider, as always
                 try ( Cursor cursor = context.getContentResolver()
-                        .query(weatherUri, NOTIFY_RESTAURANT_PROJECTION, null, null, null)){
+                        .query(restaurantUri, NOTIFY_RESTAURANT_PROJECTION, null, null, null)){
 
                     if ((cursor != null) && cursor.moveToFirst()) {
                         final String restaurant = cursor.getString(INDEX_RESTAURANT);
@@ -309,16 +362,17 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
                         final String title = context.getString(R.string.app_name);
 
-                        // Define the text of the forecast.
+                        // Se define el texto de la notificacion
                         final String contentText =
                                 String.format(context.getString(R.string.format_notification),
                                         restaurant,
                                         horaApertura,
                                         horaCierre);
 
-                        // NotificationCompatBuilder is a very convenient
-                        // way to build backward-compatible
-                        // notifications.  Just throw in some data.
+                        /*
+                        NotificationCompatBuilder es una muy manera muy conveniente de construir
+                        notificaciones retrocompatibles
+                         */
                         final NotificationCompat.Builder mBuilder =
                                 new NotificationCompat.Builder(getContext())
                                         .setColor(ContextCompat
@@ -327,16 +381,10 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                                         .setContentTitle(title)
                                         .setContentText(contentText);
 
-                        // Make something interesting happen when the user clicks on
-                        // the notification.
-                        // In this case, opening the app is sufficient.
+                        // Cuando se hace doble click sobre la notificacion se abre la aplicacion
                         final Intent resultIntent =
                                 new Intent(context, RestaurantMainActivity.class);
 
-                        // The stack builder object will contain an artificial back stack for the
-                        // started Activity.
-                        // This ensures that navigating backward from the Activity leads out of
-                        // your application to the Home screen.
                         final TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
                         stackBuilder.addNextIntent(resultIntent);
                         final PendingIntent resultPendingIntent =
@@ -349,10 +397,10 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                         final NotificationManager mNotificationManager =
                                 (NotificationManager) getContext()
                                         .getSystemService(Context.NOTIFICATION_SERVICE);
-                        // WEATHER_NOTIFICATION_ID allows you to update the notification later on.
+                        // RESTAURANT_NOTIFICATION_ID te permite actualizar la notificacion despues
                         mNotificationManager.notify(RESTAURANT_NOTIFICATION_ID, mBuilder.build());
 
-                        //refreshing last sync
+                        // actualiza variable de ultima notificacion
                         final SharedPreferences.Editor editor = prefs.edit();
                         editor.putLong(lastNotificationKey, System.currentTimeMillis());
                         editor.apply();
@@ -367,9 +415,9 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
     /**
-     * Helper method to have the sync adapter sync immediately
+     * syncImmediately metodo helper que sirve para sincronizar inmediatamente el sync adapter
      *
-     * @param context The context used to access the account service
+     * @param context El contexto usado para acceder al servicio de la cuena
      */
     public static void syncImmediately(final Context context) {
         final Bundle bundle = new Bundle();
@@ -379,15 +427,21 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 context.getString(R.string.content_authority), bundle);
     }
 
-    /*
-         * Helper method to schedule the sync adapter periodic execution
-         */
+    /**
+     * configurePeriodicSync metodo helper para programar la ejecucion
+     * de sync adapter periodicamente
+     *
+     * @param context El contexto usado para acceder al servicio de la cuena
+     * @param syncInterval intervalo deseado al cual se sincroniza la aplicacion
+     * @param flexTime la cantidad de tiempo flexible en segundos antes del tiempo deseado
+     *                 que permitas para que la sincronizacion tenga lugar
+     */
     private static void configurePeriodicSync(
             final Context context, final int syncInterval, final int flexTime) {
         final Account account = getSyncAccount(context);
         final String authority = context.getString(R.string.content_authority);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // we can enable inexact timers in our periodic sync
+            // podemos habilitar timers inexactos en nuestra sincronizacion periodica
             final SyncRequest request = new SyncRequest.Builder().
                     syncPeriodic(syncInterval, flexTime).
                     setSyncAdapter(account, authority).
@@ -400,68 +454,72 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     /**
-     * Helper method to get the fake account to be used with SyncAdapter, or make a new one
-     * if the fake account doesn't exist yet.  If we make a new account, we call the
-     * onAccountCreated method so we can initialize things.
+     * getSyncAccount metodo helper para obtener una cuenta fake a ser usada con SyncApater,
+     * o hacer un nuevo si la cuenta fake no existe
      *
-     * @param context The context used to access the account service
-     * @return a fake account.
+     * @param context context a ser usado para ser accesado al servicio de la cuenta
+     * @return una cuenta fake
      */
     private static Account getSyncAccount(final Context context) {
-        // Get an instance of the Android account manager
+        // obtiene una cuenta del Android account manager
         final AccountManager accountManager =
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
 
-        // Create the account type and default account
+        // crea la account type y una cuenta predeterminada
         final Account newAccount = new Account(
                 context.getString(R.string.app_name),
                 context.getString(R.string.sync_account_type));
 
-        // If the password doesn't exist, the account doesn't exist
+        // si la contraseña no existe, la cuenta no existe
         if (accountManager.getPassword(newAccount) == null) {
 
         /*
-         * Add the account and account type, no password or user data
-         * If successful, return the Account object, otherwise report an error.
+         * Agrega la cuenta y el tipo de cuenta, sin contraseña o datos de usuario
+         * Si es exitosam regresa un objeto Account, de otro modo reporta un error
          */
             if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
                 return null;
             }
             /*
-             * If you don't set android:syncable="true" in
-             * in your <provider> element in the manifest,
-             * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
-             * here.
+             * Si no se establece android:syncable="true" en el elemento <provider> en el manifiesto
+             * despues llama ContentResolver.setIsSyncable(account, AUTHORITY, 1)
              */
             onAccountCreated(newAccount, context);
         }
+
         return newAccount;
-    }
 
-    private static void onAccountCreated(final Account newAccount, final Context context) {
-                /*
-         * Since we've created an account
-         */
-        configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
-
-                       /*
-         * Without calling setSyncAutomatically, our periodic sync will not be enabled.
-         */
-        ContentResolver.setSyncAutomatically(
-                newAccount, context.getString(R.string.content_authority), true);
-
-                        /*
-         * Finally, let's do a sync to get things started
-         */
-        syncImmediately(context);
     }
 
     /**
-     * Initialize sync adapter.
+     * onAccountCreated metodo que se ejecuta al crear la cuenta
      *
-     * @param context the context
+     * @param newAccount la nueva cuenta que se procesara
+     * @param context contexto que se usara
+     */
+    private static void onAccountCreated(final Account newAccount, final Context context) {
+
+        // creamos una cuenta
+        configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+
+        // sin llamar setSyncAutomatically, nuestra sincronizacion periodica podria no se habilitada
+        ContentResolver.setSyncAutomatically(
+                newAccount, context.getString(R.string.content_authority), true);
+
+        // finalmente, se hace una sincronizacion para comenzar
+        syncImmediately(context);
+
+    }
+
+    /**
+     * Initializa el sync adapter.
+     *
+     * @param context el contexto que se usara
      */
     public static void initializeSyncAdapter(final Context context) {
+
         getSyncAccount(context);
+
     }
+
 }
