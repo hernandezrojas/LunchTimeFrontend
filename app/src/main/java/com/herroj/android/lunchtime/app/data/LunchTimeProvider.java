@@ -46,8 +46,7 @@ public class LunchTimeProvider extends ContentProvider {
      * Restaurant.restaurant = ?
      */
     private static final String S_RESTAURANT_SETTING_SELECTION =
-            LunchTimeContract.RestaurantEntry.TABLE_NAME +
-                    '.' + LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT + " = ? ";
+            LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT + " like ?";
 
     static {
 
@@ -107,7 +106,7 @@ public class LunchTimeProvider extends ContentProvider {
 
         if (restaurantSetting != null) {
             selection = S_RESTAURANT_SETTING_SELECTION;
-            selectionArgs = new String[]{restaurantSetting};
+            selectionArgs = new String[]{'%' + restaurantSetting + '%'};
         }
 
         return S_RESTAURANT_QUERY_BUILDER.query(m_openHelper.getReadableDatabase(),

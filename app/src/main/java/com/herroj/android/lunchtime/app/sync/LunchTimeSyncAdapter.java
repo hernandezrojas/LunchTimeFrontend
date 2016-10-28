@@ -150,7 +150,6 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                                     final SyncResult syncResult) {
 
         Log.d(m_logTag, "Starting sync");
-        final String restaurantQuery = Utilidad.getPreferredRestaurant(getContext());
 
         HttpURLConnection urlConnection = null;
 
@@ -160,16 +159,8 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             final String restaurantBaseUrl =
                     "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/" +
                             "com.herroj.lunchtimebackend.restaurant" + File.separator;
-            final Uri builtUri;
-
-            if (restaurantQuery.compareTo("") == 0) {
-                builtUri = Uri.parse(restaurantBaseUrl).buildUpon()
+            final Uri builtUri = Uri.parse(restaurantBaseUrl).buildUpon()
                         .build();
-            } else {
-                final String nomRestaurantParam = "restaurant";
-                builtUri = Uri.parse(restaurantBaseUrl + nomRestaurantParam + '=' +
-                        restaurantQuery).buildUpon().build();
-            }
 
             final URL url = new URL(builtUri.toString());
 
@@ -340,6 +331,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
         final boolean dispNotifications = prefs.getBoolean(dispNotificationsKey,
                 Boolean.parseBoolean(
                         context.getString(R.string.pref_enable_notifications_default)));
+        final String restaurantPref = Utilidad.getPreferredRestaurant(getContext());
 
         // verifica que esten activadas las notificaciones en la pantalla de configuacion
         if (dispNotifications) {
@@ -350,7 +342,9 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             // Si la ultima sincronizacion fue hace um dia o mas, se envia una notificacion
             if ((System.currentTimeMillis() - lastSync) >= DAY_IN_MILLIS) {
 
-                final Uri restaurantUri = RestaurantEntry.CONTENT_URI;
+                final Uri restaurantUri =
+                        LunchTimeContract.RestaurantEntry
+                                .buildRestaurantporNombreUri(restaurantPref);
 
                 try ( Cursor cursor = context.getContentResolver()
                         .query(restaurantUri, NOTIFY_RESTAURANT_PROJECTION, null, null, null)){

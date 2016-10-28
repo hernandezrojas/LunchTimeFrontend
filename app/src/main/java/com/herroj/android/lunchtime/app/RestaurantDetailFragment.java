@@ -1,6 +1,5 @@
 package com.herroj.android.lunchtime.app;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,12 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -30,16 +26,6 @@ public class RestaurantDetailFragment extends Fragment
      * uri del restaurant detail que se usa al momento de invocar el fragment de detalle
      */
     static final String RESTAURANT_DETAIL_URI = "URI";
-
-    /**
-     * objeto del ShareActionProvider para manejar la funcion de compartir de la aplicacion
-     */
-    private ShareActionProvider m_shareActionProvider;
-
-    /**
-     * texto que se compartira en el proveedor de la accion de compartir
-     */
-    private String m_restaurant;
 
     /**
      * uri para identificar la informacion a compartir
@@ -139,38 +125,6 @@ public class RestaurantDetailFragment extends Fragment
     @Override
     public final void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
 
-        // infla el menu, este agrega elementos en el accion bar si esta presente
-        inflater.inflate(R.menu.restaurantdetailfragment, menu);
-
-        // Recupera el elemento de menu Compartir
-        final MenuItem menuItem = menu.findItem(R.id.action_share);
-
-        // Obtiene el proveedor y guardarlo para establecer/cambiar el intent de compartir
-        m_shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-
-        // Si onLoadFinished pasa antes de esto, establecemos el intent de compartir
-        if (m_restaurant != null) {
-            m_shareActionProvider.setShareIntent(createShareRestaurantIntent());
-        }
-
-    }
-
-    /**
-     * crea el intent para compartir
-     *
-     * @return el intent creado
-     */
-    private Intent createShareRestaurantIntent() {
-
-        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        final String restaurantShareHashtag = " #LunchTimeApp";
-
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, m_restaurant + restaurantShareHashtag);
-
-        return shareIntent;
-
     }
 
     /**
@@ -244,13 +198,7 @@ public class RestaurantDetailFragment extends Fragment
             final String horaCierre = data.getString(IDX_COL_HORA_CIERRE);
             m_horaCierreView.setText(horaCierre);
 
-            // se crea la cadena que se ingresara en el intent
-            m_restaurant = String.format("%s - %s - %s", restaurant, horaApertura, horaCierre);
 
-            // Si onCreateOptionsMenu ya ha pasado, actualizamos el intent de compartir ahora
-            if (m_shareActionProvider != null) {
-                m_shareActionProvider.setShareIntent(createShareRestaurantIntent());
-            }
         }
     }
 

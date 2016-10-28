@@ -202,7 +202,16 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
 
         final String sortOrder = LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT + " ASC";
 
-        final Uri restaurantUri = LunchTimeContract.RestaurantEntry.CONTENT_URI;
+        String restaurantSetting = Utilidad.getPreferredRestaurant(getActivity());
+
+        final Uri restaurantUri;
+
+        if (restaurantSetting.compareTo("") == 0) {
+            restaurantUri = LunchTimeContract.RestaurantEntry.CONTENT_URI;
+        } else {
+            restaurantUri = LunchTimeContract.RestaurantEntry
+                    .buildRestaurantporNombreUri(restaurantSetting);
+        }
 
         return new CursorLoader(getActivity(),
                 restaurantUri,
