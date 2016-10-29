@@ -30,5 +30,6 @@
     <string name="pref_enable_notifications_true">Enabled</string>
     <string name="pref_enable_notifications_false">Not Enabled</string>
     <string name="pref_enable_notifications_default" translatable="false">true</string>
+    <string name="title_activity_restaurant">Restaurant</string>
 
 </resources>

@@ -15,18 +15,26 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".RestaurantMainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/RestaurantTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".RestaurantMainActivity"
+            android:label="@string/title_activity_restaurant"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.herroj.android.lunchtime.app.MainActivity" />
         </activity>
         <activity
             android:name=".RestaurantDetailActivity"
@@ -53,11 +61,14 @@
             android:syncable="true" />
 
         <!-- servicio de autentificacion de prueba del SyncAdapter -->
-        <service android:name=".sync.LunchTimeAuthenticatorService"
-            android:permission="android.permission.MANAGE_ACCOUNTS">>
+        <service
+            android:name=".sync.LunchTimeAuthenticatorService"
+            android:permission="android.permission.MANAGE_ACCOUNTS">
+            >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
@@ -71,11 +82,13 @@
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
+
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
 
+        <activity android:name=".TipoRestMainActivity"></activity>
     </application>
 
 </manifest>
