@@ -18,5 +18,9 @@
         Hora de Cierre: <xliff:g id="horaCierre">%3$s</xliff:g>
     </string>
     <string name="title_activity_restaurant">Restaurante</string>
+    <string name="coffeShop">Cafeterías</string>
+    <string name="foodStand">Puestos</string>
+    <string name="Places">Lugares</string>
+    <string name="Saurces">Platillos</string>
 
 </resources>

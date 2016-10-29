@@ -15,7 +15,7 @@ class LunchTimeDbHelper extends SQLiteOpenHelper {
      * DATABASE_VERSION si se cambia la estructura de la base de datos, se debera incrementar
      * esta version de base de datos
      */
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 7;
 
     /**
      * DATABASE_NAME nombre con el que se identificara la base de datos
@@ -42,10 +42,11 @@ class LunchTimeDbHelper extends SQLiteOpenHelper {
 
         final String sqlCreateRestaurantTable =
                 "CREATE TABLE " + RestaurantEntry.TABLE_NAME + " (" +
-                        RestaurantEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        RestaurantEntry._ID + " INTEGER PRIMARY KEY," +
                         RestaurantEntry.COLUMN_RESTAURANT + " TEXT NOT NULL, " +
                         RestaurantEntry.COLUMN_HORA_APERTURA + " TEXT, " +
-                        RestaurantEntry.COLUMN_HORA_CIERRE + " TEXT); ";
+                        RestaurantEntry.COLUMN_HORA_CIERRE + " TEXT, " +
+                        RestaurantEntry.COLUMN_TIPO_RESTAURANT + " INTEGER); ";
 
         sqLiteDatabase.execSQL(sqlCreateRestaurantTable);
 

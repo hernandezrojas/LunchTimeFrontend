@@ -17,7 +17,6 @@
         android:layout_height="match_parent"
         android:background="#80ffffff"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
         <ImageView
@@ -25,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/logoIndex"
+            android:contentDescription="@string/logo"
             android:src="@drawable/logo" />
 
         <ImageButton
@@ -33,11 +33,10 @@
             android:id="@+id/botonLugares"
             android:src="@drawable/lugares"
             android:background="#00ffffff"
+            android:contentDescription="@string/Places"
             android:layout_marginTop="55dp"
-            android:layout_marginLeft="53dp"
             android:layout_marginStart="53dp"
             android:layout_below="@+id/logoIndex"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <ImageButton
@@ -45,35 +44,32 @@
             android:layout_height="wrap_content"
             android:id="@+id/botonPlatillos"
             android:src="@drawable/restaurante"
+            android:contentDescription="@string/Saurces"
             android:background="#00ffffff"
             android:layout_above="@+id/textView5"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="52dp"
             android:layout_marginEnd="52dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Lugares"
+            android:text="@string/Places"
             android:id="@+id/textView5"
             android:textColor="#c01b1b"
             android:textStyle="bold"
             android:layout_below="@+id/botonLugares"
-            android:layout_alignRight="@+id/botonLugares"
             android:layout_alignEnd="@+id/botonLugares" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Platillos"
+            android:text="@string/Saurces"
             android:id="@+id/textView2"
             android:textColor="#c01b1b"
             android:textStyle="bold"
             android:layout_below="@+id/botonPlatillos"
-            android:layout_alignLeft="@+id/botonPlatillos"
             android:layout_alignStart="@+id/botonPlatillos" />
 
     </RelativeLayout>

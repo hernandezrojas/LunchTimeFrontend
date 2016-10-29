@@ -45,7 +45,8 @@ public class RestaurantDetailFragment extends Fragment
                     LunchTimeContract.RestaurantEntry._ID,
             LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT,
             LunchTimeContract.RestaurantEntry.COLUMN_HORA_APERTURA,
-            LunchTimeContract.RestaurantEntry.COLUMN_HORA_CIERRE
+            LunchTimeContract.RestaurantEntry.COLUMN_HORA_CIERRE,
+            LunchTimeContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT
     };
 
     /**
@@ -62,6 +63,7 @@ public class RestaurantDetailFragment extends Fragment
      * posicion del campo hora de cierre
      */
     private static final int IDX_COL_HORA_CIERRE = 3;
+
 
     /**
      * TextView del campo restaurante

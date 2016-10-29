@@ -100,25 +100,25 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
      * NOTIFY_RESTAURANT_PROJECTION informacion que mostrará la notificacion
      */
     private static final String[] NOTIFY_RESTAURANT_PROJECTION = {
-            LunchTimeContract.RestaurantEntry.TABLE_NAME + '.' +
-                    LunchTimeContract.RestaurantEntry._ID,
-            LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT,
-            LunchTimeContract.RestaurantEntry.COLUMN_HORA_APERTURA,
-            LunchTimeContract.RestaurantEntry.COLUMN_HORA_CIERRE
+            RestaurantEntry.TABLE_NAME + '.' + RestaurantEntry._ID,
+            RestaurantEntry.COLUMN_RESTAURANT,
+            RestaurantEntry.COLUMN_HORA_APERTURA,
+            RestaurantEntry.COLUMN_HORA_CIERRE,
+            RestaurantEntry.COLUMN_TIPO_RESTAURANT
     };
 
     /**
-     * INDEX_RESTAURANT indice del campo 0 restaurant
+     * INDEX_RESTAURANT indice del campo 1 restaurant
      */
     private static final int INDEX_RESTAURANT = 1;
 
     /**
-     * INDEX_HORA_APERTURA indice del campo 1 hora de apertura
+     * INDEX_HORA_APERTURA indice del campo 2 hora de apertura
      */
     private static final int INDEX_HORA_APERTURA = 2;
 
     /**
-     * INDEX_HORA_CIERRE indice del campo 2 hora de cierre
+     * INDEX_HORA_CIERRE indice del campo 3 hora de cierre
      */
     private static final int INDEX_HORA_CIERRE = 3;
 
@@ -226,9 +226,13 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             // Ingresa informacion nueva de restaurant obtenida de la base de datos
             final Collection<ContentValues> cVArrayList = new ArrayList<>(restaurantArray.length());
 
+            final String ownIdRestaurant = "idRestaurant";
             final String ownRestaurant = "restaurant";
             final String ownHoraApertura = "horaApertura";
             final String owmHoraCierre = "horaCierre";
+            final String ownTipoRestaurantAux = "tipoRestaurantidTipoRestaurant";
+            final String ownTipoRestaurant = "idTipoRestaurant";
+
 
             int numRestaurantes = restaurantArray.length();
             ContentValues restaurantValues;
@@ -237,6 +241,8 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 final JSONObject objRestaurant = restaurantArray.getJSONObject(i);
 
+                String idRestaurant = getStrCampo(objRestaurant, ownIdRestaurant);
+
                 String nombreRestaurant = getStrCampo(objRestaurant, ownRestaurant);
 
                 String horaApertura =
@@ -244,10 +250,19 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 String horaCierre =
                         darFormatoCadenaHora(getStrCampo(objRestaurant, owmHoraCierre));
 
+                String tipoRestaurant = getStrCampo(objRestaurant, ownTipoRestaurantAux);
+
+                JSONObject jsonObjectAux = new JSONObject(tipoRestaurant);
+
+                tipoRestaurant = getStrCampo(jsonObjectAux, ownTipoRestaurant);
+
                 restaurantValues = new ContentValues();
+
+                restaurantValues.put(RestaurantEntry._ID, idRestaurant);
                 restaurantValues.put(RestaurantEntry.COLUMN_RESTAURANT, nombreRestaurant);
                 restaurantValues.put(RestaurantEntry.COLUMN_HORA_APERTURA, horaApertura);
                 restaurantValues.put(RestaurantEntry.COLUMN_HORA_CIERRE, horaCierre);
+                restaurantValues.put(RestaurantEntry.COLUMN_TIPO_RESTAURANT, tipoRestaurant);
 
                 cVArrayList.add(restaurantValues);
             }

@@ -3,9 +3,11 @@
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/lunch_time_red</item>
         <item name="colorPrimaryDark">@color/lunch_time_dark_red</item>
+
     </style>
 
     <style name="RestaurantTheme" parent="AppTheme">
+
     </style>
 
     <style name="SettingsTheme" parent="AppTheme">

@@ -6,8 +6,8 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
+android:background="@drawable/background"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/background"
     tools:context=".TipoRestMainActivity">
 
     <RelativeLayout
@@ -16,7 +16,6 @@
         android:layout_height="match_parent"
         android:background="#80ffffff"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
 
@@ -26,10 +25,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/botonCafeterias"
+            android:contentDescription="@string/coffeShop"
             android:src="@drawable/cafeterias"
             android:background="#00ffffff"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/textView"
             android:layout_toStartOf="@+id/textView" />
 
         <ImageButton
@@ -38,41 +37,38 @@
             android:id="@+id/botonPuestos"
             android:src="@drawable/puestos"
             android:background="#00ffffff"
+            android:contentDescription="@string/foodStand"
             android:layout_above="@+id/textView5"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="52dp"
             android:layout_marginEnd="52dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Cafeterias"
+            android:text="@string/coffeShop"
             android:id="@+id/textView5"
             android:textColor="#c01b1b"
             android:textStyle="bold"
             android:layout_below="@+id/botonCafeterias"
-            android:layout_alignRight="@+id/botonCafeterias"
             android:layout_alignEnd="@+id/botonCafeterias" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Puestos"
+            android:text="@string/foodStand"
             android:id="@+id/textView2"
             android:textColor="#c01b1b"
             android:textStyle="bold"
             android:layout_below="@+id/botonPuestos"
-            android:layout_alignLeft="@+id/botonPuestos"
             android:layout_alignStart="@+id/botonPuestos" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="LUGARES"
+            android:text="@string/Places"
             android:id="@+id/textView"
             android:textColor="#d11e1e"
             android:textStyle="bold"

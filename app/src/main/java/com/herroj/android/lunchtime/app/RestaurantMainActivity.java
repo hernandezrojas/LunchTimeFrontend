@@ -22,9 +22,6 @@ public class RestaurantMainActivity extends AppCompatActivity
      */
     private static final String RESTAURANTDETAILFRAGMENT_TAG = "RDFTAG";
 
-    public static Integer filtroSeleccionado;
-
-
     /**
      * variable que indica si se van a mostrar uno o dos paneles a la vez
      */
@@ -34,15 +31,6 @@ public class RestaurantMainActivity extends AppCompatActivity
      * restaurant elegido en la pantalla de configuracion
      */
     private String m_restaurant;
-
-    public RestaurantMainActivity(){
-        super();
-
-        filtroSeleccionado =
-                (Integer) getIntent().getExtras().getSerializable("FiltroSeleccionado");
-
-    }
-
 
     /**
      * se llama cuando el activity se crea

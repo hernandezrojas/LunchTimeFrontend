@@ -627,3 +627,11 @@
 
   + pantallas de inicio parte 1
 
+
+  v0.7.6 Filtros De Restaurantes
+   0 - En desarrollo
+   7 - Limpieza de código y comentarios
+   6 - Filtros de restaurantes
+
+  + Filtros de restaurantes
+

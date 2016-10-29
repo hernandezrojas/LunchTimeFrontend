@@ -29,6 +29,7 @@ public class LunchTimeProvider extends ContentProvider {
      * que coincidan con el nombre puesto en la pantalla de configuracion
      */
     private static final int RESTAURANT_WITH_NAME = 101;
+
     /**
      * S_URI_MATCHER instancia utilitaria que se usa para ayudar en el match de uris en
      * proveedores de contenido
@@ -43,7 +44,7 @@ public class LunchTimeProvider extends ContentProvider {
     /**
      * S_RESTAURANT_SETTING_SELECTION constante que filtra los datos con el nombre ingresado
      * en la pantalla de configuracion
-     * Restaurant.restaurant = ?
+     * restaurant = ?
      */
     private static final String S_RESTAURANT_SETTING_SELECTION =
             LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT + " like ?";

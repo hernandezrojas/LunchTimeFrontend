@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.herroj.android.lunchtime.app.data.LunchTimeContract;
+import com.herroj.android.lunchtime.app.data.LunchTimeProvider;
 import com.herroj.android.lunchtime.app.sync.LunchTimeSyncAdapter;
 
 /**
@@ -216,8 +217,8 @@ public class RestaurantFragment extends Fragment implements LoaderManager.Loader
         return new CursorLoader(getActivity(),
                 restaurantUri,
                 RESTAURANT_COLUMNS,
-                null,
-                null,
+                LunchTimeContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT + " = ?",
+                new String[]{LunchTimeContract.s_filtroSeleccionado},
                 sortOrder);
 
     }

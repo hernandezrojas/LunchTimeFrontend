@@ -12,7 +12,7 @@
 
     <string name="sync_account_type" translatable="false">lunchtime.herroj.com</string>
     <string name="content_authority" translatable="false">
-        com.herroj.android.lunchtimefrontend.app
+        com.herroj.android.lunchtime.app
     </string>
 
     <!-- Formato de notificacion  -->
@@ -31,5 +31,10 @@
     <string name="pref_enable_notifications_false">Not Enabled</string>
     <string name="pref_enable_notifications_default" translatable="false">true</string>
     <string name="title_activity_restaurant">Restaurant</string>
+    <string name="logo" translatable="false">logo</string>
+    <string name="coffeShop">Coffe Shop</string>
+    <string name="foodStand">Food Stand</string>
+    <string name="Places">Places</string>
+    <string name="Saurces">Saurces</string>
 
 </resources>
