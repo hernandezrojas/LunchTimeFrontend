@@ -47,6 +47,21 @@ public class MainFragment extends Fragment {
 
         );
 
+        ImageButton imgBtnPlatillos = (ImageButton) view.findViewById(R.id.botonPlatillos);
+
+        imgBtnPlatillos.setOnClickListener(new AdapterView.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(getContext(), TipoPlatMainActivity.class));
+
+            }
+
+        }
+
+        );
+
         // Inflate the layout for this fragment
         return view;
     }

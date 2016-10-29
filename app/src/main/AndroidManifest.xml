@@ -29,6 +29,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".TipoRestMainActivity"
+            android:label="@string/title_tipo_restaurant"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.herroj.android.lunchtime.app.MainActivity" />
+        </activity>
+        <activity
+            android:name=".TipoPlatMainActivity"
+            android:label="@string/title_tipo_platillo"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.herroj.android.lunchtime.app.MainActivity" />
+        </activity>
+        <activity
             android:name=".RestaurantMainActivity"
             android:label="@string/title_activity_restaurant"
             android:parentActivityName=".MainActivity">
@@ -88,7 +104,7 @@
                 android:resource="@xml/syncadapter" />
         </service>
 
-        <activity android:name=".TipoRestMainActivity"></activity>
+
     </application>
 
 </manifest>
