@@ -643,3 +643,11 @@
 
   + tipo platillo
 
+
+  v0.7.8 Parte De Platillos
+   0 - En desarrollo
+   7 - Limpieza de código y comentarios
+   8 - Parte de platillos
+
+  + parte de platillos
+

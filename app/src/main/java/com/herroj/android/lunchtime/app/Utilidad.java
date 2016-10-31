@@ -21,4 +21,10 @@ public final class Utilidad {
                 context.getString(R.string.pref_restaurant_default));
     }
 
+    public static String getPreferredPlatillo(final Context context) {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_platillo_key),
+                context.getString(R.string.pref_platillo_default));
+    }
+
 }

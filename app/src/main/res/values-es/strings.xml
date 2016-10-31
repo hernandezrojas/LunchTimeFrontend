@@ -24,5 +24,6 @@
     <string name="Saurces">Platillos</string>
     <string name="title_tipo_platillo">Tipo Platillo</string>
     <string name="title_tipo_restaurant">Tipo Restaurant</string>
+    <string name="title_activity_platillo">Platillo</string>
 
 </resources>

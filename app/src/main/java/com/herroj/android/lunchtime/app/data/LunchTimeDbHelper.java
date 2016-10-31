@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.herroj.android.lunchtime.app.data.LunchTimeContract.RestaurantEntry;
+import com.herroj.android.lunchtime.app.data.LunchTimeContract.PlatilloEntry;
 
 /**
  * LunchTimeDbHelper una clase auxiliar para la creacion de bases de datos y manejo de versiones
@@ -15,7 +16,7 @@ class LunchTimeDbHelper extends SQLiteOpenHelper {
      * DATABASE_VERSION si se cambia la estructura de la base de datos, se debera incrementar
      * esta version de base de datos
      */
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     /**
      * DATABASE_NAME nombre con el que se identificara la base de datos
@@ -50,6 +51,16 @@ class LunchTimeDbHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL(sqlCreateRestaurantTable);
 
+        final String sqlCreatePlatilloTable =
+                "CREATE TABLE " + PlatilloEntry.TABLE_NAME + " (" +
+                        PlatilloEntry._ID + " INTEGER PRIMARY KEY," +
+                        PlatilloEntry.COLUMN_PLATILLO + " TEXT NOT NULL, " +
+                        PlatilloEntry.COLUMN_PRECIO + " REAL, " +
+                        PlatilloEntry.COLUMN_RESTAURANT + " TEXT, " +
+                        PlatilloEntry.COLUMN_TIPO_PLATILLO + " INTEGER); ";
+
+        sqLiteDatabase.execSQL(sqlCreatePlatilloTable);
+
     }
 
     /**
@@ -66,6 +77,7 @@ class LunchTimeDbHelper extends SQLiteOpenHelper {
             final SQLiteDatabase sqLiteDatabase, final int i, final int i1) {
 
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RestaurantEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PlatilloEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
 
     }

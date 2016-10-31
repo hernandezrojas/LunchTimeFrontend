@@ -29,6 +29,7 @@ import com.herroj.android.lunchtime.app.RestaurantMainActivity;
 import com.herroj.android.lunchtime.app.Utilidad;
 import com.herroj.android.lunchtime.app.data.LunchTimeContract;
 import com.herroj.android.lunchtime.app.data.LunchTimeContract.RestaurantEntry;
+import com.herroj.android.lunchtime.app.data.LunchTimeContract.PlatilloEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -151,16 +152,24 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
         Log.d(m_logTag, "Starting sync");
 
+        String baseUrl = "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/" +
+                "com.herroj.lunchtimebackend.restaurant" + File.separator;
+        getRestaurantDataFromJson(createJson(baseUrl));
+
+        baseUrl = "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/" +
+                "com.herroj.lunchtimebackend.platillo" + File.separator;
+        getPlatilloDataFromJson(createJson(baseUrl));
+
+    }
+
+    public String createJson(final String baseUrl){
+
         HttpURLConnection urlConnection = null;
 
         try {
 
-            // construccion de la URL para consulta a Lunch Time Backend
-            final String restaurantBaseUrl =
-                    "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/" +
-                            "com.herroj.lunchtimebackend.restaurant" + File.separator;
-            final Uri builtUri = Uri.parse(restaurantBaseUrl).buildUpon()
-                        .build();
+            final Uri builtUri = Uri.parse(baseUrl).buildUpon()
+                    .build();
 
             final URL url = new URL(builtUri.toString());
 
@@ -176,9 +185,8 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             final StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // si no se obtiene nada de la nube, se aborta el proceso de sincronizacion
-                return;
+                return null;
             }
-
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 
             try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
@@ -191,10 +199,13 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 if (buffer.length() == 0) {
                     // si no se obtiene nada del flujo, no hay que sincronizar
-                    return;
+                    return null;
                 }
-                final String lunchTimeJsonStr = buffer.toString();
-                getRestaurantDataFromJson(lunchTimeJsonStr);
+
+                urlConnection.disconnect();
+
+                return buffer.toString();
+
             }
 
         } catch (MalformedURLException e) {
@@ -208,6 +219,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 urlConnection.disconnect();
             }
         }
+        return null;
     }
 
     /**
@@ -274,6 +286,80 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
                 cVArrayList.toArray(cvArray);
                 getContext().getContentResolver().bulkInsert(RestaurantEntry.CONTENT_URI, cvArray);
                 notifyLunchTime();
+            }
+
+            if (BuildConfig.DEBUG) {
+                Log.d(m_logTag, "Sincronizacion completa. " + cVArrayList.size() + " Insertado");
+            }
+        } catch (final JSONException e) {
+            Log.e(m_logTag, e.getMessage(), e);
+        }
+
+    }
+
+    private void getPlatilloDataFromJson(final String lunchTimeJsonStr) {
+
+        try {
+
+            final JSONArray platilloArray = new JSONArray(lunchTimeJsonStr);
+
+            // Ingresa informacion nueva de restaurant obtenida de la base de datos
+            final Collection<ContentValues> cVArrayList = new ArrayList<>(platilloArray.length());
+
+            final String ownIdPlatillo = "idPlatillo";
+            final String ownPlatillo = "platillo";
+            final String ownPrecio = "precio";
+            final String ownRestaurantAux = "restaurantidRestaurant";
+            final String ownRestaurant = "restaurant";
+            final String ownTipoPlatilloAux = "tipoPlatilloidTipoPlatillo";
+            final String ownTipoPlatillo = "idTipoPlatillo";
+
+
+            int numPlatillos = platilloArray.length();
+            ContentValues platilloValues;
+
+            for (int i = 0; i < numPlatillos; i++) {
+
+                final JSONObject objPlatillo = platilloArray.getJSONObject(i);
+
+                String idPlatillo = getStrCampo(objPlatillo, ownIdPlatillo);
+
+                String platillo = getStrCampo(objPlatillo, ownPlatillo);
+
+                String precio = getStrCampo(objPlatillo, ownPrecio);
+
+
+                String restaurant = getStrCampo(objPlatillo, ownRestaurantAux);
+
+                JSONObject jsonObjectAux = new JSONObject(restaurant);
+
+                restaurant = getStrCampo(jsonObjectAux, ownRestaurant);
+
+
+                String tipoPlatillo = getStrCampo(objPlatillo, ownTipoPlatilloAux);
+
+                jsonObjectAux = new JSONObject(tipoPlatillo);
+
+                tipoPlatillo = getStrCampo(jsonObjectAux, ownTipoPlatillo);
+
+                platilloValues = new ContentValues();
+
+                platilloValues.put(PlatilloEntry._ID, idPlatillo);
+                platilloValues.put(PlatilloEntry.COLUMN_PLATILLO, platillo);
+                platilloValues.put(PlatilloEntry.COLUMN_PRECIO, precio);
+                platilloValues.put(PlatilloEntry.COLUMN_RESTAURANT, restaurant);
+                platilloValues.put(PlatilloEntry.COLUMN_TIPO_PLATILLO, tipoPlatillo);
+
+                cVArrayList.add(platilloValues);
+            }
+
+            // se agrega a la base de datos local
+            if (!cVArrayList.isEmpty()) {
+                getContext().getContentResolver().delete(PlatilloEntry.CONTENT_URI, null, null);
+                final ContentValues[] cvArray = new ContentValues[cVArrayList.size()];
+                cVArrayList.toArray(cvArray);
+                getContext().getContentResolver().bulkInsert(PlatilloEntry.CONTENT_URI, cvArray);
+
             }
 
             if (BuildConfig.DEBUG) {

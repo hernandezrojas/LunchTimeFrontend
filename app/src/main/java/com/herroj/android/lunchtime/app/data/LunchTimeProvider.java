@@ -24,11 +24,15 @@ public class LunchTimeProvider extends ContentProvider {
      */
     private static final int RESTAURANT = 100;
 
+    private static final int PLATILLO = 300;
+
     /**
      * RESTAURANT_WITH_NAME constante que representa la uri que muestra los restaurantes
      * que coincidan con el nombre puesto en la pantalla de configuracion
      */
     private static final int RESTAURANT_WITH_NAME = 101;
+
+    private static final int PLATILLO_WITH_NAME = 301;
 
     /**
      * S_URI_MATCHER instancia utilitaria que se usa para ayudar en el match de uris en
@@ -41,13 +45,20 @@ public class LunchTimeProvider extends ContentProvider {
      */
     private static final SQLiteQueryBuilder S_RESTAURANT_QUERY_BUILDER;
 
+    private static final SQLiteQueryBuilder S_PLATILLO_QUERY_BUILDER;
+
     /**
      * S_RESTAURANT_SETTING_SELECTION constante que filtra los datos con el nombre ingresado
      * en la pantalla de configuracion
      * restaurant = ?
      */
     private static final String S_RESTAURANT_SETTING_SELECTION =
-            LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT + " like ?";
+            LunchTimeContract.RestaurantEntry.COLUMN_RESTAURANT + " like ? and " +
+            LunchTimeContract.RestaurantEntry.COLUMN_TIPO_RESTAURANT + " = ?";
+
+    private static final String S_PLATILLO_SETTING_SELECTION =
+            LunchTimeContract.PlatilloEntry.COLUMN_PLATILLO + " like ? and " +
+            LunchTimeContract.PlatilloEntry.COLUMN_TIPO_PLATILLO + " = ?";
 
     static {
 
@@ -55,6 +66,11 @@ public class LunchTimeProvider extends ContentProvider {
 
         S_RESTAURANT_QUERY_BUILDER.setTables(
                 LunchTimeContract.RestaurantEntry.TABLE_NAME);
+
+        S_PLATILLO_QUERY_BUILDER = new SQLiteQueryBuilder();
+
+        S_PLATILLO_QUERY_BUILDER.setTables(
+                LunchTimeContract.PlatilloEntry.TABLE_NAME);
 
     }
 
@@ -79,6 +95,9 @@ public class LunchTimeProvider extends ContentProvider {
         matcher.addURI(authority, LunchTimeContract.PATH_RESTAURANT, RESTAURANT);
         matcher.addURI(authority, LunchTimeContract.PATH_RESTAURANT + File.separator + '*',
                 RESTAURANT_WITH_NAME);
+        matcher.addURI(authority, LunchTimeContract.PATH_PLATILLO, PLATILLO);
+        matcher.addURI(authority, LunchTimeContract.PATH_PLATILLO + File.separator + '*',
+                PLATILLO_WITH_NAME);
 
         return matcher;
 
@@ -107,10 +126,37 @@ public class LunchTimeProvider extends ContentProvider {
 
         if (restaurantSetting != null) {
             selection = S_RESTAURANT_SETTING_SELECTION;
-            selectionArgs = new String[]{'%' + restaurantSetting + '%'};
+            selectionArgs = new String[]{'%' + restaurantSetting + '%',
+                    LunchTimeContract.s_filtroSeleccionado};
         }
 
         return S_RESTAURANT_QUERY_BUILDER.query(m_openHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+
+    }
+
+    private Cursor getPlatilloPorNombreYTipoSetting(
+            final Uri uri, final String[] projection, final String sortOrder) {
+
+        final String platilloSetting =
+                LunchTimeContract.PlatilloEntry.getPlatilloSettingFromUri(uri);
+
+        String[] selectionArgs = null;
+        String selection = null;
+
+        if (platilloSetting != null) {
+            selection = S_PLATILLO_SETTING_SELECTION;
+            selectionArgs = new String[]{'%' + platilloSetting + '%',
+                    LunchTimeContract.s_filtroSeleccionado};
+        }
+
+        return S_PLATILLO_QUERY_BUILDER.query(m_openHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -150,6 +196,9 @@ public class LunchTimeProvider extends ContentProvider {
             case RESTAURANT:
             case RESTAURANT_WITH_NAME:
                 return LunchTimeContract.RestaurantEntry.CONTENT_TYPE;
+            case PLATILLO:
+            case PLATILLO_WITH_NAME:
+                return LunchTimeContract.PlatilloEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -180,6 +229,21 @@ public class LunchTimeProvider extends ContentProvider {
             case RESTAURANT: {
                 retCursor = m_openHelper.getReadableDatabase().query(
                         LunchTimeContract.RestaurantEntry.TABLE_NAME,
+                        strings,
+                        s,
+                        strings1,
+                        null,
+                        null,
+                        s1
+                );
+                break;
+            }
+            case PLATILLO_WITH_NAME:
+                retCursor = getPlatilloPorNombreYTipoSetting(uri, strings, s1);
+                break;
+            case PLATILLO: {
+                retCursor = m_openHelper.getReadableDatabase().query(
+                        LunchTimeContract.PlatilloEntry.TABLE_NAME,
                         strings,
                         s,
                         strings1,
@@ -228,6 +292,18 @@ public class LunchTimeProvider extends ContentProvider {
                 }
                 break;
             }
+            case PLATILLO_WITH_NAME:
+            case PLATILLO: {
+                final long id =
+                        db.insert(LunchTimeContract.PlatilloEntry.TABLE_NAME,
+                                null, contentValues);
+                if (id > 0L) {
+                    returnUri = LunchTimeContract.PlatilloEntry.buildPlatilloUri(id);
+                } else {
+                    throw new SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -267,6 +343,11 @@ public class LunchTimeProvider extends ContentProvider {
                 rowsDeleted = db.delete(
                         LunchTimeContract.RestaurantEntry.TABLE_NAME, strSelection, strings);
                 break;
+            case PLATILLO_WITH_NAME:
+            case PLATILLO:
+                rowsDeleted = db.delete(
+                        LunchTimeContract.PlatilloEntry.TABLE_NAME, strSelection, strings);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -304,6 +385,11 @@ public class LunchTimeProvider extends ContentProvider {
                 rowsUpdated = db.update(LunchTimeContract.RestaurantEntry.TABLE_NAME,
                         contentValues, s, strings);
                 break;
+            case PLATILLO_WITH_NAME:
+            case PLATILLO:
+                rowsUpdated = db.update(LunchTimeContract.PlatilloEntry.TABLE_NAME,
+                        contentValues, s, strings);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -330,28 +416,52 @@ public class LunchTimeProvider extends ContentProvider {
         final SQLiteDatabase db = m_openHelper.getWritableDatabase();
         final int match = S_URI_MATCHER.match(uri);
 
-        if ((match == RESTAURANT_WITH_NAME) || (match == RESTAURANT)) {
-            db.beginTransaction();
-            int returnCount = 0;
-            try {
-                for (final ContentValues value : values) {
-                    final long id = db.insert(
-                            LunchTimeContract.RestaurantEntry.TABLE_NAME, null, value);
-                    if (id != -1L) {
-                        returnCount++;
+        int returnCount;
+        switch(match) {
+                case RESTAURANT_WITH_NAME:
+                case RESTAURANT:
+                    db.beginTransaction();
+                    returnCount = 0;
+                    try {
+                        for (final ContentValues value : values) {
+                            final long id = db.insert(
+                                    LunchTimeContract.RestaurantEntry.TABLE_NAME, null, value);
+                            if (id != -1L) {
+                                returnCount++;
+                            }
+                        }
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
                     }
+                    if (getContext() != null) {
+                        getContext().getContentResolver().notifyChange(uri, null);
+                    }
+                    return returnCount;
+            case PLATILLO_WITH_NAME:
+            case PLATILLO:
+                db.beginTransaction();
+                returnCount = 0;
+                try {
+                    for (final ContentValues value : values) {
+                        final long id = db.insert(
+                                LunchTimeContract.PlatilloEntry.TABLE_NAME, null, value);
+                        if (id != -1L) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
                 }
-                db.setTransactionSuccessful();
-            } finally {
-                db.endTransaction();
+                if (getContext() != null) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return returnCount;
+
+            default:
+                return super.bulkInsert(uri, values);
             }
-            if (getContext() != null) {
-                getContext().getContentResolver().notifyChange(uri, null);
-            }
-            return returnCount;
-        } else {
-            return super.bulkInsert(uri, values);
-        }
 
     }
 

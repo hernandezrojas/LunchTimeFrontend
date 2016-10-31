@@ -70,6 +70,32 @@
                 android:value="com.herroj.android.lunchtime.app.RestaurantMainActivity" />
         </activity>
 
+        <activity
+            android:name=".PlatilloMainActivity"
+            android:label="@string/title_activity_platillo"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.herroj.android.lunchtime.app.MainActivity" />
+        </activity>
+        <activity
+            android:name=".PlatilloDetailActivity"
+            android:label="@string/title_activity_restaurant_detail"
+            android:parentActivityName=".PlatilloMainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.herroj.android.lunchtime.app.PlatilloMainActivity" />
+        </activity>
+        <activity
+            android:name=".PlatilloSettingsActivity"
+            android:label="@string/title_activity_restaurant_settings"
+            android:parentActivityName=".PlatilloMainActivity"
+            android:theme="@style/SettingsTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.herroj.android.lunchtime.app.PlatilloMainActivity" />
+        </activity>
+
         <provider
             android:name=".data.LunchTimeProvider"
             android:authorities="@string/content_authority"

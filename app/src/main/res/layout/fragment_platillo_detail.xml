@@ -1,0 +1,38 @@
+<!-- Master layout. -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/platillo_detail_platillo_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textIsSelectable="true" />
+
+        <TextView
+            android:id="@+id/platillo_detail_precio_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textIsSelectable="true" />
+
+        <TextView
+            android:id="@+id/platillo_detail_restaurant_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textIsSelectable="true" />
+
+    </LinearLayout>
+</ScrollView>
