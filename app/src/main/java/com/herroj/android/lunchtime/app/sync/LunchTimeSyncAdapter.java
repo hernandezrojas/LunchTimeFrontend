@@ -14,6 +14,8 @@ import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -154,12 +156,17 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
 
         String baseUrl = "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/" +
                 "com.herroj.lunchtimebackend.restaurant" + File.separator;
-        getRestaurantDataFromJson(createJson(baseUrl));
+        String json = createJson(baseUrl);
+        if (json != null) {
+            getRestaurantDataFromJson(json);
+        }
 
         baseUrl = "http://robertofcfm.mooo.com:8080/LunchTimeBackend/webresources/" +
                 "com.herroj.lunchtimebackend.platillo" + File.separator;
-        getPlatilloDataFromJson(createJson(baseUrl));
-
+        json = createJson(baseUrl);
+        if (json != null) {
+            getPlatilloDataFromJson(createJson(baseUrl));
+        }
     }
 
     public String createJson(final String baseUrl){
@@ -178,6 +185,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
             urlConnection.setRequestMethod("GET");
             final String mediaType = "application/json";
             urlConnection.setRequestProperty("Accept", mediaType);
+            urlConnection.setConnectTimeout(10 * 1000);          // 10 s.
             urlConnection.connect();
 
             // lectura del flujo de entrada a una cadena
@@ -213,7 +221,7 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
         } catch (ProtocolException e) {
             Log.e(m_logTag, "Error ", e);
         } catch (final IOException e) {
-            Log.e(m_logTag, "Error ", e);
+            //Log.e(m_logTag, "Error ", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -221,6 +229,8 @@ public class LunchTimeSyncAdapter extends AbstractThreadedSyncAdapter {
         }
         return null;
     }
+
+
 
     /**
      * getRestaurantDataFromJson Se tiene un String representando la informacion completa
